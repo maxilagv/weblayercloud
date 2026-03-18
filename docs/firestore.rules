@@ -1,0 +1,302 @@
+rules_version = '2';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// LAYERCLOUD — FIRESTORE SECURITY RULES
+// ═══════════════════════════════════════════════════════════════════════════════
+//
+// Este archivo cubre DOS capas de la plataforma:
+//
+//   CAPA A — LayerCloud landing page (analytics, leads, chatbot, contacto)
+//             Colecciones: visitors, visitorProfiles, events, people,
+//                          organizations, leadThreads, contactSubmissions,
+//                          chatSessions
+//
+//   CAPA B — Plataforma SaaS multi-tenant (demos de clientes)
+//             Colecciones: tenants/{tenantId}/*, layercloud_sessions,
+//                          layercloud_tenants_index
+//
+// Para desplegar:
+//   firebase deploy --only firestore:rules
+//
+// ═══════════════════════════════════════════════════════════════════════════════
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+
+    // =========================================================================
+    // ── FUNCIONES HELPER ─────────────────────────────────────────────────────
+    // =========================================================================
+
+    // Usuario autenticado (cualquiera)
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // ── CAPA A: LayerCloud internal admin ─────────────────────────────────────
+
+    // Admin de LayerCloud (acceso al panel /admin de la landing)
+    // Requiere custom claim  admin: true  (asignado vía Firebase Admin SDK)
+    // O bien el email hardcodeado como fallback de emergencia.
+    function isLayerCloudAdmin() {
+      return isSignedIn() && (
+        request.auth.token.admin == true ||
+        request.auth.token.role  == 'layercloud_superadmin'
+      );
+    }
+
+    // ── CAPA B: Multi-tenant SaaS ─────────────────────────────────────────────
+
+    // Super admin de LayerCloud (acceso total a todos los tenants)
+    function isSuperAdmin() {
+      return isSignedIn()
+        && request.auth.token.role == 'layercloud_superadmin';
+    }
+
+    // El usuario es admin propietario del tenant indicado
+    function isTenantAdmin(tenantId) {
+      return isSignedIn()
+        && request.auth.token.tenantId == tenantId
+        && request.auth.token.role    == 'tenant_admin';
+    }
+
+    // El usuario es empleado (cualquier rol) dentro del tenant
+    function isTenantMember(tenantId) {
+      return isSignedIn()
+        && request.auth.token.tenantId == tenantId
+        && (request.auth.token.role == 'tenant_admin'
+         || request.auth.token.role == 'tenant_employee');
+    }
+
+    // Verifica que el trial del tenant NO haya vencido.
+    // Lee el documento meta del tenant una sola vez por request.
+    // NOTA: esta función consume 1 read de Firestore por regla evaluada.
+    // Úsala solo en los match que lo requieran; evitar en reads públicos.
+    function trialIsActive(tenantId) {
+      let meta = get(/databases/$(database)/documents/tenants/$(tenantId)).data;
+      return meta.trialActive  == true
+          && meta.trialEndsAt   > request.time;
+    }
+
+    // Validación de campos permitidos en una actualización del meta del tenant.
+    // El tenant solo puede tocar siteConfig y theme desde su dashboard.
+    function tenantMetaUpdateAllowed() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['siteConfig', 'theme', 'updatedAt']);
+    }
+
+
+    // =========================================================================
+    // ══ CAPA A — LANDING PAGE ANALYTICS & LEADS ══════════════════════════════
+    // =========================================================================
+
+    // ── Visitas de página ─────────────────────────────────────────────────────
+    match /visitors/{docId} {
+      allow read:   if isLayerCloudAdmin();
+      allow create: if true;   // el cliente-side tracking escribe sin auth
+      allow update,
+            delete: if false;
+    }
+
+    match /visitorProfiles/{docId} {
+      allow read:   if isLayerCloudAdmin();
+      allow create: if true;
+      allow update: if true;   // se actualiza en cada visita del mismo visitor
+      allow delete: if false;
+    }
+
+    match /events/{docId} {
+      allow read:   if isLayerCloudAdmin();
+      allow create: if true;
+      allow update,
+            delete: if false;
+    }
+
+    // ── CRM enrichment ────────────────────────────────────────────────────────
+    match /people/{docId} {
+      allow read:  if isLayerCloudAdmin();
+      allow write: if false;   // solo escribe la Cloud Function de enriquecimiento
+    }
+
+    match /organizations/{docId} {
+      allow read:  if isLayerCloudAdmin();
+      allow write: if false;
+    }
+
+    // ── Lead threads (análisis IA) ────────────────────────────────────────────
+    match /leadThreads/{threadId} {
+      allow read:  if isLayerCloudAdmin();
+      allow write: if false;
+
+      match /analyses/{analysisId} {
+        allow read:  if isLayerCloudAdmin();
+        allow write: if false;
+      }
+    }
+
+    // ── Formulario de contacto ────────────────────────────────────────────────
+    match /contactSubmissions/{docId} {
+      allow read:   if isLayerCloudAdmin();
+      allow create: if true;   // cualquier visitante puede enviar el form
+      allow update,
+            delete: if false;
+    }
+
+    // ── Sesiones de chatbot ───────────────────────────────────────────────────
+    match /chatSessions/{sessionId} {
+      allow read:   if isLayerCloudAdmin();
+      allow create: if true;
+      allow update: if true;   // el bot actualiza la sesión durante la conversación
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        allow read:   if isLayerCloudAdmin();
+        allow create: if true;
+        allow update,
+              delete: if false;
+      }
+    }
+
+
+    // =========================================================================
+    // ══ CAPA B — PLATAFORMA SAAS MULTI-TENANT ════════════════════════════════
+    // =========================================================================
+
+    // ── Documento META del tenant + sus sub-colecciones ───────────────────────
+    //
+    // Árbol:  tenants/{tenantId}                     ← meta del tenant
+    //         tenants/{tenantId}/products/{id}        ← catálogo
+    //         tenants/{tenantId}/categories/{id}
+    //         tenants/{tenantId}/orders/{id}
+    //         tenants/{tenantId}/customers/{id}
+    //         tenants/{tenantId}/offers/{id}
+    //         tenants/{tenantId}/suppliers/{id}
+    //         tenants/{tenantId}/purchase_costs/{id}
+    //         tenants/{tenantId}/stock_movements/{id}
+    //         tenants/{tenantId}/finance_entries/{id}
+    //         tenants/{tenantId}/remitos/{id}
+    //         tenants/{tenantId}/price_batches/{id}
+    //         tenants/{tenantId}/landing_heroes/{id}
+    //         tenants/{tenantId}/business_config/{id}
+    //         tenants/{tenantId}/users/{id}
+
+    match /tenants/{tenantId} {
+
+      // Leer el meta: super admin (total) o miembro del tenant (solo el suyo)
+      allow read: if isSuperAdmin()
+               || isTenantMember(tenantId);
+
+      // Crear: solo super admin o Cloud Function (via Admin SDK, bypasses rules)
+      allow create: if isSuperAdmin();
+
+      // Actualización completa: super admin
+      allow update: if isSuperAdmin()
+                 || (isTenantAdmin(tenantId)
+                     && trialIsActive(tenantId)
+                     && tenantMetaUpdateAllowed());
+
+      // Borrar: solo super admin
+      allow delete: if isSuperAdmin();
+
+      // ── Sub-colecciones del tenant ─────────────────────────────────────────
+      //
+      // Regla general para TODAS las sub-colecciones.
+      // Las sub-colecciones con necesidades específicas se definen debajo
+      // y tienen precedencia sobre este match wildcard.
+
+      match /{collection}/{docId} {
+        // Lectura: super admin o miembro del tenant con trial activo
+        allow read: if isSuperAdmin()
+                 || (isTenantMember(tenantId) && trialIsActive(tenantId));
+
+        // Escritura: super admin o admin del tenant con trial activo
+        allow write: if isSuperAdmin()
+                  || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+      // ── orders: empleados pueden crear pedidos (checkout público) ──────────
+      match /orders/{orderId} {
+        // Cualquier usuario autenticado puede crear un pedido en un tenant
+        // cuyo trial esté activo (los clientes finales de la demo no tienen
+        // custom claims de tenant; se permite create si el trial está vivo)
+        allow create: if trialIsActive(tenantId);
+
+        allow read:   if isSuperAdmin()
+                   || (isTenantMember(tenantId) && trialIsActive(tenantId));
+
+        allow update,
+              delete: if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+      // ── products / categories / landing_heroes: lectura pública ───────────
+      // Los visitantes de la demo pueden ver el catálogo sin login,
+      // pero solo si el trial está activo.
+      match /products/{productId} {
+        allow read:   if trialIsActive(tenantId);   // público con trial activo
+        allow write:  if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+      match /categories/{categoryId} {
+        allow read:   if trialIsActive(tenantId);
+        allow write:  if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+      match /offers/{offerId} {
+        allow read:   if trialIsActive(tenantId);
+        allow write:  if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+      match /landing_heroes/{heroId} {
+        allow read:   if trialIsActive(tenantId);
+        allow write:  if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+      match /business_config/{configId} {
+        allow read:   if trialIsActive(tenantId);   // necesario para mostrar nombre/logo
+        allow write:  if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+      // ── users del tenant: solo admin puede gestionar empleados ────────────
+      match /users/{userId} {
+        allow read:   if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+        allow write:  if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+    } // fin match /tenants/{tenantId}
+
+
+    // ── Índice de tenants (solo super admin) ──────────────────────────────────
+    match /layercloud_tenants_index/{tenantId} {
+      allow read, write: if isSuperAdmin();
+    }
+
+
+    // ── Analytics de uso de la plataforma ────────────────────────────────────
+    match /layercloud_sessions/{sessionId} {
+      // Cualquier usuario autenticado puede crear eventos de sesión
+      allow create: if isSignedIn();
+
+      // Solo el super admin puede leer, actualizar o borrar sesiones
+      allow read,
+            update,
+            delete: if isSuperAdmin();
+    }
+
+
+    // ── Denegar todo lo demás ─────────────────────────────────────────────────
+    // Firestore deniega implícitamente, pero lo dejamos explícito
+    // para mayor claridad y para que las herramientas de lint no adviertan.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+  }
+}

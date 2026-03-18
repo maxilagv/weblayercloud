@@ -1,0 +1,21 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "layercloud_sessions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "tenantId",  "order": "ASCENDING" },
+        { "fieldPath": "timestamp", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "layercloud_tenants_index",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "trialActive",  "order": "ASCENDING" },
+        { "fieldPath": "trialEndsAt",  "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

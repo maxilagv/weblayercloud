@@ -1,0 +1,31 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Imágenes de tenants ────────────────────────────────────────────────
+    // Estructura: tenants/{tenantId}/logo.png
+    //             tenants/{tenantId}/products/{file}
+    //             tenants/{tenantId}/categories/{file}
+    //             tenants/{tenantId}/heroes/{file}
+    match /tenants/{tenantId}/{allPaths=**} {
+      // Lectura pública — imágenes en catálogo y tienda son visibles sin auth
+      allow read: if true;
+
+      // Escritura: solo el tenant owner (por custom claim) o super admin
+      allow write: if request.auth != null
+        && (
+          request.auth.token.tenantId == tenantId
+          || request.auth.token.role == 'layercloud_superadmin'
+        )
+        // Limitar tamaño: máx 5 MB
+        && request.resource.size < 5 * 1024 * 1024
+        // Solo imágenes
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // ── Bloquear todo lo demás ─────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

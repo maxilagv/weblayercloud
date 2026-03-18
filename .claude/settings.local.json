@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(wc -l /c/Users/User/OneDrive/Desktop/tech_king/src/**/*.jsx /c/Users/User/OneDrive/Desktop/tech_king/src/**/*.js)",
+      "Bash(/dev/null ls:*)",
+      "Bash(wc -l /c/Users/User/OneDrive/Desktop/tech_king/src/pages/admin/*.jsx)",
+      "Bash(find C:UsersUserOneDriveDesktoplayercloudnode_modulesreact -name *.d.ts)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:tiendanegocio.com)",
+      "WebFetch(domain:www.nexa.com.ar)",
+      "Bash(xargs -I {} grep -l \"mercado\\\\|paypal\\\\|afip\\\\|whatsapp\" /c/Users/User/OneDrive/Desktop/multicell/backend/server/routes/{})",
+      "Bash(grep -h \"router\\\\.\\\\\\(get\\\\|post\\\\|put\\\\|delete\\\\\\)\" /c/Users/User/OneDrive/Desktop/multicell/backend/server/routes/*.js)"
+    ]
+  }
+}
