@@ -5,6 +5,8 @@ import { useTenant } from '../../context/TenantContext';
 import { useCart } from '../../context/DemoCartContext';
 import { useDemoCustomerAuth } from '../../hooks/useDemoCustomerAuth';
 import { useTenantOrders } from '../../hooks/useTenantOrders';
+import { auth } from '../../lib/firebase';
+import { extractAuthCode, mapCustomerAuthError } from '../../lib/auth';
 import { formatCurrency } from './admin/adminHelpers';
 
 export default function DemoCheckout() {
@@ -20,6 +22,7 @@ export default function DemoCheckout() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const [checkoutError, setCheckoutError] = useState('');
   const [form, setForm] = useState({
     nombre: '',
     apellido: '',
@@ -58,14 +61,21 @@ export default function DemoCheckout() {
     if (items.length === 0) return;
 
     setLoading(true);
+    setCheckoutError('');
     try {
       if (customerUser) {
         await updateCustomerProfile({
           telefono: form.telefono,
           direccion: form.direccion,
         });
-      } else {
-        await ensureCustomerProfile(form);
+      } else if (auth.currentUser) {
+        try {
+          await ensureCustomerProfile(form);
+        } catch (profileError) {
+          if (extractAuthCode(profileError) !== 'auth/not-store-customer') {
+            throw profileError;
+          }
+        }
       }
 
       const orderRef = await createOrder({
@@ -80,6 +90,12 @@ export default function DemoCheckout() {
       setOrderId(orderRef.id);
       setSuccess(true);
       clearCart();
+    } catch (submitError) {
+      setCheckoutError(
+        extractAuthCode(submitError)
+          ? mapCustomerAuthError(submitError)
+          : 'No pudimos confirmar el pedido. Revisa los datos e intenta nuevamente.',
+      );
     } finally {
       setLoading(false);
     }
@@ -289,6 +305,9 @@ export default function DemoCheckout() {
               <button className="demo-admin-button" type="submit" disabled={loading}>
                 {loading ? 'Procesando...' : 'Confirmar pedido'}
               </button>
+              {checkoutError ? (
+                <div className="demo-admin-message error">{checkoutError}</div>
+              ) : null}
             </form>
           </section>
 

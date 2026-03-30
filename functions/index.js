@@ -6,10 +6,13 @@ const { initializeApp } = require('firebase-admin/app');
 initializeApp();
 
 // ── Tenant lifecycle ──────────────────────────────────────────────────────────
-exports.onTenantRegistration = require('./tenant/onTenantRegistration');
-exports.checkExpiredTrials   = require('./tenant/checkExpiredTrials');
-exports.extendTrial          = require('./tenant/extendTrial');
-exports.revokeTrial          = require('./tenant/revokeTrial');
+exports.registerTenantAccount = require('./tenant/registerTenantAccount');
+exports.onTenantRegistration  = require('./tenant/onTenantRegistration');
+exports.repairTenantAccess    = require('./tenant/repairTenantAccess');
+exports.registerTenantCustomer = require('./tenant/registerTenantCustomer');
+exports.checkExpiredTrials    = require('./tenant/checkExpiredTrials');
+exports.extendTrial           = require('./tenant/extendTrial');
+exports.revokeTrial           = require('./tenant/revokeTrial');
 
 // ── Super admin actions ───────────────────────────────────────────────────────
 exports.markConverted = require('./tenant/markConverted');

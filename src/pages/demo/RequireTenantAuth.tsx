@@ -18,7 +18,7 @@ export function RequireTenantAuth({ children }: { children: ReactNode }) {
   }
 
   if (!user) return <Navigate to="/login" replace />;
-  if (!user.tenantId) return <Navigate to="/registro" replace />;
+  if (!user.tenantId) return <Navigate to="/login" replace />;
 
   return <>{children}</>;
 }

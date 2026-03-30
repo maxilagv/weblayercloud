@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { DEFAULT_PUBLIC_DEMO } from '../lib/publicDemos';
 
 const injectStyles = (() => {
   let injected = false;
@@ -172,18 +173,18 @@ export default function Hero() {
 
         <div className="hero-cta">
           <Link
-            to="/contacto"
+            to={`/demo/${DEFAULT_PUBLIC_DEMO.tenantId}`}
             className="btn-primary-accent"
             data-track-event="cta_click"
-            data-track-label="Contanos tu negocio"
+            data-track-label="Probar demo interactiva"
             data-track-location="hero"
           >
-            Contanos tu negocio&nbsp;→
+            Probar demo interactiva&nbsp;→
           </Link>
           <Link
-            to="/solucion"
+            to="/contacto"
             data-track-event="cta_click"
-            data-track-label="Ver cómo trabajamos"
+            data-track-label="Contanos tu negocio"
             data-track-location="hero"
             style={{
               fontFamily: 'var(--font-sans)',
@@ -203,7 +204,7 @@ export default function Hero() {
               e.currentTarget.style.borderColor = 'var(--color-border)';
             }}
           >
-            Ver cómo trabajamos
+            Contanos tu negocio
           </Link>
         </div>
 

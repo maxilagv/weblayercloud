@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, type ReactNode } from 'react';
 import { Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { DemoCartProvider } from '../../context/DemoCartContext';
 import { DemoToastProvider } from '../../context/DemoToastContext';
+import { DemoJourneyProvider } from '../../context/DemoJourneyContext';
 import { TenantProvider, useTenant } from '../../context/TenantContext';
 import { trackTenantEvent } from '../../utils/trackTenantEvent';
 import DemoLayout from './DemoLayout';
@@ -40,6 +41,12 @@ function DemoLoader() {
 function TrialGuard({ children }: { children: ReactNode }) {
   const { trialExpired, loading, tenantMeta } = useTenant();
 
+  useEffect(() => {
+    if (tenantMeta && trialExpired && !tenantMeta.isPublicDemo) {
+      trackTenantEvent(tenantMeta.tenantId, 'trial_expired_shown', {});
+    }
+  }, [tenantMeta, trialExpired]);
+
   if (loading) {
     return <DemoLoader />;
   }
@@ -69,79 +76,90 @@ function TrialGuard({ children }: { children: ReactNode }) {
     );
   }
 
-  if (trialExpired) {
-    return (
-      <>
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 24,
-            background: 'rgba(0,0,0,0.92)',
-          }}
-        >
-          <div
-            style={{
-              width: 'min(520px, 100%)',
-              background: '#fff',
-              borderTop: '4px solid #FF3B00',
-              padding: '42px 34px',
-              textAlign: 'center',
-            }}
-          >
-            <p
-              style={{
-                fontFamily: 'monospace',
-                fontSize: 11,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#FF3B00',
-                marginBottom: 16,
-              }}
-            >
-              Periodo de prueba finalizado
-            </p>
-            <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.03em', color: '#0A0A0A' }}>
-              Tu demo de {tenantMeta.businessName} expiro
-            </h2>
-            <p style={{ marginTop: 12, color: '#666', lineHeight: 1.7 }}>
-              La demo estuvo activa durante 7 dias. Para activar el sistema completo y seguir
-              vendiendo, contacta a LayerCloud.
-            </p>
-            <a
-              href="https://weblayer.cloud/contacto"
-              style={{
-                display: 'inline-flex',
-                marginTop: 26,
-                background: '#FF3B00',
-                color: '#fff',
-                textDecoration: 'none',
-                fontWeight: 700,
-                padding: '14px 28px',
-              }}
-            >
-              Activar sistema completo
-            </a>
-          </div>
-        </div>
-        {children}
-      </>
-    );
+  if (tenantMeta.isPublicDemo || !trialExpired) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 24,
+        background: 'rgba(0,0,0,0.92)',
+      }}
+    >
+      <div
+        style={{
+          width: 'min(520px, 100%)',
+          background: '#fff',
+          borderTop: '4px solid #FF3B00',
+          padding: '42px 34px',
+          textAlign: 'center',
+        }}
+      >
+        <p
+          style={{
+            fontFamily: 'monospace',
+            fontSize: 11,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: '#FF3B00',
+            marginBottom: 16,
+          }}
+        >
+          Período de prueba finalizado
+        </p>
+        <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.03em', color: '#0A0A0A' }}>
+          Tu demo de {tenantMeta.businessName} expiró
+        </h2>
+        <p style={{ marginTop: 12, color: '#666', lineHeight: 1.7 }}>
+          La demo estuvo activa durante 7 días. Para activar el sistema completo y seguir
+          vendiendo, contactá a LayerCloud.
+        </p>
+        <a
+          href="/contacto"
+          onClick={() => trackTenantEvent(tenantMeta.tenantId, 'trial_expired_cta_clicked', {})}
+          style={{
+            display: 'inline-flex',
+            marginTop: 26,
+            background: '#FF3B00',
+            color: '#fff',
+            textDecoration: 'none',
+            fontWeight: 700,
+            padding: '14px 28px',
+          }}
+        >
+          Activar sistema completo
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function DemoJourneyWrapper({ tenantId, children }: { tenantId: string; children: ReactNode }) {
+  const { tenantMeta } = useTenant();
+
+  return (
+    <DemoJourneyProvider
+      tenantId={tenantId}
+      hideDemoBranding={tenantMeta?.hideDemoBranding ?? false}
+    >
+      {children}
+    </DemoJourneyProvider>
+  );
 }
 
 function RouteTracker({ tenantId }: { tenantId: string }) {
   const location = useLocation();
 
   useEffect(() => {
-    trackTenantEvent(tenantId, 'page_view', location.pathname);
-  }, [location.pathname, tenantId]);
+    trackTenantEvent(tenantId, 'page_view', `${location.pathname}${location.search}`);
+  }, [location.pathname, location.search, tenantId]);
 
   return null;
 }
@@ -153,30 +171,32 @@ export default function DemoStoreRouter() {
 
   return (
     <TenantProvider tenantId={tenantId}>
-      <DemoCartProvider tenantId={tenantId}>
-        <DemoToastProvider>
-          <RouteTracker tenantId={tenantId} />
-          <TrialGuard>
-            <Suspense fallback={<DemoLoader />}>
-              <Routes>
-                <Route element={<DemoLayout />}>
-                  <Route index element={<DemoHome />} />
-                  <Route path="products" element={<DemoProducts />} />
-                  <Route path="products/:productId" element={<DemoProductDetail />} />
-                  <Route path="checkout" element={<DemoCheckout />} />
-                  <Route path="about" element={<DemoAbout />} />
-                  <Route path="contact" element={<DemoContact />} />
-                  <Route path="mi-cuenta" element={<DemoMyAccount />} />
-                </Route>
+      <DemoJourneyWrapper tenantId={tenantId}>
+        <DemoCartProvider tenantId={tenantId}>
+          <DemoToastProvider>
+            <RouteTracker tenantId={tenantId} />
+            <TrialGuard>
+              <Suspense fallback={<DemoLoader />}>
+                <Routes>
+                  <Route element={<DemoLayout />}>
+                    <Route index element={<DemoHome />} />
+                    <Route path="products" element={<DemoProducts />} />
+                    <Route path="products/:productId" element={<DemoProductDetail />} />
+                    <Route path="checkout" element={<DemoCheckout />} />
+                    <Route path="about" element={<DemoAbout />} />
+                    <Route path="contact" element={<DemoContact />} />
+                    <Route path="mi-cuenta" element={<DemoMyAccount />} />
+                  </Route>
 
-                <Route path="login" element={<DemoCustomerLogin />} />
-                <Route path="registro" element={<DemoCustomerRegister />} />
-                <Route path="admin/*" element={<DemoAdminShell />} />
-              </Routes>
-            </Suspense>
-          </TrialGuard>
-        </DemoToastProvider>
-      </DemoCartProvider>
+                  <Route path="login" element={<DemoCustomerLogin />} />
+                  <Route path="registro" element={<DemoCustomerRegister />} />
+                  <Route path="admin/*" element={<DemoAdminShell />} />
+                </Routes>
+              </Suspense>
+            </TrialGuard>
+          </DemoToastProvider>
+        </DemoCartProvider>
+      </DemoJourneyWrapper>
     </TenantProvider>
   );
 }

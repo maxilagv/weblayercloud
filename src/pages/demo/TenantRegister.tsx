@@ -1,342 +1,448 @@
-import { useState, useEffect, type FormEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useMemo, useState, type FormEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  AuthNotice,
+  AuthPasswordField,
+  AuthScaffold,
+  AuthStepBar,
+  AuthTextField,
+  PasswordChecklist,
+} from '../../components/auth/AuthScaffold';
+import {
+  getPasswordPolicyState,
+  getPasswordStrength,
+  getTenantStepErrors,
+  mapTenantAuthError,
+  normalizePhone,
+  type TenantRegisterFormState,
+  type TenantRegisterStep,
+} from '../../lib/auth';
 import { useTenantAuth } from '../../hooks/useTenantAuth';
 
 const BUSINESS_TYPES = [
-  { key: 'muebleria',    label: 'Mueblería',              icon: '🪑' },
-  { key: 'indumentaria', label: 'Indumentaria / Ropa',    icon: '👕' },
-  { key: 'electronica',  label: 'Electrónica',            icon: '📱' },
-  { key: 'ferreteria',   label: 'Ferretería',             icon: '🔧' },
-  { key: 'libreria',     label: 'Librería / Papelería',   icon: '📚' },
-  { key: 'veterinaria',  label: 'Veterinaria / Pet Shop', icon: '🐾' },
-  { key: 'farmacia',     label: 'Farmacia / Perfumería',  icon: '💊' },
-  { key: 'gastronomia',  label: 'Gastronomía / Delivery', icon: '🍕' },
-  { key: 'servicios',    label: 'Servicios Profesionales',icon: '💼' },
-  { key: 'otro',         label: 'Otro rubro',             icon: '✨' },
+  { key: 'muebleria', label: 'Muebleria', detail: 'Catalogo, stock y listas de precios.' },
+  { key: 'indumentaria', label: 'Indumentaria', detail: 'Variantes, ofertas y venta omnicanal.' },
+  { key: 'electronica', label: 'Electronica', detail: 'SKU, lotes y control comercial.' },
+  { key: 'ferreteria', label: 'Ferreteria', detail: 'Amplio inventario y reposicion rapida.' },
+  { key: 'libreria', label: 'Libreria', detail: 'Listados simples y combos.' },
+  { key: 'veterinaria', label: 'Veterinaria', detail: 'Productos, atencion y fidelizacion.' },
+  { key: 'farmacia', label: 'Farmacia', detail: 'Venta asistida y contacto por WhatsApp.' },
+  { key: 'gastronomia', label: 'Gastronomia', detail: 'Carta online, pedidos y promos.' },
+  { key: 'servicios', label: 'Servicios', detail: 'Presencia profesional y captura de leads.' },
+  { key: 'otro', label: 'Otro rubro', detail: 'Configuracion flexible para pruebas rapidas.' },
 ] as const;
 
-// Mensajes del loading screen (se van mostrando en secuencia)
 const LOADING_STEPS = [
-  'Creando tu cuenta...',
-  'Configurando tu tienda...',
-  'Sembrando productos de ejemplo...',
-  'Activando el panel de administración...',
-  'Todo listo. Redirigiendo...',
+  'Reservando tu identidad de acceso',
+  'Creando la estructura del tenant',
+  'Sembrando contenido inicial',
+  'Asignando permisos y claims',
+  'Abriendo tu dashboard',
 ];
+
+function LoadingState({ businessName, businessType, loadingStep }: { businessName: string; businessType: string; loadingStep: number }) {
+  return (
+    <div
+      style={{
+        minHeight: '100svh',
+        display: 'grid',
+        placeItems: 'center',
+        background:
+          'radial-gradient(circle at top left, rgba(255,59,0,0.18), transparent 28%), linear-gradient(135deg, #09090b 0%, #121218 100%)',
+        color: '#fafafa',
+        padding: 24,
+      }}
+    >
+      <div style={{ width: 'min(100%, 420px)', textAlign: 'center' }}>
+        <p
+          style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: 11,
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: '#ff8a66',
+            marginBottom: 14,
+          }}
+        >
+          Activando tu cuenta
+        </p>
+        <h1
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(34px, 6vw, 48px)',
+            letterSpacing: '-0.05em',
+            lineHeight: 0.98,
+            marginBottom: 14,
+          }}
+        >
+          Preparando tu demo
+        </h1>
+        <p style={{ color: 'rgba(255,255,255,0.64)', lineHeight: 1.7 }}>
+          Estamos creando el entorno inicial para {businessName || 'tu negocio'}.
+        </p>
+
+        <div
+          style={{
+            marginTop: 28,
+            height: 6,
+            background: 'rgba(255,255,255,0.08)',
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              height: '100%',
+              width: `${((loadingStep + 1) / LOADING_STEPS.length) * 100}%`,
+              background: 'linear-gradient(90deg, #ff3b00, #ff9a6a)',
+              transition: 'width 0.35s ease',
+            }}
+          />
+        </div>
+
+        <div style={{ marginTop: 20, display: 'grid', gap: 10, textAlign: 'left' }}>
+          {LOADING_STEPS.map((item, index) => (
+            <div
+              key={item}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                color: index <= loadingStep ? '#fafafa' : 'rgba(255,255,255,0.38)',
+                fontSize: 13,
+              }}
+            >
+              <span
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: 999,
+                  background: index <= loadingStep ? '#ff3b00' : 'rgba(255,255,255,0.18)',
+                  boxShadow: index === loadingStep ? '0 0 0 8px rgba(255,59,0,0.12)' : 'none',
+                  transition: 'all 0.2s ease',
+                }}
+              />
+              {item}
+            </div>
+          ))}
+        </div>
+
+        <p
+          style={{
+            marginTop: 22,
+            fontFamily: 'var(--font-mono)',
+            fontSize: 10,
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: 'rgba(255,255,255,0.32)',
+          }}
+        >
+          {businessType || 'tenant'} / onboarding seguro
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function TenantRegister() {
   const navigate = useNavigate();
   const { registerTenant } = useTenantAuth();
-
-  const [step, setStep]         = useState<1 | 2 | 3 | 4>(1);
-  const [loading, setLoading]   = useState(false);
+  const [step, setStep] = useState<TenantRegisterStep>(1);
+  const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
-  const [error, setError]       = useState('');
-
-  const [form, setForm] = useState({
-    email: '', password: '', ownerName: '',
-    businessName: '', phone: '', businessType: '',
+  const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof TenantRegisterFormState, string>>>({});
+  const [form, setForm] = useState<TenantRegisterFormState>({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    ownerName: '',
+    businessName: '',
+    phone: '',
+    businessType: '',
+    acceptSetup: false,
   });
 
-  const set = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
-    setForm(f => ({ ...f, [key]: e.target.value }));
+  const passwordPolicy = useMemo(() => getPasswordPolicyState(form.password), [form.password]);
+  const passwordStrength = useMemo(() => getPasswordStrength(passwordPolicy), [passwordPolicy]);
 
-  // Avanza el mensaje de loading automáticamente
-  useEffect(() => {
-    if (step !== 4) return;
-    const interval = setInterval(() => {
-      setLoadingStep(prev => {
-        if (prev >= LOADING_STEPS.length - 1) {
-          clearInterval(interval);
-          return prev;
-        }
-        return prev + 1;
-      });
-    }, 1100);
-    return () => clearInterval(interval);
-  }, [step]);
+  const updateForm = <K extends keyof TenantRegisterFormState>(key: K, value: TenantRegisterFormState[K]) => {
+    setForm((current) => ({ ...current, [key]: value }));
+    setFieldErrors((current) => ({ ...current, [key]: undefined }));
+  };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const validateStep = (targetStep: TenantRegisterStep) => {
+    const nextErrors = getTenantStepErrors(form, targetStep);
+    setFieldErrors((current) => ({ ...current, ...nextErrors }));
+    return Object.keys(nextErrors).length === 0;
+  };
 
-    if (step === 1 || step === 2) {
-      setStep((s) => (s + 1) as 2 | 3);
+  const handleNextStep = () => {
+    if (!validateStep(step)) {
       return;
     }
 
-    // Paso 3 → lanzar registro
-    setLoading(true);
     setError('');
-    setStep(4);  // pantalla de loading
+    setStep((current) => (current + 1) as TenantRegisterStep);
+  };
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!validateStep(3)) {
+      return;
+    }
+
+    setError('');
+    setLoading(true);
     setLoadingStep(0);
+    window.setTimeout(() => setLoadingStep(1), 350);
+    window.setTimeout(() => setLoadingStep(2), 800);
+    window.setTimeout(() => setLoadingStep(3), 1250);
 
     try {
       await registerTenant(form.email, form.password, {
-        ownerName:    form.ownerName,
-        businessName: form.businessName,
+        ownerName: form.ownerName.trim(),
+        businessName: form.businessName.trim(),
         businessType: form.businessType,
-        phone:        form.phone,
+        phone: normalizePhone(form.phone),
       });
-      // Esperar un momento para que el último mensaje se vea
-      await new Promise(r => setTimeout(r, 800));
-      navigate('/dashboard');
-    } catch (err: any) {
-      const msg =
-        err.code === 'auth/email-already-in-use'
-          ? 'Ya existe una cuenta con ese email. ¿Querés iniciar sesión?'
-          : err.code === 'auth/weak-password'
-            ? 'La contraseña es muy corta (mínimo 6 caracteres).'
-            : err.message ?? 'Error al registrarse. Intentá de nuevo.';
-      setError(msg);
+
+      setLoadingStep(4);
+      window.setTimeout(() => navigate('/dashboard'), 380);
+    } catch (submitError) {
+      setError(mapTenantAuthError(submitError));
       setLoading(false);
-      setStep(1); // volver al inicio si hay error de auth
     }
   };
 
-  // ── Pantalla de loading (paso 4) ─────────────────────────────────────────────
-  if (step === 4) {
+  if (loading) {
     return (
-      <div style={{
-        minHeight: '100svh', background: '#0A0A0A',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        gap: 40, padding: 40,
-      }}>
-        {/* Logo */}
-        <span style={{
-          fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 22,
-          letterSpacing: '-0.04em', color: '#FAFAFA',
-        }}>
-          Layer<span style={{ color: '#FF3B00' }}>Cloud</span>
-        </span>
-
-        {/* Spinner */}
-        <div style={{
-          width: 56, height: 56,
-          border: '2px solid rgba(255,255,255,0.1)',
-          borderTop: '2px solid #FF3B00',
-          borderRadius: '50%',
-          animation: 'lc-spin 0.8s linear infinite',
-        }} />
-        <style>{`@keyframes lc-spin { to { transform: rotate(360deg); } }`}</style>
-
-        {/* Mensaje actual */}
-        <div style={{ textAlign: 'center', maxWidth: 360 }}>
-          <p style={{
-            fontFamily: 'var(--font-display)', fontSize: 22, fontWeight: 700,
-            color: '#FAFAFA', letterSpacing: '-0.02em', marginBottom: 8,
-          }}>
-            Estamos preparando tu demo
-          </p>
-          <p style={{
-            fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.1em',
-            textTransform: 'uppercase', color: '#FF3B00',
-            minHeight: 20,
-          }}>
-            {LOADING_STEPS[loadingStep]}
-          </p>
-        </div>
-
-        {/* Barra de progreso */}
-        <div style={{ width: 240, height: 2, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
-          <div style={{
-            height: '100%',
-            width: `${((loadingStep + 1) / LOADING_STEPS.length) * 100}%`,
-            background: '#FF3B00',
-            transition: 'width 0.9s cubic-bezier(0.22, 1, 0.36, 1)',
-          }} />
-        </div>
-
-        {/* Rubro elegido */}
-        {form.businessType && (
-          <p style={{
-            fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em',
-            textTransform: 'uppercase', color: 'rgba(255,255,255,0.2)',
-          }}>
-            {form.businessName} · {form.businessType}
-          </p>
-        )}
-      </div>
+      <LoadingState
+        businessName={form.businessName}
+        businessType={form.businessType}
+        loadingStep={loadingStep}
+      />
     );
   }
 
-  // ── Formulario wizard (pasos 1-3) ─────────────────────────────────────────────
   return (
-    <div style={{
-      minHeight: '100svh', background: 'var(--color-bg)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 'clamp(24px, 6vw, 64px)',
-    }}>
-      <div style={{ width: '100%', maxWidth: 520 }}>
+    <AuthScaffold
+      brandEyebrow="Alta guiada"
+      brandTitle="Crea una cuenta mas clara, validada y sin estados rotos."
+      brandDescription="La demo se aprovisiona desde backend con controles de unicidad, rollback y claims consistentes. Tu registro deja de depender de varios pasos sueltos del cliente."
+      features={[
+        {
+          title: 'Paso 1. Identidad segura',
+          description: 'Email validado, confirmacion de contrasena y politica minima real.',
+        },
+        {
+          title: 'Paso 2. Datos operativos',
+          description: 'Normalizamos nombre, negocio y telefono antes de crear el tenant.',
+        },
+        {
+          title: 'Paso 3. Provision controlada',
+          description: 'Solo se activa la cuenta cuando tenant, indices y claims quedan consistentes.',
+        },
+      ]}
+      headerEyebrow={`Registro / paso ${step} de 3`}
+      headerTitle="Activa tu demo profesional"
+      headerDescription="Configura tu acceso en tres pasos cortos. Si algo falla, el backend revierte la operacion para no dejar cuentas incompletas."
+      footer={
+        <p>
+          Ya tienes cuenta?{' '}
+          <Link to="/login" style={{ color: 'var(--color-accent)', fontWeight: 700, textDecoration: 'none' }}>
+            Iniciar sesion
+          </Link>
+        </p>
+      }
+      backTo="/"
+      backLabel="Volver a LayerCloud"
+    >
+      <AuthStepBar currentStep={step} totalSteps={3} />
 
-        {/* Logo */}
-        <Link to="/" style={{ textDecoration: 'none', display: 'block', marginBottom: 40 }}>
-          <span style={{
-            fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 20,
-            letterSpacing: '-0.04em', color: 'var(--color-text)',
-          }}>
-            Layer<span style={{ color: 'var(--color-accent)' }}>Cloud</span>
-          </span>
-        </Link>
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 18 }}>
+        {step === 1 ? (
+          <>
+            <AuthTextField
+              label="Email del titular"
+              type="email"
+              value={form.email}
+              onChange={(event) => updateForm('email', event.target.value)}
+              autoComplete="email"
+              placeholder="fundador@negocio.com"
+              error={fieldErrors.email}
+            />
 
-        {/* Barra de pasos */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 32 }}>
-          {[1, 2, 3].map(n => (
-            <div key={n} style={{
-              height: 3, flex: 1, borderRadius: 2,
-              background: n <= step ? 'var(--color-accent)' : 'var(--color-border)',
-              transition: 'background 0.3s',
-            }} />
-          ))}
-        </div>
+            <AuthPasswordField
+              label="Contrasena"
+              value={form.password}
+              onChange={(event) => updateForm('password', event.target.value)}
+              autoComplete="new-password"
+              placeholder="Crea una contrasena fuerte"
+              error={fieldErrors.password}
+              hint={
+                passwordStrength >= 3
+                  ? 'La contrasena ya cumple gran parte de la politica.'
+                  : 'Usa una contrasena larga y dificil de reutilizar.'
+              }
+            />
 
-        <form onSubmit={handleSubmit}>
+            <PasswordChecklist password={form.password} />
 
-          {/* ── Paso 1: cuenta ──────────────────────────────────────────────── */}
-          {step === 1 && (
-            <>
-              <p className="eyebrow">01 / Creá tu cuenta</p>
-              <h1 style={{
-                fontFamily: 'var(--font-display)', fontSize: 'clamp(26px, 4vw, 36px)',
-                fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--color-text)',
-                marginBottom: 32, lineHeight: 1.1,
-              }}>
-                Empezá tu prueba <br />
-                <em style={{ fontStyle: 'italic', color: 'var(--color-accent)' }}>
-                  gratis de 7 días
-                </em>
-              </h1>
-              <div className="input-group">
-                <input type="email" required placeholder=" "
-                  value={form.email} onChange={set('email')} />
-                <label>Email</label>
-              </div>
-              <div className="input-group">
-                <input type="password" required minLength={6} placeholder=" "
-                  value={form.password} onChange={set('password')} />
-                <label>Contraseña (mínimo 6 caracteres)</label>
-              </div>
-            </>
-          )}
+            <AuthPasswordField
+              label="Confirmar contrasena"
+              value={form.confirmPassword}
+              onChange={(event) => updateForm('confirmPassword', event.target.value)}
+              autoComplete="new-password"
+              placeholder="Repite tu contrasena"
+              error={fieldErrors.confirmPassword}
+            />
+          </>
+        ) : null}
 
-          {/* ── Paso 2: negocio ─────────────────────────────────────────────── */}
-          {step === 2 && (
-            <>
-              <p className="eyebrow">02 / Tu negocio</p>
-              <h1 style={{
-                fontFamily: 'var(--font-display)', fontSize: 'clamp(26px, 4vw, 36px)',
-                fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--color-text)',
-                marginBottom: 32, lineHeight: 1.1,
-              }}>
-                Contanos sobre <br />tu negocio
-              </h1>
-              <div className="input-group">
-                <input type="text" required placeholder=" "
-                  value={form.ownerName} onChange={set('ownerName')} />
-                <label>Tu nombre completo</label>
-              </div>
-              <div className="input-group">
-                <input type="text" required placeholder=" "
-                  value={form.businessName} onChange={set('businessName')} />
-                <label>Nombre del negocio</label>
-              </div>
-              <div className="input-group">
-                <input type="tel" placeholder=" "
-                  value={form.phone} onChange={set('phone')} />
-                <label>WhatsApp del negocio (opcional)</label>
-              </div>
-            </>
-          )}
+        {step === 2 ? (
+          <>
+            <AuthTextField
+              label="Tu nombre completo"
+              value={form.ownerName}
+              onChange={(event) => updateForm('ownerName', event.target.value)}
+              autoComplete="name"
+              placeholder="Nombre y apellido"
+              error={fieldErrors.ownerName}
+            />
 
-          {/* ── Paso 3: rubro ───────────────────────────────────────────────── */}
-          {step === 3 && (
-            <>
-              <p className="eyebrow">03 / Rubro</p>
-              <h1 style={{
-                fontFamily: 'var(--font-display)', fontSize: 'clamp(26px, 4vw, 36px)',
-                fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--color-text)',
-                marginBottom: 24, lineHeight: 1.1,
-              }}>
-                ¿A qué se dedica <br />tu negocio?
-              </h1>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(148px, 1fr))',
-                gap: 10, marginBottom: 28,
-              }}>
-                {BUSINESS_TYPES.map(bt => {
-                  const selected = form.businessType === bt.key;
+            <AuthTextField
+              label="Nombre del negocio"
+              value={form.businessName}
+              onChange={(event) => updateForm('businessName', event.target.value)}
+              autoComplete="organization"
+              placeholder="Nombre comercial"
+              error={fieldErrors.businessName}
+            />
+
+            <AuthTextField
+              label="WhatsApp o telefono"
+              value={form.phone}
+              onChange={(event) => updateForm('phone', event.target.value)}
+              autoComplete="tel"
+              placeholder="+54 9 ..."
+              error={fieldErrors.phone}
+              hint="Opcional, pero sirve para personalizar la demo y el contacto."
+            />
+          </>
+        ) : null}
+
+        {step === 3 ? (
+          <>
+            <div style={{ display: 'grid', gap: 12 }}>
+              <span className="lc-auth-field-label">Rubro principal</span>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+                  gap: 10,
+                }}
+              >
+                {BUSINESS_TYPES.map((businessType) => {
+                  const selected = form.businessType === businessType.key;
                   return (
                     <button
-                      key={bt.key} type="button"
-                      onClick={() => setForm(f => ({ ...f, businessType: bt.key }))}
+                      key={businessType.key}
+                      type="button"
+                      onClick={() => updateForm('businessType', businessType.key)}
                       style={{
-                        padding: '14px 12px', textAlign: 'left', cursor: 'pointer',
-                        border: `1px solid ${selected ? 'var(--color-accent)' : 'var(--color-border)'}`,
-                        background: selected ? 'rgba(255,59,0,0.06)' : 'var(--color-surface)',
-                        transition: 'border-color 0.15s, background 0.15s',
-                        outline: 'none',
+                        border: `1px solid ${selected ? 'var(--color-accent)' : 'rgba(15,23,42,0.12)'}`,
+                        background: selected ? 'rgba(255,59,0,0.06)' : 'rgba(255,255,255,0.85)',
+                        padding: '14px 14px 16px',
+                        textAlign: 'left',
+                        cursor: 'pointer',
                       }}
                     >
-                      <div style={{ fontSize: 24, marginBottom: 8 }}>{bt.icon}</div>
-                      <div style={{
-                        fontFamily: 'var(--font-sans)', fontSize: 13, lineHeight: 1.3,
-                        color: selected ? 'var(--color-accent)' : 'var(--color-text)',
-                        fontWeight: selected ? 600 : 400,
-                      }}>
-                        {bt.label}
+                      <div
+                        style={{
+                          fontWeight: 700,
+                          color: selected ? 'var(--color-accent)' : '#18181b',
+                          marginBottom: 6,
+                        }}
+                      >
+                        {businessType.label}
+                      </div>
+                      <div style={{ fontSize: 12, lineHeight: 1.6, color: '#5b6270' }}>
+                        {businessType.detail}
                       </div>
                     </button>
                   );
                 })}
               </div>
-            </>
-          )}
+              {fieldErrors.businessType ? (
+                <span className="lc-auth-field-error">{fieldErrors.businessType}</span>
+              ) : null}
+            </div>
 
-          {error && (
-            <p style={{
-              color: '#EF4444', fontSize: 13, marginBottom: 16,
-              fontFamily: 'var(--font-sans)',
-            }}>
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading || (step === 3 && !form.businessType)}
-            className="btn-primary-accent"
-            style={{ width: '100%', justifyContent: 'center', opacity: loading ? 0.7 : 1 }}
-          >
-            {step < 3 ? 'Continuar →' : '🚀 Crear mi demo gratis'}
-          </button>
-
-          {step > 1 && (
-            <button
-              type="button"
-              onClick={() => setStep((s) => (s - 1) as 1 | 2)}
+            <label
               style={{
-                marginTop: 12, width: '100%',
-                background: 'none', border: 'none', cursor: 'pointer',
-                fontFamily: 'var(--font-sans)', fontSize: 13,
-                color: 'var(--color-muted)', padding: '8px',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: 12,
+                marginTop: 20,
+                fontSize: 13,
+                lineHeight: 1.65,
+                color: '#4b5563',
               }}
             >
-              ← Atrás
+              <input
+                type="checkbox"
+                checked={form.acceptSetup}
+                onChange={(event) => updateForm('acceptSetup', event.target.checked)}
+                style={{ marginTop: 3 }}
+              />
+              Confirmo que quiero crear una demo de 7 dias y recibir el email de acceso en la cuenta indicada.
+            </label>
+            {fieldErrors.acceptSetup ? (
+              <span className="lc-auth-field-error" style={{ display: 'block', marginTop: 8 }}>
+                {fieldErrors.acceptSetup}
+              </span>
+            ) : null}
+
+            <AuthNotice tone="info">
+              El sistema crea la cuenta, el tenant, el indice administrativo y los claims en un flujo unico.
+            </AuthNotice>
+          </>
+        ) : null}
+
+        {error ? <AuthNotice tone="error">{error}</AuthNotice> : null}
+
+        <div style={{ display: 'grid', gap: 12, marginTop: 4 }}>
+          {step < 3 ? (
+            <button
+              type="button"
+              className="btn-primary-accent"
+              onClick={handleNextStep}
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              Continuar
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="btn-primary-accent"
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              Crear mi demo segura
             </button>
           )}
-        </form>
 
-        <p style={{
-          marginTop: 24, textAlign: 'center',
-          fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--color-muted)',
-        }}>
-          ¿Ya tenés cuenta?{' '}
-          <Link to="/login" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontWeight: 500 }}>
-            Iniciá sesión
-          </Link>
-        </p>
-      </div>
-    </div>
+          {step > 1 ? (
+            <button
+              type="button"
+              className="btn-ghost"
+              onClick={() => setStep((current) => (current - 1) as TenantRegisterStep)}
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              Volver al paso anterior
+            </button>
+          ) : null}
+        </div>
+      </form>
+    </AuthScaffold>
   );
 }

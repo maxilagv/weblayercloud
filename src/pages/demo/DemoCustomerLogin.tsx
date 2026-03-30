@@ -1,117 +1,169 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  AuthNotice,
+  AuthPasswordField,
+  AuthScaffold,
+  AuthTextField,
+} from '../../components/auth/AuthScaffold';
+import {
+  isValidEmail,
+  mapCustomerAuthError,
+  normalizeEmail,
+} from '../../lib/auth';
 import { useTenant } from '../../context/TenantContext';
 import { useDemoCustomerAuth } from '../../hooks/useDemoCustomerAuth';
 
-function mapAuthError(errorCode?: string) {
-  if (errorCode === 'auth/user-not-found') return 'No encontramos un usuario con ese email.';
-  if (errorCode === 'auth/wrong-password') return 'La contraseña es incorrecta.';
-  if (errorCode === 'auth/invalid-credential') return 'Email o contraseña incorrectos.';
-  return 'No fue posible iniciar sesion. Intenta nuevamente.';
-}
-
 export default function DemoCustomerLogin() {
   const { tenantId, tenantMeta } = useTenant();
-  const { loginCustomer } = useDemoCustomerAuth(tenantId);
+  const { loginCustomer, sendPasswordResetLink } = useDemoCustomerAuth(tenantId);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resetState, setResetState] = useState<'idle' | 'sending' | 'sent'>('idle');
 
   const primary = tenantMeta?.theme?.primaryColor ?? '#FF3B00';
   const redirect = searchParams.get('redirect');
-  const redirectTo = redirect === 'checkout' ? `/demo/${tenantId}/checkout` : `/demo/${tenantId}/mi-cuenta`;
+  const redirectTo =
+    redirect === 'checkout'
+      ? `/demo/${tenantId}/checkout`
+      : `/demo/${tenantId}/mi-cuenta`;
+  const primaryButtonStyle = {
+    width: '100%',
+    justifyContent: 'center',
+    ['--btn-primary-bg' as any]: primary,
+    ['--btn-primary-hover' as any]: primary,
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    setLoading(true);
     setError('');
+    setLoading(true);
+
     try {
       await loginCustomer(email, password);
       navigate(redirectTo);
-    } catch (submitError: any) {
-      setError(mapAuthError(submitError?.code));
+    } catch (submitError) {
+      setError(mapCustomerAuthError(submitError));
     } finally {
       setLoading(false);
     }
   };
 
+  const handleReset = async () => {
+    if (!isValidEmail(email)) {
+      setError('Ingresa tu email para enviarte el enlace de recuperacion.');
+      return;
+    }
+
+    setError('');
+    setResetState('sending');
+
+    try {
+      await sendPasswordResetLink(normalizeEmail(email));
+    } catch {
+      // Evitamos enumerar usuarios.
+    } finally {
+      setResetState('sent');
+    }
+  };
+
   return (
-    <div
-      style={{
-        minHeight: '100svh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 'clamp(20px, 6vw, 48px)',
-        background: '#0f0f13',
-      }}
-    >
-      <div
-        style={{
-          width: 'min(460px, 100%)',
-          background: '#17171f',
-          border: '1px solid rgba(255,255,255,0.08)',
-          borderTop: `3px solid ${primary}`,
-          padding: '28px',
-          color: '#fff',
-        }}
-      >
-        <p className="demo-admin-page-eyebrow" style={{ marginBottom: 10 }}>
-          Cliente web
-        </p>
-        <h1 className="demo-admin-page-title" style={{ fontSize: 30 }}>
-          Ingresar a {tenantMeta?.businessName}
-        </h1>
-        <p className="demo-admin-page-desc" style={{ marginBottom: 24 }}>
-          Accede a tu cuenta para ver pedidos, autocompletar checkout y guardar tus datos.
-        </p>
-
-        <form onSubmit={handleSubmit} className="demo-admin-grid">
-          <label className="demo-admin-field">
-            <span className="demo-admin-label">Email</span>
-            <input
-              className="demo-admin-input"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              autoComplete="email"
-              required
-            />
-          </label>
-          <label className="demo-admin-field">
-            <span className="demo-admin-label">Contraseña</span>
-            <input
-              className="demo-admin-input"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              autoComplete="current-password"
-              required
-            />
-          </label>
-          {error ? (
-            <div className="demo-admin-message error">{error}</div>
-          ) : null}
-          <button className="demo-admin-button" type="submit" disabled={loading}>
-            {loading ? 'Ingresando...' : 'Ingresar'}
-          </button>
-        </form>
-
-        <div style={{ marginTop: 18, display: 'flex', justifyContent: 'space-between', gap: 12 }}>
-          <Link to={`/demo/${tenantId}`} style={{ color: 'rgba(255,255,255,0.48)', textDecoration: 'none' }}>
+    <AuthScaffold
+      accentColor={primary}
+      brandEyebrow={tenantMeta?.businessName ?? 'Area de clientes'}
+      brandTitle={`Accede a tu cuenta en ${tenantMeta?.businessName ?? 'la tienda'}`}
+      brandDescription="Guarda tus datos, revisa pedidos y reutiliza tu cuenta web en cada nueva compra dentro de esta demo."
+      features={[
+        {
+          title: 'Pedidos accesibles',
+          description: 'Consulta tu historial y tus datos desde cualquier dispositivo.',
+        },
+        {
+          title: 'Registro consistente',
+          description: 'Tu perfil del store se crea con validaciones y flujo de alta controlado.',
+        },
+        {
+          title: 'Recuperacion incluida',
+          description: 'Si olvidas tu contrasena, puedes reiniciar acceso desde esta misma pantalla.',
+        },
+      ]}
+      headerEyebrow="Area de clientes"
+      headerTitle="Inicia sesion"
+      headerDescription="Usa tu cuenta de cliente para ver tu perfil, agilizar el checkout y mantener tus datos sincronizados con la tienda."
+      footer={
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+          <p>
+            No tienes cuenta?{' '}
+            <Link
+              to={`/demo/${tenantId}/registro${redirect ? `?redirect=${redirect}` : ''}`}
+              style={{ color: primary, fontWeight: 700, textDecoration: 'none' }}
+            >
+              Crear cuenta
+            </Link>
+          </p>
+          <Link
+            to={`/demo/${tenantId}`}
+            style={{ color: '#71717a', textDecoration: 'none', fontWeight: 600 }}
+          >
             Volver a la tienda
           </Link>
-          <Link
-            to={`/demo/${tenantId}/registro${redirect ? `?redirect=${redirect}` : ''}`}
-            style={{ color: primary, textDecoration: 'none', fontWeight: 700 }}
-          >
-            Crear cuenta
-          </Link>
         </div>
-      </div>
-    </div>
+      }
+      backTo={`/demo/${tenantId}`}
+      backLabel="Volver a la tienda"
+    >
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 16 }}>
+        <AuthTextField
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          autoComplete="email"
+          placeholder="tu@email.com"
+          disabled={loading}
+        />
+
+        <AuthPasswordField
+          label="Contrasena"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          autoComplete="current-password"
+          placeholder="Tu contrasena"
+          disabled={loading}
+        />
+
+        {error ? <AuthNotice tone="error">{error}</AuthNotice> : null}
+        {resetState === 'sent' ? (
+          <AuthNotice tone="success">
+            Si la cuenta existe, te enviamos un enlace para restablecer la contrasena.
+          </AuthNotice>
+        ) : null}
+
+        <div style={{ display: 'grid', gap: 12, marginTop: 4 }}>
+          <button
+            type="submit"
+            className="btn-primary-accent"
+            disabled={loading}
+            style={primaryButtonStyle}
+          >
+            {loading ? 'Verificando acceso...' : 'Ingresar a mi cuenta'}
+          </button>
+
+          <button
+            type="button"
+            className="btn-ghost"
+            onClick={handleReset}
+            disabled={loading || resetState === 'sending'}
+            style={{ width: '100%', justifyContent: 'center' }}
+          >
+            {resetState === 'sending' ? 'Enviando enlace...' : 'Olvide mi contrasena'}
+          </button>
+        </div>
+      </form>
+    </AuthScaffold>
   );
 }

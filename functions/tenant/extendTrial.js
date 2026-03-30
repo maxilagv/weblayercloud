@@ -3,6 +3,7 @@
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
+const { makeEmailKey } = require('../utils/authValidation');
 
 module.exports = onCall(async (request) => {
   if (request.auth?.token.role !== 'layercloud_superadmin') {
@@ -35,6 +36,20 @@ module.exports = onCall(async (request) => {
   const batch = db.batch();
   batch.update(metaRef,  { trialEndsAt: newEndTs, trialActive: true, plan: 'trial' });
   batch.update(indexRef, { trialEndsAt: newEndTs, trialActive: true });
+  if (meta.ownerEmail) {
+    batch.set(
+      db.collection('layercloud_owner_accounts').doc(makeEmailKey(meta.ownerEmail)),
+      {
+        tenantId,
+        ownerEmail: meta.ownerEmail,
+        ...(meta.ownerUid ? { ownerUid: meta.ownerUid } : {}),
+        trialEndsAt: newEndTs,
+        trialActive: true,
+        plan: 'trial',
+      },
+      { merge: true }
+    );
+  }
   await batch.commit();
 
   // Restaurar custom claims si estaban revocados
@@ -43,6 +58,8 @@ module.exports = onCall(async (request) => {
       tenantId,
       role:        'tenant_admin',
       trialActive: true,
+      active:      true,
+      plan:        'trial',
     });
   }
 

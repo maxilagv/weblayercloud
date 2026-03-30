@@ -1,14 +1,40 @@
 import { useEffect, useState } from 'react';
 import {
-  createUserWithEmailAndPassword,
+  browserLocalPersistence,
   onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  setPersistence,
   signInWithEmailAndPassword,
   signOut,
-  updateProfile,
+  type User,
 } from 'firebase/auth';
-import { doc, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
+import {
+  doc,
+  getDoc,
+  onSnapshot,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import app, { auth, db } from '../lib/firebase';
+import { normalizeEmail, normalizePhone, splitDisplayName } from '../lib/auth';
 import type { TenantCustomer } from './useTenantCustomers';
+
+const functions = getFunctions(app, 'us-central1');
+const registerTenantCustomer = httpsCallable<
+  {
+    tenantId: string;
+    nombre: string;
+    apellido: string;
+    email: string;
+    telefono: string;
+    direccion: string;
+    password: string;
+  },
+  { uid: string }
+>(functions, 'registerTenantCustomer');
 
 export interface DemoCustomerUser extends TenantCustomer {
   uid: string;
@@ -24,12 +50,58 @@ export interface RegisterDemoCustomerPayload {
   password: string;
 }
 
+async function ensurePersistentSession() {
+  await setPersistence(auth, browserLocalPersistence);
+}
+
+async function signInWithRetry(email: string, password: string) {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    try {
+      return await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      lastError = error;
+      await new Promise((resolve) => window.setTimeout(resolve, 350 * (attempt + 1)));
+    }
+  }
+
+  throw lastError;
+}
+
+function buildProfilePayload(
+  firebaseUser: User,
+  payload?: Partial<Omit<RegisterDemoCustomerPayload, 'password'>>,
+) {
+  const derivedName = splitDisplayName(firebaseUser.displayName);
+  const nombre = payload?.nombre?.trim() || derivedName.nombre || 'Cliente';
+  const apellido = payload?.apellido?.trim() || derivedName.apellido || '';
+  const email = normalizeEmail(payload?.email ?? firebaseUser.email ?? '');
+  const telefono = normalizePhone(payload?.telefono ?? '');
+  const direccion = payload?.direccion?.trim() ?? '';
+
+  return {
+    uid: firebaseUser.uid,
+    nombre,
+    apellido,
+    email,
+    telefono,
+    direccion,
+    tipo: 'web' as const,
+    updatedAt: serverTimestamp(),
+  };
+}
+
 export function useDemoCustomerAuth(tenantId: string) {
   const [customerUser, setCustomerUser] = useState<DemoCustomerUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!tenantId) return;
+    if (!tenantId) {
+      setCustomerUser(null);
+      setLoading(false);
+      return;
+    }
 
     let unsubscribeProfile = () => undefined;
 
@@ -73,66 +145,79 @@ export function useDemoCustomerAuth(tenantId: string) {
     };
   }, [tenantId]);
 
+  const ensureCustomerProfile = async (
+    payload?: Partial<Omit<RegisterDemoCustomerPayload, 'password'>>,
+  ) => {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser || !tenantId) {
+      return;
+    }
+
+    const tokenResult = await firebaseUser.getIdTokenResult();
+    if (tokenResult.claims.role) {
+      throw Object.assign(new Error('Not a store customer'), {
+        code: 'auth/not-store-customer',
+      });
+    }
+
+    const customerRef = doc(db, 'tenants', tenantId, 'customers', firebaseUser.uid);
+    const snapshot = await getDoc(customerRef);
+    const profile = buildProfilePayload(firebaseUser, payload);
+
+    await setDoc(
+      customerRef,
+      {
+        ...profile,
+        ...(snapshot.exists() ? {} : { createdAt: serverTimestamp() }),
+      },
+      { merge: true },
+    );
+  };
+
   const loginCustomer = async (email: string, password: string) => {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
+    await ensurePersistentSession();
+    const credential = await signInWithRetry(normalizeEmail(email), password);
+    await ensureCustomerProfile();
     return credential.user;
   };
 
   const registerCustomer = async (payload: RegisterDemoCustomerPayload) => {
-    const credential = await createUserWithEmailAndPassword(auth, payload.email, payload.password);
-
-    await updateProfile(credential.user, {
-      displayName: `${payload.nombre} ${payload.apellido}`.trim(),
+    await ensurePersistentSession();
+    await registerTenantCustomer({
+      tenantId,
+      nombre: payload.nombre.trim(),
+      apellido: payload.apellido.trim(),
+      email: normalizeEmail(payload.email),
+      telefono: normalizePhone(payload.telefono),
+      direccion: payload.direccion.trim(),
+      password: payload.password,
     });
 
-    await setDoc(
-      doc(db, 'tenants', tenantId, 'customers', credential.user.uid),
-      {
-        uid: credential.user.uid,
-        nombre: payload.nombre.trim(),
-        apellido: payload.apellido.trim(),
-        email: payload.email.trim().toLowerCase(),
-        telefono: payload.telefono.trim(),
-        direccion: payload.direccion.trim(),
-        tipo: 'web',
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      },
-      { merge: true },
-    );
+    const credential = await signInWithRetry(normalizeEmail(payload.email), payload.password);
 
+    await ensureCustomerProfile(payload);
+    await sendEmailVerification(credential.user).catch(() => undefined);
     return credential.user;
   };
 
   const updateCustomerProfile = async (payload: Partial<RegisterDemoCustomerPayload>) => {
     const uid = auth.currentUser?.uid;
-    if (!uid) return;
+    if (!uid) {
+      return;
+    }
 
     await updateDoc(doc(db, 'tenants', tenantId, 'customers', uid), {
-      ...payload,
-      email: payload.email?.trim().toLowerCase(),
+      ...('nombre' in payload ? { nombre: payload.nombre?.trim() } : {}),
+      ...('apellido' in payload ? { apellido: payload.apellido?.trim() } : {}),
+      ...('direccion' in payload ? { direccion: payload.direccion?.trim() } : {}),
+      ...('telefono' in payload ? { telefono: normalizePhone(payload.telefono ?? '') } : {}),
+      ...('email' in payload ? { email: normalizeEmail(payload.email ?? '') } : {}),
       updatedAt: serverTimestamp(),
     });
   };
 
-  const ensureCustomerProfile = async (payload: Omit<RegisterDemoCustomerPayload, 'password'>) => {
-    const uid = auth.currentUser?.uid;
-    if (!uid) return;
-
-    await setDoc(
-      doc(db, 'tenants', tenantId, 'customers', uid),
-      {
-        uid,
-        nombre: payload.nombre.trim(),
-        apellido: payload.apellido.trim(),
-        email: payload.email.trim().toLowerCase(),
-        telefono: payload.telefono.trim(),
-        direccion: payload.direccion.trim(),
-        tipo: 'web',
-        updatedAt: serverTimestamp(),
-      },
-      { merge: true },
-    );
+  const sendPasswordResetLink = async (email: string) => {
+    await sendPasswordResetEmail(auth, normalizeEmail(email));
   };
 
   const logoutCustomer = () => signOut(auth);
@@ -144,6 +229,7 @@ export function useDemoCustomerAuth(tenantId: string) {
     registerCustomer,
     updateCustomerProfile,
     ensureCustomerProfile,
+    sendPasswordResetLink,
     logoutCustomer,
   };
 }

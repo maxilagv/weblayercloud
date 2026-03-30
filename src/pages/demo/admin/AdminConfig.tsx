@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent, type CSSProperties } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { doc, setDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useTenant } from '../../../context/TenantContext';
@@ -52,11 +53,28 @@ const FONT_OPTIONS = [
 export default function AdminConfig({ tenantId }: { tenantId: string }) {
   const { tenantMeta } = useTenant();
   const { config, saveConfig } = useTenantBusinessConfig(tenantId);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<TabId>('identidad');
   const [saving, setSaving]       = useState(false);
   const [logoUploading, setLogoUploading] = useState(false);
   const [savedMsg, setSavedMsg]   = useState('');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (!tabParam) return;
+    const targetTab = TABS.find((tab) => tab.id === tabParam)?.id;
+    if (targetTab) {
+      setActiveTab(targetTab);
+    }
+  }, [searchParams]);
+
+  const handleTabChange = (tabId: TabId) => {
+    setActiveTab(tabId);
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.set('tab', tabId);
+    setSearchParams(nextParams, { replace: true });
+  };
 
   const [form, setForm] = useState({
     // Identidad
@@ -230,7 +248,7 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
     <div>
       <AdminPageHeader
         eyebrow="Tienda"
-        title="Configuracion"
+        title="Configuración"
         description="Personaliza la identidad, textos, colores y todos los detalles de tu tienda."
         actions={
           <AdminButton onClick={handleSave} disabled={saving}>
@@ -249,7 +267,7 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
         overflowX: 'auto',
       }}>
         {TABS.map((tab) => (
-          <button key={tab.id} style={tabBtn(tab.id)} onClick={() => setActiveTab(tab.id)}>
+          <button key={tab.id} style={tabBtn(tab.id)} onClick={() => handleTabChange(tab.id)}>
             {tab.label}
           </button>
         ))}
@@ -358,9 +376,9 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
       {/* ─── Tab: Hero ──────────────────────────────────────────── */}
       {activeTab === 'hero' && (
         <AdminSurface padding="pad-md">
-          <p className="demo-admin-page-eyebrow" style={{ marginBottom: 16 }}>Seccion principal</p>
+          <p className="demo-admin-page-eyebrow" style={{ marginBottom: 16 }}>Sección principal</p>
           <div className="demo-admin-grid">
-            <AdminField label="Titulo principal">
+            <AdminField label="Título principal">
               <AdminInput
                 value={form.heroTitle}
                 onChange={(e) => set('heroTitle', e.target.value)}
@@ -368,24 +386,24 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
               />
             </AdminField>
 
-            <AdminField label="Subtitulo / descripcion breve">
+            <AdminField label="Subtítulo / descripción breve">
               <AdminTextarea
                 value={form.heroSubtitle}
                 onChange={(e) => set('heroSubtitle', e.target.value)}
                 rows={3}
-                placeholder="Ej: Encontra lo que buscas con envio a todo el pais"
+                placeholder="Ej: Encontrá lo que buscás con envío a todo el país"
               />
             </AdminField>
 
             <div className="demo-admin-inline-grid">
-              <AdminField label="Texto del boton principal">
+              <AdminField label="Texto del botón principal">
                 <AdminInput
                   value={form.heroCTALabel}
                   onChange={(e) => set('heroCTALabel', e.target.value)}
-                  placeholder="Ej: Ver coleccion"
+                  placeholder="Ej: Ver colección"
                 />
               </AdminField>
-              <AdminField label="Texto del boton secundario">
+              <AdminField label="Texto del botón secundario">
                 <AdminInput
                   value={form.heroSecondaryCTALabel}
                   onChange={(e) => set('heroSecondaryCTALabel', e.target.value)}
@@ -395,8 +413,8 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
             </div>
 
             <div style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', fontSize: 12, color: 'rgba(255,255,255,0.4)', lineHeight: 1.7 }}>
-              Las imagenes del slider hero se configuran desde{' '}
-              <strong style={{ color: 'rgba(255,255,255,0.6)' }}>Landing</strong> en el menu lateral.
+              Las imágenes del slider hero se configuran desde{' '}
+              <strong style={{ color: 'rgba(255,255,255,0.6)' }}>Landing</strong> en el menú lateral.
             </div>
           </div>
         </AdminSurface>
@@ -407,23 +425,23 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
         <div className="demo-admin-grid">
           <AdminSurface padding="pad-md">
             <p className="demo-admin-page-eyebrow" style={{ marginBottom: 14 }}>Barra de anuncio</p>
-            <AdminField label="Texto del banner superior (dejar vacio para ocultar)">
+            <AdminField label="Texto del banner superior (dejar vacío para ocultar)">
               <AdminInput
                 value={form.bannerText}
                 onChange={(e) => set('bannerText', e.target.value)}
-                placeholder="Ej: Envio gratis en compras mayores a $50.000"
+                placeholder="Ej: Envío gratis en compras mayores a $50.000"
               />
             </AdminField>
           </AdminSurface>
 
           <AdminSurface padding="pad-md">
-            <p className="demo-admin-page-eyebrow" style={{ marginBottom: 14 }}>Seccion Nosotros</p>
+            <p className="demo-admin-page-eyebrow" style={{ marginBottom: 14 }}>Sección Nosotros</p>
             <div className="demo-admin-grid">
-              <AdminField label="Titulo">
+              <AdminField label="Título">
                 <AdminInput
                   value={form.aboutTitle}
                   onChange={(e) => set('aboutTitle', e.target.value)}
-                  placeholder="Ej: Quienes somos"
+                  placeholder="Ej: Quiénes somos"
                 />
               </AdminField>
               <AdminField label="Texto descriptivo">
@@ -440,18 +458,18 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
           <AdminSurface padding="pad-md">
             <p className="demo-admin-page-eyebrow" style={{ marginBottom: 14 }}>Grilla de productos</p>
             <div className="demo-admin-inline-grid">
-              <AdminField label="Titulo de la seccion">
+              <AdminField label="Título de la sección">
                 <AdminInput
                   value={form.productsSectionTitle}
                   onChange={(e) => set('productsSectionTitle', e.target.value)}
                   placeholder="Ej: Nuestros productos"
                 />
               </AdminField>
-              <AdminField label="Subtitulo">
+              <AdminField label="Subtítulo">
                 <AdminInput
                   value={form.productsSectionSubtitle}
                   onChange={(e) => set('productsSectionSubtitle', e.target.value)}
-                  placeholder="Ej: Los mas vendidos de la semana"
+                  placeholder="Ej: Los más vendidos de la semana"
                 />
               </AdminField>
             </div>
@@ -476,7 +494,7 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
           <AdminSurface padding="pad-md">
             <div className="demo-admin-grid">
               <div className="demo-admin-inline-grid">
-                <AdminField label="WhatsApp (con codigo pais)">
+                <AdminField label="WhatsApp (con código país)">
                   <AdminInput
                     value={form.whatsappNumber}
                     onChange={(e) => set('whatsappNumber', e.target.value)}
@@ -492,21 +510,21 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
                   />
                 </AdminField>
               </div>
-              <AdminField label="Direccion fisica">
+              <AdminField label="Dirección física">
                 <AdminInput
                   value={form.address}
                   onChange={(e) => set('address', e.target.value)}
                   placeholder="Ej: Av. Corrientes 1234, Buenos Aires"
                 />
               </AdminField>
-              <AdminField label="Horario de atencion">
+              <AdminField label="Horario de atención">
                 <AdminInput
                   value={form.scheduleText}
                   onChange={(e) => set('scheduleText', e.target.value)}
                   placeholder="Ej: Lun a Vie 9 - 18hs / Sab 10 - 14hs"
                 />
               </AdminField>
-              <AdminField label="Color del boton de WhatsApp">
+              <AdminField label="Color del botón de WhatsApp">
                 <AdminSelect
                   value={form.whatsappBubbleColor}
                   onChange={(e) => set('whatsappBubbleColor', e.target.value)}
@@ -550,7 +568,7 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
           <AdminSurface padding="pad-md">
             <p className="demo-admin-page-eyebrow" style={{ marginBottom: 14 }}>SEO</p>
             <div className="demo-admin-grid">
-              <AdminField label="Titulo de pagina (meta title)">
+              <AdminField label="Título de página (meta title)">
                 <AdminInput
                   value={form.seoTitle}
                   onChange={(e) => set('seoTitle', e.target.value)}
@@ -558,13 +576,13 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
                   maxLength={70}
                 />
               </AdminField>
-              <AdminField label="Descripcion para Google (meta description)">
+              <AdminField label="Descripción para Google (meta description)">
                 <AdminTextarea
                   value={form.seoDescription}
                   onChange={(e) => set('seoDescription', e.target.value)}
                   rows={3}
                   maxLength={160}
-                  placeholder="Breve descripcion de tu negocio para motores de busqueda..."
+                  placeholder="Breve descripción de tu negocio para motores de búsqueda..."
                 />
               </AdminField>
               <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', fontFamily: 'monospace' }}>
@@ -576,7 +594,7 @@ export default function AdminConfig({ tenantId }: { tenantId: string }) {
           <AdminSurface padding="pad-md">
             <p className="demo-admin-page-eyebrow">Pagos</p>
             <h2 className="demo-admin-page-title" style={{ fontSize: 20, marginBottom: 16 }}>
-              Metodos aceptados
+              Métodos aceptados
             </h2>
             <div className="demo-admin-grid">
               {PAYMENT_OPTIONS.map((method) => (

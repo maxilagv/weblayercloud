@@ -1,104 +1,139 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthNotice, AuthPasswordField, AuthScaffold, AuthTextField } from '../../components/auth/AuthScaffold';
+import { isValidEmail, mapTenantAuthError, normalizeEmail } from '../../lib/auth';
 import { useTenantAuth } from '../../hooks/useTenantAuth';
 
 export default function TenantLogin() {
   const navigate = useNavigate();
-  const { login } = useTenantAuth();
-
-  const [email, setEmail]     = useState('');
+  const { login, sendPasswordResetLink } = useTenantAuth();
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState('');
+  const [error, setError] = useState('');
+  const [resetState, setResetState] = useState<'idle' | 'sending' | 'sent'>('idle');
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
     setError('');
+    setLoading(true);
+
     try {
-      const { user: loggedUser } = await login(email, password);
-      const token = await loggedUser.getIdTokenResult(true);
+      const { user } = await login(email, password);
+      const token = await user.getIdTokenResult(true);
+
       if (token.claims.role === 'layercloud_superadmin') {
         navigate('/layercloud-admin');
-      } else {
-        navigate('/dashboard');
+        return;
       }
-    } catch (err: any) {
-      const msg = err.code === 'auth/invalid-credential'
-        ? 'Email o contraseña incorrectos.'
-        : 'Error al iniciar sesión. Intentá de nuevo.';
-      setError(msg);
+
+      navigate('/dashboard');
+    } catch (submitError) {
+      setError(mapTenantAuthError(submitError));
+    } finally {
       setLoading(false);
     }
   };
 
+  const handleReset = async () => {
+    if (!isValidEmail(email)) {
+      setError('Ingresa tu email para enviarte el enlace de recuperacion.');
+      return;
+    }
+
+    setError('');
+    setResetState('sending');
+
+    try {
+      await sendPasswordResetLink(normalizeEmail(email));
+    } catch {
+      // Evitamos enumerar cuentas: mostramos el mismo estado de exito.
+    } finally {
+      setResetState('sent');
+    }
+  };
+
   return (
-    <div style={{
-      minHeight: '100svh', background: 'var(--color-bg)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: 'clamp(24px, 6vw, 64px)',
-    }}>
-      <div style={{ width: '100%', maxWidth: 420 }}>
-        <Link to="/" style={{ textDecoration: 'none', display: 'block', marginBottom: 40 }}>
-          <span style={{
-            fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 20,
-            letterSpacing: '-0.04em', color: 'var(--color-text)',
-          }}>
-            Layer<span style={{ color: 'var(--color-accent)' }}>Cloud</span>
-          </span>
-        </Link>
-
-        <p className="eyebrow">// Acceso a tu demo</p>
-        <h1 style={{
-          fontFamily: 'var(--font-display)', fontSize: 'clamp(26px, 4vw, 36px)',
-          fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--color-text)',
-          marginBottom: 32, lineHeight: 1.1,
-        }}>
-          Bienvenido de vuelta
-        </h1>
-
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <input
-              type="email" required placeholder=" "
-              value={email} onChange={e => setEmail(e.target.value)}
-            />
-            <label>Email</label>
-          </div>
-          <div className="input-group">
-            <input
-              type="password" required placeholder=" "
-              value={password} onChange={e => setPassword(e.target.value)}
-            />
-            <label>Contraseña</label>
-          </div>
-
-          {error && (
-            <p style={{ color: '#EF4444', fontSize: 13, marginBottom: 16, fontFamily: 'var(--font-sans)' }}>
-              {error}
-            </p>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary-accent"
-            style={{ width: '100%', justifyContent: 'center', opacity: loading ? 0.7 : 1 }}
-          >
-            {loading ? 'Ingresando...' : 'Ingresar →'}
-          </button>
-        </form>
-
-        <p style={{
-          marginTop: 24, textAlign: 'center',
-          fontFamily: 'var(--font-sans)', fontSize: 13, color: 'var(--color-muted)',
-        }}>
-          ¿No tenés cuenta?{' '}
-          <Link to="/registro" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontWeight: 500 }}>
-            Crear demo gratis
+    <AuthScaffold
+      brandEyebrow="LayerCloud access"
+      brandTitle="Accede al panel con un flujo mas limpio y seguro."
+      brandDescription="Centralizamos el alta en backend, controlamos duplicados reales y dejamos la experiencia de acceso al nivel del resto del producto."
+      features={[
+        {
+          title: 'Provision segura',
+          description: 'La cuenta se crea completa o se revierte. No quedan tenants a medias.',
+        },
+        {
+          title: 'Recuperacion integrada',
+          description: 'Puedes reenviar acceso y resetear contrasena sin salir del flujo.',
+        },
+        {
+          title: 'Claims reparables',
+          description: 'Si habia cuentas viejas con claims rotos, el login intenta recuperarlas.',
+        },
+      ]}
+      headerEyebrow="Acceso tenant"
+      headerTitle="Bienvenido de vuelta"
+      headerDescription="Ingresa con tu cuenta de administrador para abrir tu dashboard, tu demo o el panel de superadmin segun los permisos del usuario."
+      footer={
+        <p>
+          Aun no tienes cuenta?{' '}
+          <Link to="/registro" style={{ color: 'var(--color-accent)', fontWeight: 700, textDecoration: 'none' }}>
+            Crear demo
           </Link>
         </p>
-      </div>
-    </div>
+      }
+      backTo="/"
+      backLabel="Volver a LayerCloud"
+    >
+      <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 16 }}>
+        <AuthTextField
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          autoComplete="email"
+          placeholder="fundador@negocio.com"
+          disabled={loading}
+        />
+
+        <AuthPasswordField
+          label="Contrasena"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          autoComplete="current-password"
+          placeholder="Tu contrasena"
+          disabled={loading}
+        />
+
+        {error ? <AuthNotice tone="error">{error}</AuthNotice> : null}
+        {resetState === 'sent' ? (
+          <AuthNotice tone="success">
+            Si el email existe, te enviamos un enlace para restablecer la contrasena.
+          </AuthNotice>
+        ) : null}
+
+        <div style={{ display: 'grid', gap: 12, marginTop: 4 }}>
+          <button
+            type="submit"
+            className="btn-primary-accent"
+            disabled={loading}
+            style={{ width: '100%', justifyContent: 'center' }}
+          >
+            {loading ? 'Validando acceso...' : 'Ingresar al panel'}
+          </button>
+
+          <button
+            type="button"
+            className="btn-ghost"
+            onClick={handleReset}
+            disabled={loading || resetState === 'sending'}
+            style={{ width: '100%', justifyContent: 'center' }}
+          >
+            {resetState === 'sending' ? 'Enviando enlace...' : 'Olvide mi contrasena'}
+          </button>
+        </div>
+      </form>
+    </AuthScaffold>
   );
 }

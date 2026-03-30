@@ -85,6 +85,43 @@ service cloud.firestore {
              .hasOnly(['siteConfig', 'theme', 'updatedAt']);
     }
 
+    function isCustomerSelf(customerId) {
+      return isSignedIn()
+        && request.auth.uid == customerId;
+    }
+
+    function customerSelfCreateAllowed(customerId) {
+      return request.resource.data.keys().hasOnly([
+        'uid',
+        'nombre',
+        'apellido',
+        'email',
+        'telefono',
+        'direccion',
+        'tipo',
+        'createdAt',
+        'updatedAt'
+      ])
+      && request.resource.data.uid == customerId
+      && request.resource.data.email == request.auth.token.email
+      && request.resource.data.tipo == 'web';
+    }
+
+    function customerSelfUpdateAllowed(customerId) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'nombre',
+        'apellido',
+        'email',
+        'telefono',
+        'direccion',
+        'updatedAt'
+      ])
+      && request.resource.data.uid == resource.data.uid
+      && request.resource.data.uid == customerId
+      && request.resource.data.email == request.auth.token.email
+      && request.resource.data.tipo == resource.data.tipo;
+    }
+
 
     // =========================================================================
     // ══ CAPA A — LANDING PAGE ANALYTICS & LEADS ══════════════════════════════
@@ -222,10 +259,34 @@ service cloud.firestore {
         allow create: if trialIsActive(tenantId);
 
         allow read:   if isSuperAdmin()
-                   || (isTenantMember(tenantId) && trialIsActive(tenantId));
+                   || (isTenantMember(tenantId) && trialIsActive(tenantId))
+                   || (isSignedIn()
+                       && resource.data.customerId == request.auth.uid
+                       && trialIsActive(tenantId));
 
         allow update,
               delete: if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
+      }
+
+      match /customers/{customerId} {
+        allow read:   if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId))
+                   || (isCustomerSelf(customerId) && trialIsActive(tenantId));
+
+        allow create: if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId))
+                   || (isCustomerSelf(customerId)
+                       && trialIsActive(tenantId)
+                       && customerSelfCreateAllowed(customerId));
+
+        allow update: if isSuperAdmin()
+                   || (isTenantAdmin(tenantId) && trialIsActive(tenantId))
+                   || (isCustomerSelf(customerId)
+                       && trialIsActive(tenantId)
+                       && customerSelfUpdateAllowed(customerId));
+
+        allow delete: if isSuperAdmin()
                    || (isTenantAdmin(tenantId) && trialIsActive(tenantId));
       }
 

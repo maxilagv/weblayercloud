@@ -3,6 +3,7 @@
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
+const { makeEmailKey } = require('../utils/authValidation');
 
 /**
  * Marca un tenant como convertido a pago.
@@ -40,6 +41,19 @@ module.exports = onCall(async (request) => {
   // 3. Actualizar custom claims: quitar trialActive, marcar paid
   const tenantSnap = await db.collection('tenants').doc(tenantId).get();
   const ownerUid   = tenantSnap.data()?.ownerUid;
+  const ownerEmail = tenantSnap.data()?.ownerEmail;
+
+  if (ownerEmail) {
+    await db.collection('layercloud_owner_accounts').doc(makeEmailKey(ownerEmail)).set({
+      tenantId,
+      ownerEmail,
+      ...(ownerUid ? { ownerUid } : {}),
+      convertedToPaid: true,
+      plan: 'paid',
+      trialActive: false,
+      convertedAt: FieldValue.serverTimestamp(),
+    }, { merge: true });
+  }
 
   if (ownerUid) {
     const auth = getAuth();
@@ -47,6 +61,7 @@ module.exports = onCall(async (request) => {
     await auth.setCustomUserClaims(ownerUid, {
       ...(user.customClaims ?? {}),
       trialActive: false,
+      active: true,
       plan: 'paid',
     });
   }

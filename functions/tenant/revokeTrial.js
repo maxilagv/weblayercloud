@@ -3,6 +3,7 @@
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
 const { getFirestore } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
+const { makeEmailKey } = require('../utils/authValidation');
 
 module.exports = onCall(async (request) => {
   if (request.auth?.token.role !== 'layercloud_superadmin') {
@@ -23,7 +24,7 @@ module.exports = onCall(async (request) => {
     throw new HttpsError('not-found', `Tenant ${tenantId} no existe`);
   }
 
-  const { ownerUid } = metaSnap.data();
+  const { ownerUid, ownerEmail } = metaSnap.data();
 
   const batch = db.batch();
   batch.update(
@@ -34,6 +35,19 @@ module.exports = onCall(async (request) => {
     db.collection('layercloud_tenants_index').doc(tenantId),
     { trialActive: false }
   );
+  if (ownerEmail) {
+    batch.set(
+      db.collection('layercloud_owner_accounts').doc(makeEmailKey(ownerEmail)),
+      {
+        tenantId,
+        ownerEmail,
+        ...(ownerUid ? { ownerUid } : {}),
+        trialActive: false,
+        plan: 'suspended',
+      },
+      { merge: true }
+    );
+  }
   await batch.commit();
 
   if (ownerUid) {
@@ -41,6 +55,8 @@ module.exports = onCall(async (request) => {
       tenantId,
       role:        'tenant_admin',
       trialActive: false,
+      active:      false,
+      plan:        'suspended',
     });
   }
 

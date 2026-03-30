@@ -3,6 +3,7 @@
 const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
+const { makeEmailKey } = require('../utils/authValidation');
 
 module.exports = onSchedule(
   {
@@ -42,6 +43,19 @@ module.exports = onSchedule(
           { trialActive: false, plan: 'suspended' }
         );
         batch.update(indexDoc.ref, { trialActive: false });
+        if (ownerEmail) {
+          batch.set(
+            db.collection('layercloud_owner_accounts').doc(makeEmailKey(ownerEmail)),
+            {
+              tenantId,
+              ownerEmail,
+              ...(ownerUid ? { ownerUid } : {}),
+              trialActive: false,
+              plan: 'suspended',
+            },
+            { merge: true }
+          );
+        }
         await batch.commit();
 
         // Actualizar custom claims del propietario
@@ -50,6 +64,8 @@ module.exports = onSchedule(
             tenantId,
             role:        'tenant_admin',
             trialActive: false,
+            active:      false,
+            plan:        'suspended',
           });
         }
 

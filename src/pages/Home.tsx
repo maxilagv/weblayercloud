@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Check, Database, Infinity, LayoutDashboard, Store, Users, X, Zap } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import Hero from '../components/Hero';
+import DemoExperienceSection from '../components/home/DemoExperienceSection';
 import { useAdaptiveExperience } from '../hooks/useAdaptiveExperience';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -318,6 +319,12 @@ export default function Home() {
         {/* ── HERO ── */}
         <Hero />
 
+        <DemoExperienceSection
+          isSmallViewport={isSmallViewport}
+          sectionRef={demoRef}
+          wrapStyle={wrap}
+        />
+
         {/* ── MARQUEE ── */}
         <div aria-hidden="true" style={{ borderBottom: '1px solid var(--color-border)', overflow: 'hidden', background: 'var(--color-surface)' }}>
           <div style={{ display: 'flex', overflow: 'hidden' }}>
@@ -481,23 +488,23 @@ export default function Home() {
         </section>
 
         {/* ── DEMO EN VIVO ── */}
-        <section data-track-section="home_demo" style={{ background: 'var(--color-dark)', borderBottom: '1px solid var(--color-dark-border)', paddingBlock: 'clamp(72px, 9vw, 120px)' }}>
+        <section data-track-section="home_demo_legacy" style={{ background: 'var(--color-dark)', borderBottom: '1px solid var(--color-dark-border)', paddingBlock: 'clamp(72px, 9vw, 120px)' }}>
           <div style={wrap}>
             <div style={{ marginBottom: '52px' }}>
-              <p className="eyebrow-accent" style={{ marginBottom: '16px' }}>Demo en vivo</p>
+              <p className="eyebrow-accent" style={{ marginBottom: '16px' }}>Qué incluye la demo</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px', flexWrap: 'wrap' }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3.8vw, 52px)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.02, color: '#FAFAFA', maxWidth: 560 }}>
-                  Probalo antes
+                  Lo que podés
                   <br />
-                  <em style={{ fontStyle: 'italic', fontWeight: 700, color: 'rgba(255,255,255,0.4)' }}>de decidir.</em>
+                  <em style={{ fontStyle: 'italic', fontWeight: 700, color: 'rgba(255,255,255,0.4)' }}>probar en vivo.</em>
                 </h2>
                 <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', color: 'rgba(255,255,255,0.45)', maxWidth: '380px', lineHeight: 1.7, fontWeight: 300 }}>
-                  Una demo completa con tu marca, tu catálogo y tu tienda. Todo personalizable en minutos.
+                  Storefront, panel admin, branding, catálogo e integraciones visibles en una experiencia real.
                 </p>
               </div>
             </div>
 
-            <div ref={demoRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2px', marginBottom: '48px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2px', marginBottom: '48px' }}>
               {demoFeatures.map(({ Icon, title, desc }) => (
                 <div key={title} className="demo-feat-card" style={{ padding: '28px 28px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={{ width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,59,0,0.1)', border: '1px solid rgba(255,59,0,0.15)' }}>
@@ -521,8 +528,8 @@ export default function Home() {
                 to="/registro"
                 className="btn-primary-accent"
                 data-track-event="cta_click"
-                data-track-label="Activar demo desde sección demo"
-                data-track-location="home_demo"
+                data-track-label="Activar demo desde capacidades de demo"
+                data-track-location="home_demo_legacy"
               >
                 Activar mi demo gratis&nbsp;→
               </Link>

@@ -53,7 +53,7 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { id: 'gastos', label: 'Gastos', path: 'gastos', icon: Wallet },
   { id: 'empleados', label: 'Empleados', path: 'empleados', icon: UserCog },
   { id: 'landing', label: 'Landing', path: 'landing', icon: Image },
-  { id: 'configuracion', label: 'Configuracion', path: 'configuracion', icon: Settings },
+  { id: 'configuracion', label: 'Configuración', path: 'configuracion', icon: Settings },
 ];
 
 export const ADMIN_SECONDARY_LINKS = {
