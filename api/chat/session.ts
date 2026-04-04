@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import type { ChatSessionOptions } from '../../src/lib/crmTypes';
 import { resolveLeadContext, syncLegacyChatSession } from '../_lib/crmEngine';
-import { readJsonBody, sanitizeText, toPlainObject } from '../_lib/http';
+import { assertBodySize, readJsonBody, sanitizeText, toPlainObject } from '../_lib/http';
+import { checkRateLimit, getClientKey } from '../_lib/rateLimit';
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
@@ -9,7 +10,20 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    assertBodySize(req, 8192);
+
     const body = readJsonBody<Record<string, unknown>>(req, {});
+
+    const allowed = await checkRateLimit({
+      key: getClientKey(req, body),
+      bucket: 'chat-session',
+      maxRequests: 10,
+      windowSeconds: 60,
+    });
+    if (!allowed) {
+      return res.status(429).json({ ok: false, error: 'Too many requests.' });
+    }
+
     const sessionId = sanitizeText(typeof body.sessionId === 'string' ? body.sessionId : '') || `chat_${randomUUID()}`;
     const resolved = await resolveLeadContext({
       sourceType: 'chatbot',
@@ -31,8 +45,11 @@ export default async function handler(req: any, res: any) {
       sessionId,
       identity: resolved.identity,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[chat/session]', error);
+    if (error?.statusCode === 413) {
+      return res.status(413).json({ ok: false, error: 'Request body too large.' });
+    }
     return res.status(500).json({ ok: false, error: 'Could not persist chat session.' });
   }
 }

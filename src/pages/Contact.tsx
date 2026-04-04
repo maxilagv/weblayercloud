@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import PageTransition from '../components/PageTransition';
 import { submitContactSubmission } from '../lib/crm';
 import { trackBehaviorEvent } from '../lib/tracking';
+import { getDemoJourneyABContext } from '../lib/abTest';
 import { useAdaptiveExperience } from '../hooks/useAdaptiveExperience';
 
 const injectContactStyles = (() => {
@@ -170,6 +171,11 @@ export default function Contact() {
         eventName: 'form_submit',
         path: '/contacto',
         payload: { form: 'contact', company: formState.company },
+      }).catch(() => undefined);
+      void trackBehaviorEvent({
+        eventName: 'contact_conversion',
+        path: '/contacto',
+        payload: { abVariants: getDemoJourneyABContext(), conversionType: 'contact_form' },
       }).catch(() => undefined);
       setIsSuccess(true);
       setFormState({ name: '', email: '', phone: '', company: '', message: '' });

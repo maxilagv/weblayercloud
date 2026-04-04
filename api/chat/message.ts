@@ -7,7 +7,9 @@ import {
   persistLeadAnalysis,
 } from '../_lib/crmEngine';
 import { adminDb } from '../_lib/firebaseAdmin';
-import { readJsonBody, sanitizeText, toPlainObject } from '../_lib/http';
+import { assertBodySize, readJsonBody, sanitizeText, toPlainObject } from '../_lib/http';
+import { checkRateLimit, getClientKey } from '../_lib/rateLimit';
+import { enqueueFollowUp } from '../_lib/followUpQueue';
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
@@ -15,7 +17,20 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
+    assertBodySize(req, 16384);
+
     const body = readJsonBody<Record<string, unknown>>(req, {});
+
+    const allowed = await checkRateLimit({
+      key: getClientKey(req, body),
+      bucket: 'chat-message',
+      maxRequests: 30,
+      windowSeconds: 60,
+    });
+    if (!allowed) {
+      return res.status(429).json({ ok: false, error: 'Too many requests.' });
+    }
+
     const sessionId = sanitizeText(typeof body.sessionId === 'string' ? body.sessionId : '');
     if (!sessionId) {
       return res.status(400).json({ ok: false, error: 'Missing session id.' });
@@ -23,7 +38,7 @@ export default async function handler(req: any, res: any) {
 
     const messageInput = toPlainObject(body.message);
     const role = messageInput.role === 'assistant' ? 'assistant' : messageInput.role === 'user' ? 'user' : '';
-    const content = sanitizeText(typeof messageInput.content === 'string' ? messageInput.content : '');
+    const content = sanitizeText(typeof messageInput.content === 'string' ? messageInput.content : '').slice(0, 2000);
     if (!role || !content) {
       return res.status(400).json({ ok: false, error: 'Invalid chat message.' });
     }
@@ -70,6 +85,26 @@ export default async function handler(req: any, res: any) {
         transcript,
         milestone,
       });
+
+      // ── Follow-up: solo encolar si warm/hot y no hay job previo ──
+      if (
+        strategy &&
+        identity.leadThreadId &&
+        (strategy.priorityLevel === 'warm' || strategy.priorityLevel === 'hot')
+      ) {
+        try {
+          await enqueueFollowUp({
+            leadData,
+            strategy,
+            sourceType: 'chatbot',
+            submissionId: sessionId,
+            leadThreadId: identity.leadThreadId,
+            identity,
+          });
+        } catch (err) {
+          console.error('[chat/message] followup enqueue failed', err);
+        }
+      }
     }
 
     return res.status(200).json({
@@ -77,8 +112,11 @@ export default async function handler(req: any, res: any) {
       identity,
       strategy,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[chat/message]', error);
+    if (error?.statusCode === 413) {
+      return res.status(413).json({ ok: false, error: 'Request body too large.' });
+    }
     return res.status(500).json({ ok: false, error: 'Could not persist chat message.' });
   }
 }

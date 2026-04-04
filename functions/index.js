@@ -30,3 +30,6 @@ exports.deleteTenantStaff        = require('./tenant/deleteTenantStaff');
 
 // ── Cloudinary signed upload ───────────────────────────────────────────────────
 exports.getCloudinarySignature = require('./tenant/getCloudinarySignature');
+
+// ── Follow-up automático (procesador de cola durable) ─────────────────────────
+exports.processFollowUps = require('./processFollowUps').handler;

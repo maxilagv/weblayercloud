@@ -54,6 +54,7 @@ export interface AttributionContext {
   firstUtmTerm?: string;
   firstAttributionChannel?: string;
   firstTouchAt?: string;
+  abVariants?: Record<string, string>;
 }
 
 export interface ChatMessageInput {
@@ -328,7 +329,19 @@ export function normalizeAttribution(raw: unknown, pathOverride?: string): Attri
       typeof value.firstAttributionChannel === 'string' ? value.firstAttributionChannel : '',
     ),
     firstTouchAt: sanitizeText(typeof value.firstTouchAt === 'string' ? value.firstTouchAt : ''),
+    abVariants: sanitizeAbVariants(value.abVariants),
   };
+}
+
+function sanitizeAbVariants(raw: unknown): Record<string, string> | undefined {
+  const obj = toPlainObject(raw);
+  const entries = Object.entries(obj).filter(
+    ([, v]) => typeof v === 'string' && v.length > 0 && v.length <= 100,
+  );
+  if (entries.length === 0) return undefined;
+  return Object.fromEntries(
+    entries.slice(0, 20).map(([k, v]) => [sanitizeText(k).slice(0, 60), sanitizeText(v as string).slice(0, 100)]),
+  );
 }
 
 export function normalizeLeadData(raw: unknown): Partial<ChatLeadData> {
@@ -375,6 +388,7 @@ function buildAttributionFields(attribution: AttributionContext) {
     firstUtmTerm: attribution.firstUtmTerm,
     firstAttributionChannel: attribution.firstAttributionChannel,
     firstTouchAt: attribution.firstTouchAt,
+    ...(attribution.abVariants ? { abVariants: attribution.abVariants } : {}),
   });
 }
 

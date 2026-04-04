@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { DEFAULT_PUBLIC_DEMO } from '../lib/publicDemos';
+import { usePersonalization } from '../hooks/usePersonalization';
 
 const injectStyles = (() => {
   let injected = false;
@@ -106,6 +107,8 @@ const injectStyles = (() => {
 })();
 
 export default function Hero() {
+  const p = usePersonalization();
+
   useEffect(() => {
     injectStyles();
   }, []);
@@ -157,34 +160,49 @@ export default function Hero() {
         </p>
 
         <h1 className="hero-headline">
-          Construimos
-          <br />
-          sistemas que
-          <br />
-          hacen <em>crecer</em>
-          <br />
-          negocios.
+          {p.heroHeadline.split('\n').map((line, i, arr) => (
+            <span key={i}>
+              {line.includes('crecer') ? (
+                <>
+                  {line.split('crecer')[0]}
+                  <em>crecer</em>
+                  {line.split('crecer')[1]}
+                </>
+              ) : line}
+              {i < arr.length - 1 && <br />}
+            </span>
+          ))}
         </h1>
 
-        <p className="hero-sub">
-          Arquitectura de software para empresas argentinas
-          que quieren operar, vender y escalar sin fricción.
-        </p>
+        <p className="hero-sub">{p.heroSub}</p>
+
+        {p.urgencySignal && (
+          <p style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: '10px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: 'var(--color-accent)',
+            marginBottom: '20px',
+          }}>
+            ● Solo 1 lugar disponible este mes
+          </p>
+        )}
 
         <div className="hero-cta">
           <Link
             to={`/demo/${DEFAULT_PUBLIC_DEMO.tenantId}`}
             className="btn-primary-accent"
             data-track-event="cta_click"
-            data-track-label="Probar demo interactiva"
+            data-track-label={p.primaryCta}
             data-track-location="hero"
           >
-            Probar demo interactiva&nbsp;→
+            {p.primaryCta}&nbsp;→
           </Link>
           <Link
             to="/contacto"
             data-track-event="cta_click"
-            data-track-label="Contanos tu negocio"
+            data-track-label={p.secondaryCta}
             data-track-location="hero"
             style={{
               fontFamily: 'var(--font-sans)',
@@ -204,7 +222,7 @@ export default function Hero() {
               e.currentTarget.style.borderColor = 'var(--color-border)';
             }}
           >
-            Contanos tu negocio
+            {p.secondaryCta}
           </Link>
         </div>
 

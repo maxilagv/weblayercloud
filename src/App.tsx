@@ -11,6 +11,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { useVisitorTracking } from './hooks/useVisitorTracking';
 import { useAdaptiveExperience } from './hooks/useAdaptiveExperience';
+import { usePersonalization } from './hooks/usePersonalization';
 
 const Chatbot = lazy(() => import('./components/Chatbot'));
 const Home = lazy(() => import('./pages/Home'));
@@ -128,6 +129,7 @@ const BAR_H = 36; /* px — debe coincidir con .ann-bar height en CSS */
 function PublicShell() {
   const [enableDeferredUi, setEnableDeferredUi] = useState(false);
   const [barVisible, setBarVisible] = useState(true);
+  const { barText } = usePersonalization();
 
   /* Sincroniza la variable CSS --bar-h con la visibilidad del bar */
   useEffect(() => {
@@ -158,9 +160,7 @@ function PublicShell() {
       {barVisible && (
         <div className="ann-bar" role="banner">
           <span className="ann-bar-dot" aria-hidden="true" />
-          <span className="ann-bar-text">
-            Tomamos 3 proyectos nuevos por mes&nbsp;·&nbsp;Solo 1 lugar disponible en abril
-          </span>
+          <span className="ann-bar-text">{barText}</span>
           <button
             className="ann-bar-close"
             onClick={() => setBarVisible(false)}

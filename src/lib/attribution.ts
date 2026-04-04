@@ -91,6 +91,15 @@ function getStoredFirstTouch(pathOverride?: string) {
   return currentTouch;
 }
 
+export function getAttributionContextWithAB(
+  pathOverride?: string,
+  abVariants?: Record<string, string>,
+) {
+  const base = getAttributionContext(pathOverride);
+  if (!abVariants || typeof window === 'undefined') return base;
+  return { ...base, abVariants };
+}
+
 export function getAttributionContext(pathOverride?: string) {
   if (typeof window === 'undefined') {
     return {};
@@ -129,3 +138,4 @@ export function getAttributionContext(pathOverride?: string) {
     firstTouchAt: firstTouch.occurredAt,
   };
 }
+

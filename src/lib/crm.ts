@@ -1,4 +1,4 @@
-import { getAttributionContext } from './attribution';
+import { getAttributionContextWithAB } from './attribution';
 import { postJson } from './apiClient';
 import { getStoredLeadIdentity, mergeStoredLeadIdentity, type LeadIdentity } from './identity';
 import type { LeadIntelligence } from './leadStrategy';
@@ -49,7 +49,7 @@ interface ApiIdentityResponse {
 
 function buildSharedPayload(pathOverride?: string) {
   return {
-    attribution: getAttributionContext(pathOverride),
+    attribution: getAttributionContextWithAB(pathOverride),
     identity: getStoredLeadIdentity(),
   };
 }
@@ -181,7 +181,7 @@ export async function updateLeadStage(
   }, { auth: 'admin' });
 }
 
-export async function submitContactSubmission(input: ContactLeadInput) {
+export async function submitContactSubmission(input: ContactLeadInput & { turnstileToken?: string }) {
   const response = await postJson<ApiIdentityResponse>('/api/intake/contact', {
     input: stripEmptyFields({
       name: sanitizeText(input.name),
@@ -191,6 +191,7 @@ export async function submitContactSubmission(input: ContactLeadInput) {
       message: sanitizeText(input.message),
     }),
     leadData: buildContactLeadData(input),
+    turnstileToken: input.turnstileToken || '',
     ...buildSharedPayload('/contacto'),
   });
 

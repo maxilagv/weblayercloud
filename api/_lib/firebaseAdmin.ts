@@ -98,12 +98,14 @@ export function assertAdminToken(decodedToken: DecodedIdToken | null) {
     return decodedToken;
   }
 
-  const email = sanitizeText(decodedToken.email).toLowerCase();
   const adminEmails = getAdminEmails();
+
+  // FAIL-CLOSED: si no hay emails configurados, NADIE es admin
   if (adminEmails.length === 0) {
-    return decodedToken;
+    throw new Error('Admin access not configured. Set ADMIN_EMAILS env var.');
   }
 
+  const email = sanitizeText(decodedToken.email).toLowerCase();
   if (email && adminEmails.includes(email)) {
     return decodedToken;
   }

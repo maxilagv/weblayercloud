@@ -127,6 +127,17 @@ service cloud.firestore {
     // ══ CAPA A — LANDING PAGE ANALYTICS & LEADS ══════════════════════════════
     // =========================================================================
 
+    // ── Rate limits (solo Admin SDK, inaccesible al cliente) ─────────────────
+    match /_rateLimits/{doc} {
+      allow read, write: if false;
+    }
+
+    // ── Follow-up jobs (solo Admin SDK) ────────────────────────────────────────
+    match /followUpJobs/{doc} {
+      allow read:  if isLayerCloudAdmin();
+      allow write: if false;
+    }
+
     // ── Visitas de página ─────────────────────────────────────────────────────
     match /visitors/{docId} {
       allow read:   if isLayerCloudAdmin();

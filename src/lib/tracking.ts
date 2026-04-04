@@ -1,4 +1,5 @@
-import { getAttributionContext } from './attribution';
+import { getAttributionContextWithAB } from './attribution';
+import { getDemoJourneyABContext } from './abTest';
 import { postJson } from './apiClient';
 import { getStoredLeadIdentity, mergeStoredLeadIdentity, type LeadIdentity } from './identity';
 
@@ -14,8 +15,11 @@ export interface TrackIdentityPayload {
 }
 
 function buildEventPayload(pathOverride?: string) {
+  const abVariants = typeof window !== 'undefined'
+    ? (getDemoJourneyABContext() as unknown as Record<string, string>)
+    : undefined;
   return {
-    attribution: getAttributionContext(pathOverride),
+    attribution: getAttributionContextWithAB(pathOverride, abVariants),
     identity: getStoredLeadIdentity(),
   };
 }
