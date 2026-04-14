@@ -1,15 +1,39 @@
 {
-  "routes": [
+  "redirects": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "source": "/demo/:path*",
+      "destination": "/solucion",
+      "permanent": true
     },
     {
-      "handle": "filesystem"
+      "source": "/dashboard/:path*",
+      "destination": "https://motor.cloud/dashboard/:path*",
+      "permanent": true
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/registro",
+      "destination": "https://motor.cloud/registro",
+      "permanent": true
+    },
+    {
+      "source": "/login",
+      "destination": "https://motor.cloud/login",
+      "permanent": true
+    },
+    {
+      "source": "/informatica",
+      "destination": "/saas-java",
+      "permanent": true
+    },
+    {
+      "source": "/sistema",
+      "destination": "/arquitectura-microservicios",
+      "permanent": true
+    },
+    {
+      "source": "/soluciones",
+      "destination": "/integraciones-empresariales",
+      "permanent": true
     }
   ]
 }

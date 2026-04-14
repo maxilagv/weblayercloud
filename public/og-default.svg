@@ -1,0 +1,17 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#0A0A0A"/>
+  <rect x="72" y="72" width="1056" height="486" stroke="rgba(255,255,255,0.12)" fill="none"/>
+  <g opacity="0.9">
+    <path d="M120 310L240 350L360 310L240 270L120 310Z" fill="#3A3A3A"/>
+    <path d="M120 260L240 300L360 260L240 220L120 260Z" fill="#7A7A7A"/>
+    <path d="M120 210L240 250L360 210L240 170L120 210Z" fill="#FF3B00"/>
+  </g>
+  <text x="420" y="248" fill="#FFFFFF" font-family="Georgia, serif" font-size="80" font-weight="700">Motor<tspan font-style="italic">Cloud</tspan></text>
+  <text x="420" y="318" fill="#FF3B00" font-family="Courier New, monospace" font-size="24" letter-spacing="5">SAAS JAVA · MICROSERVICIOS · B2B</text>
+  <text x="420" y="388" fill="#D4D4D4" font-family="Arial, sans-serif" font-size="34">
+    Plataforma moderna para catálogos, órdenes,
+  </text>
+  <text x="420" y="432" fill="#D4D4D4" font-family="Arial, sans-serif" font-size="34">
+    pagos, integraciones y operación empresarial.
+  </text>
+</svg>

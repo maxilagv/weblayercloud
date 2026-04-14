@@ -11,7 +11,22 @@
       "WebFetch(domain:tiendanegocio.com)",
       "WebFetch(domain:www.nexa.com.ar)",
       "Bash(xargs -I {} grep -l \"mercado\\\\|paypal\\\\|afip\\\\|whatsapp\" /c/Users/User/OneDrive/Desktop/multicell/backend/server/routes/{})",
-      "Bash(grep -h \"router\\\\.\\\\\\(get\\\\|post\\\\|put\\\\|delete\\\\\\)\" /c/Users/User/OneDrive/Desktop/multicell/backend/server/routes/*.js)"
+      "Bash(grep -h \"router\\\\.\\\\\\(get\\\\|post\\\\|put\\\\|delete\\\\\\)\" /c/Users/User/OneDrive/Desktop/multicell/backend/server/routes/*.js)",
+      "Bash(gh api:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm --version)",
+      "Bash(uipro init:*)",
+      "Bash(uipro:*)",
+      "Bash(claude mcp:*)",
+      "Bash(python skills/ui-ux-pro-max/scripts/search.py \"b2b saas java microservices technical enterprise dark editorial\" --design-system -p \"MotorCloud\")",
+      "Bash(python3 skills/ui-ux-pro-max/scripts/search.py \"b2b saas java microservices technical enterprise dark editorial\" --design-system -p \"MotorCloud\")",
+      "Bash(where python3:*)",
+      "Bash(where python:*)",
+      "Bash(py --version)",
+      "Bash(\"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python313\\\\python.exe\" skills/ui-ux-pro-max/scripts/search.py \"b2b saas java microservices technical enterprise dark editorial\" --design-system -p \"MotorCloud\")",
+      "Bash(npx vite:*)",
+      "Bash(echo \"EXIT: $?\")"
     ]
   }
 }
