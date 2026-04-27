@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import StructuredData from '../components/seo/StructuredData';
+import PageHero from '../components/PageHero';
 import { useAdaptiveExperience } from '../hooks/useAdaptiveExperience';
 import { breadcrumbJsonLd, buildMeta, faqJsonLd, serviceJsonLd } from '../lib/seo';
 
@@ -268,106 +269,13 @@ export default function ServicioEcommerce() {
       <div style={{ background: 'var(--color-bg)', minHeight: '100vh' }}>
 
         {/* ── HERO ── */}
-        <section
-          style={{
-            paddingTop: 'clamp(120px, 14vw, 200px)',
-            paddingBottom: 'clamp(72px, 9vw, 120px)',
-            background: 'var(--color-dark)',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Fondo decorativo */}
-          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(ellipse 70% 60% at 20% 50%, rgba(255,59,0,0.08) 0%, transparent 65%)', pointerEvents: 'none' }} />
-
-          <div style={wrap}>
-            {/* Breadcrumb */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '40px' }}
-            >
-              <Link to="/servicios" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', textDecoration: 'none', transition: 'color 0.15s' }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.3)'; }}
-              >
-                Servicios
-              </Link>
-              <span style={{ color: 'rgba(255,255,255,0.15)', fontSize: '12px' }}>→</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#FF3B00' }}>
-                E-commerce
-              </span>
-            </motion.div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: isSmallViewport ? '1fr' : '1fr 1fr', gap: 'clamp(40px, 6vw, 80px)', alignItems: 'end' }}>
-              <motion.div
-                initial={{ opacity: 0, y: 36 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.75, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 56, height: 56, background: 'rgba(255,59,0,0.1)', border: '1px solid rgba(255,59,0,0.2)', marginBottom: '28px' }}>
-                  <ShoppingBag size={26} color="#FF3B00" strokeWidth={1.5} />
-                </div>
-                <h1
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(38px, 6vw, 88px)',
-                    fontWeight: 900,
-                    letterSpacing: '-0.045em',
-                    lineHeight: 0.92,
-                    color: '#FAFAFA',
-                    marginBottom: '28px',
-                  }}
-                >
-                  Tu tienda online,
-                  <br />
-                  <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'rgba(255,255,255,0.28)' }}>
-                    hecha para vender.
-                  </em>
-                </h1>
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {['Tienda completa', 'Panel admin', 'MercadoPago', 'SEO incluido'].map(tag => (
-                    <span key={tag} style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.12)', padding: '5px 12px' }}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.75, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <p
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: 'clamp(15px, 1.5vw, 18px)',
-                    lineHeight: 1.75,
-                    color: 'rgba(255,255,255,0.42)',
-                    fontWeight: 300,
-                    marginBottom: '32px',
-                  }}
-                >
-                  No es un template de Tiendanube ni un WordPress con plugins. Es un sistema construido sobre tu operación real, con tu marca, tu catálogo y la forma en que tu negocio vende.
-                </p>
-                <button
-                  onClick={() => window.dispatchEvent(new CustomEvent('layercloud:open-chat'))}
-                  data-track-event="cta_click"
-                  data-track-label="Hero CTA ecommerce"
-                  data-track-location="ecommerce_hero"
-                  style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 500, color: '#FFFFFF', background: '#FF3B00', border: 'none', padding: '16px 28px', cursor: 'pointer', transition: 'background 0.15s', letterSpacing: '-0.01em' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#E03000'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#FF3B00'; }}
-                >
-                  Quiero mi tienda →
-                </button>
-              </motion.div>
-            </div>
-          </div>
-        </section>
+        <PageHero
+          eyebrow="E-commerce · Tienda completa a medida"
+          title={<>Tu tienda online,<br /><em style={{ fontStyle: 'italic', fontWeight: 400, color: 'rgba(255,255,255,0.28)' }}>hecha para vender.</em></>}
+          sub="No es un template de Tiendanube ni un WordPress con plugins. Es un sistema construido sobre tu operación real, con tu marca, tu catálogo y la forma en que tu negocio vende."
+          variant="ecommerce"
+          breadcrumb={{ label: 'E-commerce', to: '/servicios/ecommerce' }}
+        />
 
         {/* ── QUÉ INCLUYE ── */}
         <section style={{ paddingBlock: 'clamp(72px, 9vw, 120px)', borderBottom: '1px solid var(--color-border)' }}>

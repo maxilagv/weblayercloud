@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import LogoMark from './LogoMark';
+import { Button } from './ui/liquid-glass-button';
 import { useAdaptiveExperience } from '../hooks/useAdaptiveExperience';
 
 const navLinks = [
@@ -10,6 +11,14 @@ const navLinks = [
   { name: 'Microservicios', path: '/arquitectura-microservicios' },
   { name: 'Diagnóstico', path: '/contacto' },
 ];
+
+const darkHeroPaths = new Set([
+  '/solucion',
+  '/servicios',
+  '/arquitectura-microservicios',
+  '/contacto',
+  '/saas-java',
+]);
 
 const injectHamStyles = (() => {
   let done = false;
@@ -82,6 +91,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { isSmallViewport } = useAdaptiveExperience();
+  const isOverDarkHero = darkHeroPaths.has(location.pathname) && !isScrolled && !isMobileMenuOpen;
 
   useEffect(() => {
     injectHamStyles();
@@ -137,7 +147,7 @@ export default function Navbar() {
           }}
         >
           <Link to="/" style={{ textDecoration: 'none', position: 'relative', zIndex: 101 }}>
-            <LogoMark size={26} variant="full" theme={isMobileMenuOpen ? 'dark' : 'light'} />
+            <LogoMark size={26} variant="full" theme={isMobileMenuOpen || isOverDarkHero ? 'dark' : 'light'} />
           </Link>
 
           {!isSmallViewport && (
@@ -155,17 +165,23 @@ export default function Navbar() {
                       fontFamily: 'var(--font-sans)',
                       fontSize: '14px',
                       fontWeight: active ? 500 : 400,
-                      color: active ? 'var(--color-text)' : 'var(--color-muted)',
+                      color: isOverDarkHero
+                        ? active ? '#FFFFFF' : 'rgba(255,255,255,0.64)'
+                        : active ? 'var(--color-text)' : 'var(--color-muted)',
                       textDecoration: 'none',
                       transition: 'color 0.15s',
                       paddingBottom: '2px',
-                      borderBottom: active ? '1px solid var(--color-text)' : '1px solid transparent',
+                      borderBottom: active
+                        ? `1px solid ${isOverDarkHero ? '#FFFFFF' : 'var(--color-text)'}`
+                        : '1px solid transparent',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = 'var(--color-text)';
+                      e.currentTarget.style.color = isOverDarkHero ? '#FFFFFF' : 'var(--color-text)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = active ? 'var(--color-text)' : 'var(--color-muted)';
+                      e.currentTarget.style.color = isOverDarkHero
+                        ? active ? '#FFFFFF' : 'rgba(255,255,255,0.64)'
+                        : active ? 'var(--color-text)' : 'var(--color-muted)';
                     }}
                   >
                     {link.name}
@@ -177,29 +193,29 @@ export default function Navbar() {
                 style={{
                   fontFamily: 'var(--font-sans)',
                   fontSize: '13px',
-                  color: 'var(--color-muted)',
+                  color: isOverDarkHero ? 'rgba(255,255,255,0.64)' : 'var(--color-muted)',
                   textDecoration: 'none',
                   transition: 'color 0.15s',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = 'var(--color-text)';
+                  e.currentTarget.style.color = isOverDarkHero ? '#FFFFFF' : 'var(--color-text)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = 'var(--color-muted)';
+                  e.currentTarget.style.color = isOverDarkHero ? 'rgba(255,255,255,0.64)' : 'var(--color-muted)';
                 }}
               >
                 SaaS en Java →
               </Link>
-              <Link
-                to="/contacto"
-                className="btn-primary-accent"
-                data-track-event="cta_click"
-                data-track-label="Solicitar diagnostico navbar"
-                data-track-location="navbar"
-                style={{ fontSize: '13px', padding: '9px 20px' }}
-              >
-                Solicitar diagnóstico
-              </Link>
+              <Button asChild variant="cool" size="sm" className="px-5">
+                <Link
+                  to="/contacto"
+                  data-track-event="cta_click"
+                  data-track-label="Solicitar diagnostico navbar"
+                  data-track-location="navbar"
+                >
+                  Solicitar diagnostico
+                </Link>
+              </Button>
             </nav>
           )}
 
@@ -210,7 +226,7 @@ export default function Navbar() {
               aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
               aria-expanded={isMobileMenuOpen}
               style={{
-                color: isMobileMenuOpen ? '#FFFFFF' : 'var(--color-text)',
+                color: isMobileMenuOpen || isOverDarkHero ? '#FFFFFF' : 'var(--color-text)',
                 position: 'relative',
                 zIndex: 101,
               }}

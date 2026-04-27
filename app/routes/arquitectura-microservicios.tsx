@@ -38,9 +38,11 @@ export default function MicroservicesRoute() {
   return (
     <TopicPage
       eyebrow="Microservicios"
-      title="La arquitectura de microservicios sirve cuando cada dominio tiene que crecer sin arrastrar al resto."
-      intro="MotorCloud usa microservicios porque el producto necesita separar responsabilidades reales: identidad, catálogo, pricing, órdenes, pagos, inventario, CRM, auditoría e integraciones."
-      emphasis="La clave no está en partir todo por moda. Está en separar donde el dominio, la operación y el despliegue realmente lo justifican."
+      visual="tech"
+      breadcrumbLabel="Microservicios"
+      title="Dominios separados. Una operacion coordinada."
+      intro="MotorCloud separa identidad, catalogo, pricing, ordenes, pagos, inventario, CRM e integraciones para que cada parte evolucione sin arrastrar al resto."
+      emphasis="La arquitectura sirve cuando baja el riesgo del cambio y deja ver donde esta cada responsabilidad."
       highlights={[
         { label: 'Servicios', value: '10+', detail: 'Cada uno responde a dominios o capacidades con límites claros.' },
         { label: 'Modelo', value: 'Event-driven', detail: 'Los cambios importantes pueden propagarse sin acoplar todos los módulos entre sí.' },

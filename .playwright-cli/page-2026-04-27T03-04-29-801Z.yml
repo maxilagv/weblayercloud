@@ -1,0 +1,162 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "LayerCloud" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e6]:
+          - img [ref=e7]
+          - generic [ref=e14]: LayerCloud
+      - navigation [ref=e15]:
+        - link "Plataforma" [ref=e16] [cursor=pointer]:
+          - /url: /solucion
+        - link "Servicios" [ref=e17] [cursor=pointer]:
+          - /url: /servicios
+        - link "Microservicios" [ref=e18] [cursor=pointer]:
+          - /url: /arquitectura-microservicios
+        - link "Diagnóstico" [ref=e19] [cursor=pointer]:
+          - /url: /contacto
+        - link "SaaS en Java →" [ref=e20] [cursor=pointer]:
+          - /url: /saas-java
+        - link "Solicitar diagnostico" [ref=e21] [cursor=pointer]:
+          - /url: /contacto
+  - main [ref=e22]:
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - generic:
+          - paragraph: Diagnostico MotorCloud
+          - heading "Mostranos la friccion y armamos el mapa" [level=1]:
+            - text: Mostranos la friccion
+            - text: y armamos el mapa
+          - paragraph: En una primera lectura ordenamos el problema, la arquitectura posible y el siguiente paso concreto para tu operacion.
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - paragraph [ref=e34]: Tu contexto
+              - heading "Dejanos el problema principal y armamos la primera lectura." [level=2] [ref=e35]
+              - paragraph [ref=e36]: No hace falta tener el alcance cerrado. Con una friccion clara alcanza para empezar.
+            - generic [ref=e37]:
+              - generic [ref=e38]:
+                - generic [ref=e39]:
+                  - textbox [ref=e40]:
+                    - /placeholder: " "
+                  - generic: Nombre completo
+                - generic [ref=e41]:
+                  - textbox [ref=e42]:
+                    - /placeholder: " "
+                  - generic: Email de trabajo
+              - generic [ref=e43]:
+                - generic [ref=e44]:
+                  - textbox [ref=e45]:
+                    - /placeholder: " "
+                  - generic: WhatsApp o telefono
+                - generic [ref=e46]:
+                  - textbox [ref=e47]:
+                    - /placeholder: " "
+                  - generic: Empresa o marca
+              - generic [ref=e48]:
+                - textbox [ref=e49]:
+                  - /placeholder: " "
+                - generic: Cual es el punto de friccion principal hoy?
+              - button "Solicitar diagnostico" [ref=e50] [cursor=pointer]:
+                - img [ref=e51]
+                - text: Solicitar diagnostico
+          - generic [ref=e54]:
+            - generic [ref=e55]:
+              - paragraph [ref=e56]: Que pasa despues
+              - generic [ref=e57]:
+                - generic [ref=e58]:
+                  - generic [ref=e59]: "01"
+                  - paragraph [ref=e60]: Leemos tu contexto operativo y comercial.
+                - generic [ref=e61]:
+                  - generic [ref=e62]: "02"
+                  - paragraph [ref=e63]: "Definimos la mejor entrada: ERP, automatizaciones o diagnóstico técnico gratuito."
+                - generic [ref=e64]:
+                  - generic [ref=e65]: "03"
+                  - paragraph [ref=e66]: Te devolvemos un siguiente paso con direccion clara.
+            - generic [ref=e67]:
+              - img [ref=e69]
+              - generic [ref=e71]:
+                - paragraph [ref=e72]: Infraestructura segura
+                - paragraph [ref=e73]: Tus datos y los de tu operacion viven en un entorno mas ordenado, con accesos, respaldos y criterio tecnico.
+            - generic [ref=e74]:
+              - img [ref=e76]
+              - generic [ref=e79]:
+                - paragraph [ref=e80]: Relacion por resultado
+                - paragraph [ref=e81]: No buscamos retenerte por friccion. Queremos que te quedes porque el sistema te da control, velocidad y direccion.
+            - generic [ref=e82]:
+              - generic [ref=e83]:
+                - img [ref=e84]
+                - img [ref=e86]
+                - img [ref=e88]
+                - img [ref=e90]
+                - img [ref=e92]
+              - paragraph [ref=e94]: "\"Lo mas valioso no fue solo ordenar ventas; fue empezar a operar con una base preparada para crecer sin perder identidad.\""
+              - generic [ref=e95]:
+                - img "Perfil de cliente" [ref=e97]
+                - generic [ref=e98]:
+                  - paragraph [ref=e99]: Valeria Costa
+                  - paragraph [ref=e100]: COO, marca omnicanal
+        - generic [ref=e101]:
+          - paragraph [ref=e102]: // Preguntas frecuentes
+          - heading "Todo lo que querés saber antes de dar el paso." [level=2] [ref=e103]
+          - generic [ref=e104]:
+            - button "¿Cuánto tarda la implementación? +" [ref=e106] [cursor=pointer]:
+              - generic [ref=e107]: ¿Cuánto tarda la implementación?
+              - generic [ref=e108]: +
+            - button "¿Qué pasa con mis datos actuales (planillas, Excel)? +" [ref=e110] [cursor=pointer]:
+              - generic [ref=e111]: ¿Qué pasa con mis datos actuales (planillas, Excel)?
+              - generic [ref=e112]: +
+            - button "¿Puedo empezar con una sola parte y escalar después? +" [ref=e114] [cursor=pointer]:
+              - generic [ref=e115]: ¿Puedo empezar con una sola parte y escalar después?
+              - generic [ref=e116]: +
+            - button "¿Qué pasa si el negocio cambia o crece? +" [ref=e118] [cursor=pointer]:
+              - generic [ref=e119]: ¿Qué pasa si el negocio cambia o crece?
+              - generic [ref=e120]: +
+            - button "¿Cómo es el soporte después de entregar el sistema? +" [ref=e122] [cursor=pointer]:
+              - generic [ref=e123]: ¿Cómo es el soporte después de entregar el sistema?
+              - generic [ref=e124]: +
+            - button "¿Tienen experiencia con mi industria? +" [ref=e126] [cursor=pointer]:
+              - generic [ref=e127]: ¿Tienen experiencia con mi industria?
+              - generic [ref=e128]: +
+  - contentinfo [ref=e129]:
+    - generic [ref=e130]:
+      - generic [ref=e131]:
+        - link "LayerCloud" [ref=e132] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e133]:
+            - img [ref=e134]
+            - generic [ref=e141]: LayerCloud
+        - paragraph [ref=e142]:
+          - text: SaaS moderno en Java
+          - text: para operaciones que ya necesitan sistema.
+      - generic [ref=e143]:
+        - paragraph [ref=e144]: Plataforma
+        - list [ref=e145]:
+          - listitem [ref=e146]:
+            - link "Plataforma" [ref=e147] [cursor=pointer]:
+              - /url: /solucion
+          - listitem [ref=e148]:
+            - link "Servicios" [ref=e149] [cursor=pointer]:
+              - /url: /servicios
+          - listitem [ref=e150]:
+            - link "Diagnóstico" [ref=e151] [cursor=pointer]:
+              - /url: /contacto
+      - generic [ref=e152]:
+        - paragraph [ref=e153]: Arquitectura
+        - list [ref=e154]:
+          - listitem [ref=e155]:
+            - link "SaaS en Java" [ref=e156] [cursor=pointer]:
+              - /url: /saas-java
+          - listitem [ref=e157]:
+            - link "Microservicios" [ref=e158] [cursor=pointer]:
+              - /url: /arquitectura-microservicios
+          - listitem [ref=e159]:
+            - link "Integraciones" [ref=e160] [cursor=pointer]:
+              - /url: /integraciones-empresariales
+          - listitem [ref=e161]:
+            - link "Migración legacy" [ref=e162] [cursor=pointer]:
+              - /url: /migracion-sistemas-legacy
+    - generic [ref=e163]:
+      - paragraph [ref=e164]: © 2026 MotorCloud. Todos los derechos reservados.
+      - paragraph [ref=e165]: Built in Argentina. Designed for scale.

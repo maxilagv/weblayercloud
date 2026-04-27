@@ -1,5 +1,6 @@
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import GLSLHero from '../GLSLHero';
 import PageTransition from '../PageTransition';
 import StructuredData from '../seo/StructuredData';
 
@@ -30,6 +31,8 @@ interface TopicPageProps {
   sections: TopicSection[];
   relatedLinks: TopicLink[];
   jsonLd?: unknown[];
+  visual?: string;
+  breadcrumbLabel?: string;
 }
 
 const wrap = {
@@ -47,6 +50,8 @@ export default function TopicPage({
   sections,
   relatedLinks,
   jsonLd,
+  visual,
+  breadcrumbLabel,
 }: TopicPageProps) {
   return (
     <PageTransition>
@@ -55,69 +60,13 @@ export default function TopicPage({
           <StructuredData key={index} data={entry} />
         ))}
 
-        <section
-          style={{
-            paddingTop: 'clamp(128px, 14vw, 200px)',
-            paddingBottom: 'clamp(72px, 9vw, 120px)',
-            borderBottom: '1px solid var(--color-border)',
-            background:
-              'radial-gradient(circle at 82% 18%, rgba(255,59,0,0.07), transparent 24%), var(--color-bg)',
-          }}
-        >
-          <div style={wrap}>
-            <p
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-                marginBottom: '18px',
-              }}
-            >
-              {eyebrow}
-            </p>
-            <h1
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(38px, 6vw, 92px)',
-                fontWeight: 900,
-                letterSpacing: '-0.05em',
-                lineHeight: 0.94,
-                color: 'var(--color-text)',
-                marginBottom: '22px',
-                maxWidth: '880px',
-              }}
-            >
-              {title}
-            </h1>
-            <p
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 'clamp(16px, 1.7vw, 19px)',
-                lineHeight: 1.75,
-                color: 'var(--color-muted)',
-                fontWeight: 300,
-                maxWidth: '720px',
-                marginBottom: '18px',
-              }}
-            >
-              {intro}
-            </p>
-            <p
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '15px',
-                lineHeight: 1.8,
-                color: 'var(--color-text)',
-                fontWeight: 400,
-                maxWidth: '680px',
-              }}
-            >
-              {emphasis}
-            </p>
-          </div>
-        </section>
+        <GLSLHero
+          eyebrow={eyebrow}
+          accent={breadcrumbLabel ?? eyebrow}
+          title={title}
+          description={`${intro} ${emphasis}`}
+          trackSection={`${breadcrumbLabel ?? eyebrow}_hero`}
+        />
 
         <section style={{ paddingBlock: 'clamp(48px, 6vw, 72px)', borderBottom: '1px solid var(--color-border)' }}>
           <div

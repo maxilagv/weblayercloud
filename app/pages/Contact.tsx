@@ -3,6 +3,7 @@ import { type MetaFunction } from 'react-router';
 import { motion } from 'motion/react';
 import { Send, CheckCircle2, Shield, Lock, Star } from 'lucide-react';
 import gsap from 'gsap';
+import GLSLHero from '../components/GLSLHero';
 import PageTransition from '../components/PageTransition';
 import StructuredData from '../components/seo/StructuredData';
 import { submitContactSubmission } from '../lib/crm';
@@ -231,21 +232,30 @@ export default function Contact() {
           })),
         )}
       />
-      <div className="w-full pt-24" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="w-full" style={{ position: 'relative', zIndex: 1 }}>
+        <GLSLHero
+          eyebrow="Diagnostico MotorCloud"
+          accent="Mostranos la friccion"
+          title="y armamos el mapa"
+          description="En una primera lectura ordenamos el problema, la arquitectura posible y el siguiente paso concreto para tu operacion."
+          trackSection="contact_hero"
+        />
+
         <section
-          data-track-section="contact_hero"
+          id="formulario"
+          data-track-section="contact_form"
           style={{
             padding: 'clamp(48px, 8vw, 80px) clamp(20px, 6vw, 56px) clamp(64px, 10vw, 100px)',
             position: 'relative',
             overflow: 'hidden',
-            borderBottom: '1px solid var(--color-dark-border)',
-            background: 'var(--color-dark)',
+            borderBottom: '1px solid var(--color-border)',
+            background: 'var(--color-bg)',
           }}
         >
           {/* Dot-grid */}
           <div aria-hidden="true" style={{
             position: 'absolute', inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.065) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(10,10,10,0.045) 1px, transparent 1px)',
             backgroundSize: '26px 26px',
             pointerEvents: 'none',
             maskImage: 'linear-gradient(to right, transparent 0%, black 30%, black 70%, transparent 100%)',
@@ -253,7 +263,7 @@ export default function Contact() {
           {/* Orange orb right */}
           <div aria-hidden="true" style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 45% 55% at 100% 50%, rgba(255,59,0,0.1) 0%, transparent 65%)',
+            background: 'linear-gradient(120deg, transparent 0%, rgba(255,59,0,0.08) 100%)',
             pointerEvents: 'none',
           }} />
 
@@ -261,7 +271,7 @@ export default function Contact() {
             {/* ── Hero header ── */}
             <div
               style={{
-                display: 'grid',
+                display: 'none',
                 gridTemplateColumns: isSmallViewport ? '1fr' : 'minmax(0, 1fr) minmax(340px, 0.94fr)',
                 gap: isSmallViewport ? '36px' : '52px',
                 alignItems: 'center',
@@ -269,24 +279,21 @@ export default function Contact() {
               }}
             >
               <div style={{ maxWidth: '760px' }}>
-                <p className="eyebrow-accent" style={{ marginBottom: '20px' }}>// Diagnostico inicial</p>
+                <p className="eyebrow-accent" style={{ marginBottom: '20px' }}>// Diagnostico tecnico</p>
                 <h1
                   style={{
                     fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(32px, 4vw, 56px)',
+                    fontSize: 'clamp(36px, 5vw, 72px)',
                     fontWeight: 800,
-                    letterSpacing: '-0.03em',
-                    color: '#FAFAFA',
-                    marginBottom: '16px',
-                    lineHeight: 1.05,
+                    letterSpacing: 0,
+                    color: 'var(--color-text)',
+                    marginBottom: '20px',
+                    lineHeight: 1,
                   }}
                 >
-                  Conversemos sobre
-                  <br />
-                  la operacion que queres construir.
-                  <br />
+                  Converti la friccion actual en un plan de sistema.
                   <span style={{ color: 'var(--color-accent)', fontStyle: 'italic' }}>
-                    Pensada para escalar.
+                    {' '}Sin vueltas.
                   </span>
                 </h1>
                 <p
@@ -294,7 +301,7 @@ export default function Contact() {
                     fontFamily: 'var(--font-sans)',
                     fontSize: '17px',
                     lineHeight: 1.7,
-                    color: 'rgba(255,255,255,0.5)',
+                    color: 'var(--color-muted)',
                     fontWeight: 300,
                     maxWidth: '560px',
                     marginBottom: '26px',
@@ -312,10 +319,10 @@ export default function Contact() {
                         fontSize: '10px',
                         letterSpacing: '0.1em',
                         textTransform: 'uppercase',
-                        color: 'rgba(255,255,255,0.38)',
+                        color: 'var(--color-muted)',
                         padding: '7px 10px',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid var(--color-border)',
+                        background: 'var(--color-surface)',
                       }}
                     >
                       {signal}
@@ -610,6 +617,45 @@ export default function Contact() {
                   </motion.div>
                 )}
 
+                <div style={{ marginBottom: '28px' }}>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '10px',
+                      letterSpacing: '0.16em',
+                      textTransform: 'uppercase',
+                      color: 'var(--color-accent)',
+                      marginBottom: '10px',
+                    }}
+                  >
+                    Tu contexto
+                  </p>
+                  <h2
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: 'clamp(24px, 3vw, 36px)',
+                      fontWeight: 800,
+                      letterSpacing: 0,
+                      lineHeight: 1.05,
+                      color: 'var(--color-text)',
+                      marginBottom: '10px',
+                    }}
+                  >
+                    Dejanos el problema principal y armamos la primera lectura.
+                  </h2>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '14px',
+                      lineHeight: 1.7,
+                      color: 'var(--color-muted)',
+                      fontWeight: 300,
+                    }}
+                  >
+                    No hace falta tener el alcance cerrado. Con una friccion clara alcanza para empezar.
+                  </p>
+                </div>
+
                 <form onSubmit={handleSubmit}>
                   <div
                     style={{
@@ -768,7 +814,7 @@ export default function Contact() {
                   <div style={{ display: 'grid', gap: '16px' }}>
                     {[
                       'Leemos tu contexto operativo y comercial.',
-                      'Definimos la mejor entrada: ERP, integracion o demo diagnostica.',
+                      'Definimos la mejor entrada: ERP, automatizaciones o diagnóstico técnico gratuito.',
                       'Te devolvemos un siguiente paso con direccion clara.',
                     ].map((item, index) => (
                       <div

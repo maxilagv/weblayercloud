@@ -26,7 +26,8 @@
       "Bash(py --version)",
       "Bash(\"C:\\\\Users\\\\User\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python313\\\\python.exe\" skills/ui-ux-pro-max/scripts/search.py \"b2b saas java microservices technical enterprise dark editorial\" --design-system -p \"MotorCloud\")",
       "Bash(npx vite:*)",
-      "Bash(echo \"EXIT: $?\")"
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); deps={**d.get\\('dependencies',{}\\),**d.get\\('devDependencies',{}\\)}; print\\('\\\\n'.join\\(k for k in sorted\\(deps.keys\\(\\)\\)\\)\\)\")"
     ]
   }
 }

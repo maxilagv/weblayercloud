@@ -38,6 +38,8 @@ export default function LegacyMigrationRoute() {
   return (
     <TopicPage
       eyebrow="Migración legacy"
+      visual="tech"
+      breadcrumbLabel="Migración Legacy"
       title="Migrar no es tirar todo y empezar de cero. Es mover una operación real sin romperla."
       intro="La mayoría de las empresas llegan a una nueva plataforma cuando ya dependen de planillas, circuitos manuales, ERPs viejos o aplicaciones que no se hablan entre sí."
       emphasis="MotorCloud plantea la migración como transición controlada: entender dominios, aislar riesgos, mover datos con criterio y convivir por etapas cuando hace falta."

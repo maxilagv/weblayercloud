@@ -1,0 +1,77 @@
+[2m11:43:17[22m [31m[1m[vite][22m[39m [31m[2m(ssr)[22m[39m [31mError when evaluating SSR module virtual:react-router/server-build: Transform failed with 1 error:
+C:/Users/User/OneDrive/Desktop/layercloud/app/components/ui/liquid-glass-button.tsx:51:8: ERROR: Expected ">" but found "."[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mC:/Users/User/OneDrive/Desktop/layercloud/app/components/ui/liquid-glass-button.tsx[39m:51:8
+[33m  
+  [33mExpected ">" but found "."[33m
+  49 |          className={cn(buttonVariants({ variant, size, className }))}
+  50 |          ref={ref}
+  51 |          ...props
+     |          ^
+  52 |        />
+  53 |      )
+  [39m
+      at failureErrorWithLog (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:1467:15)
+      at C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:736:50
+      at responseCallbacks.<computed> (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:603:9)
+      at handleIncomingPacket (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:658:12)
+      at Socket.readFromStdout (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:581:7)
+      at Socket.emit (node:events:519:28)
+      at addChunk (node:internal/streams/readable:559:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+      at Socket.Readable.push (node:internal/streams/readable:390:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:191:23)
+[2m11:43:17[22m [31m[1m[vite][22m[39m [31mInternal server error: Transform failed with 1 error:
+C:/Users/User/OneDrive/Desktop/layercloud/app/components/ui/liquid-glass-button.tsx:51:8: ERROR: Expected ">" but found "."[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mC:/Users/User/OneDrive/Desktop/layercloud/app/components/ui/liquid-glass-button.tsx[39m:51:8
+[33m  
+  [33mExpected ">" but found "."[33m
+  49 |          className={cn(buttonVariants({ variant, size, className }))}
+  50 |          ref={ref}
+  51 |          ...props
+     |          ^
+  52 |        />
+  53 |      )
+  [39m
+      at failureErrorWithLog (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:1467:15)
+      at C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:736:50
+      at responseCallbacks.<computed> (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:603:9)
+      at handleIncomingPacket (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:658:12)
+      at Socket.readFromStdout (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\vite\node_modules\esbuild\lib\main.js:581:7)
+      at Socket.emit (node:events:519:28)
+      at addChunk (node:internal/streams/readable:559:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+      at Socket.Readable.push (node:internal/streams/readable:390:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:191:23)
+[2m11:52:21[22m [33m[1m[vite][22m[39m [33m[2m(ssr)[22m[39m [33mwarning: [33mDuplicate key "display" in object literal[33m
+242|              display: 'none',
+243|              minHeight: '100svh',
+244|              display: 'flex',
+   |              ^
+245|              flexDirection: 'column',
+246|              justifyContent: 'center',
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[39m
+Error: No route matches URL "/favicon.ico"
+    at getInternalRouterError (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\react-router\dist\development\chunk-YMKMFAYZ.js:5269:5)
+    at Object.query (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\react-router\dist\development\chunk-YMKMFAYZ.js:3301:19)
+    at handleDocumentRequest (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\react-router\dist\development\index.js:1557:38)
+    at requestHandler (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\react-router\dist\development\index.js:1416:24)
+    at nodeHandler (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\@react-router\dev\dist\vite.js:3802:30)
+    at C:\Users\User\OneDrive\Desktop\layercloud\node_modules\@react-router\dev\dist\vite.js:3809:17
+No routes matched location "/favicon.ico" 
+ErrorResponseImpl {
+  status: 404,
+  statusText: 'Not Found',
+  internal: true,
+  data: 'Error: No route matches URL "/favicon.ico"',
+  error: Error: No route matches URL "/favicon.ico"
+      at getInternalRouterError (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\react-router\dist\development\chunk-YMKMFAYZ.js:5269:5)
+      at Object.query (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\react-router\dist\development\chunk-YMKMFAYZ.js:3301:19)
+      at handleDocumentRequest (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\react-router\dist\development\index.js:1557:38)
+      at requestHandler (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\react-router\dist\development\index.js:1416:24)
+      at nodeHandler (C:\Users\User\OneDrive\Desktop\layercloud\node_modules\@react-router\dev\dist\vite.js:3802:30)
+      at C:\Users\User\OneDrive\Desktop\layercloud\node_modules\@react-router\dev\dist\vite.js:3809:17
+}

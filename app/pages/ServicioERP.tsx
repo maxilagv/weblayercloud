@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import StructuredData from '../components/seo/StructuredData';
+import PageHero from '../components/PageHero';
 import { useAdaptiveExperience } from '../hooks/useAdaptiveExperience';
 import { breadcrumbJsonLd, buildMeta, faqJsonLd, serviceJsonLd } from '../lib/seo';
 
@@ -285,87 +286,28 @@ export default function ServicioERP() {
       <div style={{ background: '#050505', minHeight: '100vh', color: '#FAFAFA' }}>
 
         {/* ── HERO ── */}
-        <section style={{ paddingTop: 'clamp(120px, 14vw, 200px)', paddingBottom: 'clamp(72px, 9vw, 120px)', background: '#050505', borderBottom: '1px solid rgba(255,255,255,0.06)', position: 'relative', overflow: 'hidden' }}>
+        <PageHero
+          eyebrow="Producto estrella · 40+ módulos"
+          title={<>El sistema<br />operativo de<br /><em style={{ fontStyle: 'italic', fontWeight: 400, color: 'rgba(255,255,255,0.22)' }}>tu empresa.</em></>}
+          sub="No es un software genérico adaptado a tu rubro. Es una arquitectura construida sobre tu operación real, con los módulos que necesitás desde el día uno y la capacidad de crecer sin límite."
+          variant="erp"
+          breadcrumb={{ label: 'ERP B2B', to: '/servicios/erp' }}
+        />
 
-          {/* Grid de ruido decorativo */}
-          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'radial-gradient(ellipse 90% 70% at 60% 50%, rgba(255,59,0,0.07) 0%, transparent 65%), radial-gradient(ellipse 50% 40% at 10% 80%, rgba(0,188,255,0.04) 0%, transparent 60%)' }} />
-
-          <div style={wrap}>
-            {/* Breadcrumb */}
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '44px' }}>
-              <Link to="/servicios" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', textDecoration: 'none', transition: 'color 0.15s' }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.55)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.25)'; }}
-              >
-                Servicios
-              </Link>
-              <span style={{ color: 'rgba(255,255,255,0.12)' }}>→</span>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#FF3B00' }}>ERP B2B</span>
-            </motion.div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: isSmallViewport ? '1fr' : '1fr 1fr', gap: 'clamp(40px, 6vw, 80px)', alignItems: 'end' }}>
-              <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}>
-                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 56, height: 56, background: 'rgba(255,59,0,0.1)', border: '1px solid rgba(255,59,0,0.2)', marginBottom: '28px' }}>
-                  <Building2 size={26} color="#FF3B00" strokeWidth={1.5} />
+        {/* ── STATS ── */}
+        <section style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: '#060606' }}>
+          <div style={{ maxWidth: '1200px', marginInline: 'auto', paddingInline: 'clamp(20px, 6vw, 80px)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.06)' }}>
+              {[
+                { num: '40+', lbl: 'módulos integrados' },
+                { num: '6',   lbl: 'industrias probadas' },
+                { num: '∞',   lbl: 'usuarios sin costo extra' },
+              ].map(({ num, lbl }) => (
+                <div key={lbl} style={{ background: '#060606', padding: '28px 24px', textAlign: 'center' }}>
+                  <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3vw, 42px)', fontWeight: 900, letterSpacing: '-0.04em', color: '#FF3B00', lineHeight: 1, marginBottom: '8px' }}>{num}</p>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{lbl}</p>
                 </div>
-
-                {/* Badge */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,59,0,0.08)', border: '1px solid rgba(255,59,0,0.2)', padding: '5px 12px', marginBottom: '24px', width: 'fit-content' }}>
-                  <div style={{ width: 5, height: 5, background: '#FF3B00', borderRadius: '50%' }} />
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#FF3B00' }}>
-                    Producto estrella · 40+ módulos
-                  </span>
-                </div>
-
-                <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(38px, 6vw, 88px)', fontWeight: 900, letterSpacing: '-0.045em', lineHeight: 0.92, color: '#FAFAFA', marginBottom: '0' }}>
-                  El sistema
-                  <br />
-                  operativo de
-                  <br />
-                  <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'rgba(255,255,255,0.22)' }}>
-                    tu empresa.
-                  </em>
-                </h1>
-              </motion.div>
-
-              <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(15px, 1.5vw, 18px)', lineHeight: 1.75, color: 'rgba(255,255,255,0.38)', fontWeight: 300, marginBottom: '36px' }}>
-                  No es un software genérico adaptado a tu rubro. Es una arquitectura construida sobre tu operación real, con los módulos que necesitás desde el día uno y la capacidad de crecer sin límite.
-                </p>
-
-                {/* Stats rápidos */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '36px' }}>
-                  {[
-                    { num: '40+', lbl: 'módulos integrados' },
-                    { num: '6',   lbl: 'industrias probadas' },
-                    { num: '∞',   lbl: 'usuarios sin costo extra' },
-                  ].map(({ num, lbl }) => (
-                    <div key={lbl} style={{ background: 'rgba(255,255,255,0.02)', padding: '20px 16px', textAlign: 'center' }}>
-                      <p style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px, 2.5vw, 32px)', fontWeight: 900, letterSpacing: '-0.04em', color: '#FF3B00', lineHeight: 1, marginBottom: '6px' }}>{num}</p>
-                      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{lbl}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                  <button
-                    onClick={() => window.dispatchEvent(new CustomEvent('layercloud:open-chat'))}
-                    data-track-event="cta_click" data-track-label="Consultar ERP Hero" data-track-location="erp_hero"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 500, color: '#FFFFFF', background: '#FF3B00', border: 'none', padding: '14px 24px', cursor: 'pointer', transition: 'background 0.15s' }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#E03000'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#FF3B00'; }}
-                  >
-                    Consultar disponibilidad <ArrowRight size={14} strokeWidth={2} />
-                  </button>
-                  <Link to="/solucion"
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 400, color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.1)', padding: '13px 24px', textDecoration: 'none', transition: 'border-color 0.15s, color 0.15s' }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; e.currentTarget.style.color = 'rgba(255,255,255,0.7)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; }}
-                  >
-                    Ver arquitectura →
-                  </Link>
-                </div>
-              </motion.div>
+              ))}
             </div>
           </div>
         </section>

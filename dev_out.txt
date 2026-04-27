@@ -1,0 +1,217 @@
+
+> motorcloud-web@0.0.0 dev
+> vite --port=3000 --host=0.0.0.0
+
+[2m11:42:40[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
+Port 3000 is in use, trying another one...
+
+  [32m[1mVITE[22m v6.4.2[39m  [2mready in [0m[1m1235[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m3001[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://172.30.224.1:[1m3001[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.0.54:[1m3001[22m/[39m
+[2m11:43:32[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/components/ui/liquid-glass-button.tsx[22m
+[2m11:43:32[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_err.txt[22m
+[2m11:43:32[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:43:46[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mmotion/react, @radix-ui/react-compose-refs, clsx, tailwind-merge, lucide-react[32m[39m
+[2m11:43:46[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m11:43:57[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:43:57[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:43:57[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:43:57[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:50:34[22m [36m[1m[react-router][22m[39m [32mConfig saved[39m
+[2m11:50:51[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Servicios.tsx[22m
+[2m11:50:51[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Servicios.tsx[22m
+[2m11:50:51[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Servicios.tsx[22m
+[2m11:50:51[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Servicios.tsx[22m
+[2m11:50:52[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:50:52[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:50:52[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:50:52[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:50:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Product.tsx[22m
+[2m11:50:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Product.tsx[22m
+[2m11:50:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Product.tsx[22m
+[2m11:50:59[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Product.tsx[22m
+[2m11:50:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:50:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:50:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:50:59[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:51:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Product.tsx[22m
+[2m11:51:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Product.tsx[22m
+[2m11:51:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Product.tsx[22m
+[2m11:51:28[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Product.tsx[22m
+[2m11:51:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:51:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:51:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:51:28[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:51:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/components/marketing/TopicPage.tsx[22m
+[2m11:51:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/components/marketing/TopicPage.tsx[22m
+[2m11:51:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/components/marketing/TopicPage.tsx[22m
+[2m11:51:43[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/components/marketing/TopicPage.tsx[22m
+[2m11:51:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:51:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:51:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:51:43[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:51:49[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Contact.tsx[22m
+[2m11:51:49[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Contact.tsx[22m
+[2m11:51:49[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Contact.tsx[22m
+[2m11:51:49[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Contact.tsx[22m
+[2m11:51:49[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:51:49[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:51:49[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:51:49[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:51:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Contact.tsx[22m
+[2m11:51:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Contact.tsx[22m
+[2m11:51:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Contact.tsx[22m
+[2m11:51:58[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Contact.tsx[22m
+[2m11:51:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:51:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:51:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:51:58[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:52:04[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Contact.tsx[22m
+[2m11:52:04[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Contact.tsx[22m
+[2m11:52:04[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Contact.tsx[22m
+[2m11:52:04[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Contact.tsx[22m
+[2m11:52:04[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:52:04[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:52:04[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:52:04[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:52:09[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[22m
+[2m11:52:09[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[22m
+[2m11:52:09[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/routes/saas-java.tsx[22m
+[2m11:52:09[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/routes/saas-java.tsx[22m
+[2m11:52:09[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:52:09[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:52:09[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:52:09[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/routes/saas-java.tsx[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/routes/saas-java.tsx[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_err.txt[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_err.txt[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_err.txt[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_err.txt[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:52:21[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:52:32[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[22m
+[2m11:52:32[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[22m
+[2m11:52:32[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/routes/saas-java.tsx[22m
+[2m11:52:32[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/routes/saas-java.tsx[22m
+[2m11:52:32[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:52:32[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:52:32[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:52:32[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:55:57[22m [36m[1m[react-router][22m[39m [32mConfig saved[39m
+[2m11:56:17[22m [36m[1m[react-router][22m[39m [32mConfig saved[39m
+[2m11:56:29[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Product.tsx[22m
+[2m11:56:29[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Product.tsx[22m
+[2m11:56:29[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Product.tsx[22m
+[2m11:56:29[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Product.tsx[22m
+[2m11:56:30[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:56:30[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:56:30[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:56:30[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:56:38[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Servicios.tsx[22m
+[2m11:56:38[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Servicios.tsx[22m
+[2m11:56:38[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Servicios.tsx[22m
+[2m11:56:38[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Servicios.tsx[22m
+[2m11:56:38[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:56:38[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:56:38[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:56:38[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:56:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/components/marketing/TopicPage.tsx[22m
+[2m11:56:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/components/marketing/TopicPage.tsx[22m
+[2m11:56:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/components/marketing/TopicPage.tsx[22m
+[2m11:56:54[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/components/marketing/TopicPage.tsx[22m
+[2m11:56:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:56:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:56:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:56:54[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:57:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Contact.tsx[22m
+[2m11:57:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/pages/Contact.tsx[22m
+[2m11:57:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/pages/Contact.tsx[22m
+[2m11:57:03[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/pages/Contact.tsx[22m
+[2m11:57:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:57:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:57:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:57:03[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:57:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[22m
+[2m11:57:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/app/routes/saas-java.tsx[22m
+[2m11:57:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mapp/routes/saas-java.tsx[22m
+[2m11:57:14[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/routes/saas-java.tsx[22m
+[2m11:57:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:57:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:57:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:57:14[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:57:33[22m [36m[1m[react-router][22m[39m [32mConfig saved[39m
+[2m11:57:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:57:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m11:57:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:57:33[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m11:57:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mthree[32m[39m
+[2m11:57:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m12:00:12[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:00:12[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:00:12[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:00:12[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ new dependencies optimized: [33mgsap, gsap/ScrollTrigger, @radix-ui/react-slot, class-variance-authority[32m[39m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_err.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_err.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_err.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_err.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:00:16[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:05:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:05:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:05:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:05:33[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/components/Navbar.tsx[22m
+[2m12:05:34[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:05:34[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:05:34[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:05:34[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:05:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:05:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:05:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:05:50[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/components/Navbar.tsx[22m
+[2m12:05:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:05:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:05:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:05:50[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/components/Navbar.tsx[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:06:01[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:06:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:08[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/components/Navbar.tsx[22m
+[2m12:06:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:06:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:06:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:06:08[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:06:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/@fs/C:\Users\User\OneDrive\Desktop\layercloud\app\components\Navbar.tsx, /app/index.css[22m
+[2m12:06:24[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mapp/components/Navbar.tsx[22m
+[2m12:06:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:06:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mC:/Users/User/OneDrive/Desktop/layercloud/dev_out.txt[22m
+[2m12:06:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m
+[2m12:06:24[22m [36m[1m[vite][22m[39m [34m[2m(ssr)[22m[39m [32mpage reload [39m[2mdev_out.txt[22m

@@ -38,6 +38,8 @@ export default function EnterpriseIntegrationsRoute() {
   return (
     <TopicPage
       eyebrow="Integraciones empresariales"
+      visual="tech"
+      breadcrumbLabel="Integraciones"
       title="Integrar no es pegar APIs. Es decidir dónde termina tu producto y dónde empieza el borde con terceros."
       intro="MotorCloud necesita convivir con procesadores de pago, marketplaces, ERPs externos, notificaciones y sistemas previos. Eso obliga a diseñar una capa de integración seria."
       emphasis="La integración correcta no invade todo el sistema. Se encapsula, se observa y se vuelve reemplazable cuando el negocio cambia de proveedor o canal."

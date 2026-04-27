@@ -129,6 +129,26 @@ h1, h2, h3, h4, h5, h6 {
   100% { background-position: 0% 50%; }
 }
 
+@keyframes blur-fade-in {
+  from { opacity: 0; filter: blur(10px); transform: translateY(14px); }
+  to   { opacity: 1; filter: blur(0);   transform: translateY(0); }
+}
+
+@keyframes line-grow {
+  from { width: 0; opacity: 0; }
+  to   { width: 60px; opacity: 1; }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position:  200% center; }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0)   scale(1); }
+  50%       { transform: translateY(-12px) scale(1.02); }
+}
+
 @keyframes orb-drift {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33%       { transform: translate(40px, 30px) scale(1.05); }
@@ -1373,4 +1393,213 @@ h1, h2, h3, h4, h5, h6 {
 }
 @media (max-width: 480px) {
   .ann-bar-text { font-size: 10px; letter-spacing: 0.08em; }
+}
+
+/* ─── SECTION REVEAL UTILITIES ───────────────────── */
+
+/* Clip-path wipe — GSAP sets initial state inline, this just ensures no FOUC */
+.section-reveal-heading {
+  will-change: clip-path, opacity;
+}
+
+/* Eyebrow slide-in — also GSAP driven */
+.section-eyebrow-anim {
+  will-change: transform, opacity;
+}
+
+/* Sub-paragraph blur fade — GSAP driven */
+.section-sub-anim {
+  will-change: transform, opacity;
+}
+
+/* ─── STAT / PROBLEM / AUTO / CASE / TEAM / SERVICE CARDS ── */
+/* (GSAP targets these classes for stagger reveals) */
+.stat-card,
+.problem-card,
+.auto-card,
+.case-card,
+.team-card,
+.service-card {
+  will-change: transform, opacity;
+}
+
+/* ─── CTA PRIMARY BUTTON ─────────────────────────── */
+.cta-btn-main {
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-btn-main::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 33%,
+    rgba(255, 59, 0, 0.12) 50%,
+    transparent 67%
+  );
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.cta-btn-main:hover::after {
+  opacity: 1;
+  animation: shimmer 0.6s ease forwards;
+}
+
+/* ─── REDUCED MOTION OVERRIDE ────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .section-reveal-heading,
+  .section-eyebrow-anim,
+  .section-sub-anim,
+  .stat-card,
+  .problem-card,
+  .auto-card,
+  .case-card,
+  .team-card,
+  .service-card {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
+    will-change: auto !important;
+  }
+}
+
+/* ─── SHADCN COMPAT VARS (auth-fuse) ─────────────── */
+:root {
+  --background:            #FAFAFA;
+  --foreground:            #0A0A0A;
+  --muted-foreground:      #6B7280;
+  --primary-foreground:    #FFFFFF;
+  --secondary:             #F5F5F5;
+  --secondary-foreground:  #0A0A0A;
+  --destructive:           #EF4444;
+  --destructive-foreground:#FFFFFF;
+  --border:                #E5E5E5;
+  --input:                 #E5E5E5;
+  --ring:                  #FF3B00;
+  --radius:                0.5rem;
+}
+
+@theme inline {
+  --color-background:             var(--background);
+  --color-foreground:             var(--foreground);
+  --color-muted-foreground:       var(--muted-foreground);
+  --color-primary-foreground:     var(--primary-foreground);
+  --color-secondary:              var(--secondary);
+  --color-secondary-foreground:   var(--secondary-foreground);
+  --color-destructive:            var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-input:                  var(--input);
+  --color-ring:                   var(--ring);
+  /* Retro testimonial font alias */
+  --font-tiemposHeadline:         var(--font-display);
+}
+
+/* ─── ANIMATED SHADER HERO ───────────────────────── */
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-600 { animation-delay: 0.6s; }
+.animation-delay-800 { animation-delay: 0.8s; }
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* ─── LOADER-9 (isometric boxes) ─────────────────── */
+@keyframes from-left {
+  0%   { z-index: 20; opacity: 0; translate: -20px -6px; }
+  20%  { z-index: 10; opacity: 1; translate: 0px 0px; }
+  40%  { z-index: 9;  translate: 0px 4px; }
+  60%  { z-index: 8;  translate: 0px 8px; }
+  80%  { z-index: 7;  opacity: 1; translate: 0px 12px; }
+  100% { z-index: 5;  translate: 0px 30px; opacity: 0; }
+}
+
+@keyframes from-right {
+  0%   { z-index: 20; opacity: 0; translate: 20px -6px; }
+  20%  { z-index: 10; opacity: 1; translate: 0px 0px; }
+  40%  { z-index: 9;  translate: 0px 4px; }
+  60%  { z-index: 8;  translate: 0px 8px; }
+  80%  { z-index: 7;  opacity: 1; translate: 0px 12px; }
+  100% { z-index: 5;  translate: 0px 30px; opacity: 0; }
+}
+
+.loader {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.box {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%);
+}
+
+.box-1 { animation: from-left  2.4s ease-in-out infinite; }
+.box-2 { animation: from-right 2.4s ease-in-out infinite; animation-delay: 0.6s; }
+.box-3 { animation: from-left  2.4s ease-in-out infinite; animation-delay: 1.2s; }
+.box-4 { animation: from-right 2.4s ease-in-out infinite; animation-delay: 1.8s; }
+
+.side-top {
+  width: 40px;
+  height: 20px;
+  background: #FF3B00;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: skewX(-30deg) translateX(8px);
+}
+
+.side-left {
+  width: 20px;
+  height: 28px;
+  background: #CC2E00;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: skewY(30deg);
+}
+
+.side-right {
+  width: 20px;
+  height: 28px;
+  background: #E03500;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: skewY(-30deg);
 }

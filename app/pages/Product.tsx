@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
 import StructuredData from '../components/seo/StructuredData';
 import TiltCard from '../components/TiltCard';
+import GLSLHero from '../components/GLSLHero';
 import { useAdaptiveExperience } from '../hooks/useAdaptiveExperience';
 import { breadcrumbJsonLd, buildMeta, serviceJsonLd } from '../lib/seo';
 
@@ -394,28 +395,37 @@ export default function Product() {
           { name: 'Plataforma', path: '/solucion' },
         ])}
       />
-      <div className="w-full pt-24" style={{ position: 'relative', zIndex: 1 }}>
+      <div className="w-full" style={{ position: 'relative', zIndex: 1 }}>
+        <GLSLHero
+          eyebrow="Plataforma MotorCloud"
+          accent="ERP, e-commerce y datos"
+          title="en una sola operacion"
+          description="Una base comercial y operativa para vender, coordinar stock, seguir clientes y decidir con informacion viva."
+          trackSection="product_hero"
+        />
+
         {/* ── Hero ── */}
         <section
           data-track-section="product_hero"
           style={sec({
+            display: 'none',
             overflow: 'hidden',
-            background: 'var(--color-dark)',
-            borderBottom: '1px solid var(--color-dark-border)',
+            background: 'var(--color-bg)',
+            borderBottom: '1px solid var(--color-border)',
           })}
         >
           {/* Dot-grid */}
           <div aria-hidden="true" style={{
             position: 'absolute', inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.065) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(10,10,10,0.05) 1px, transparent 1px)',
             backgroundSize: '28px 28px',
             pointerEvents: 'none',
-            maskImage: 'linear-gradient(135deg, transparent 0%, black 35%, black 65%, transparent 100%)',
+            maskImage: 'linear-gradient(135deg, transparent 0%, black 34%, black 68%, transparent 100%)',
           }} />
           {/* Orange glow left */}
           <div aria-hidden="true" style={{
             position: 'absolute', inset: 0,
-            background: 'radial-gradient(ellipse 40% 55% at 0% 50%, rgba(255,59,0,0.12) 0%, transparent 65%)',
+            background: 'linear-gradient(120deg, rgba(255,59,0,0.08) 0%, transparent 46%)',
             pointerEvents: 'none',
           }} />
 
@@ -428,34 +438,35 @@ export default function Product() {
             }}
           >
             <div style={{ position: 'relative', zIndex: 1 }}>
-              <p className="eyebrow-accent" style={{ marginBottom: '20px' }}>// Arquitectura MotorCloud</p>
+              <p className="eyebrow-accent" style={{ marginBottom: '20px' }}>// Plataforma operativa</p>
               <h1
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(32px, 4vw, 56px)',
+                  fontSize: 'clamp(36px, 5vw, 72px)',
                   fontWeight: 800,
-                  letterSpacing: '-0.03em',
-                  color: '#FAFAFA',
-                  marginBottom: '16px',
+                  letterSpacing: 0,
+                  lineHeight: 1,
+                  color: 'var(--color-text)',
+                  marginBottom: '20px',
                   maxWidth: '760px',
                 }}
               >
-                ERP, automatizacion y e-commerce en una sola{' '}
-                <span style={{ color: 'var(--color-accent)', fontStyle: 'italic' }}>arquitectura operativa</span>
+                Una plataforma para vender, coordinar y decidir{' '}
+                <span style={{ color: 'var(--color-accent)', fontStyle: 'italic', fontWeight: 500 }}>sin parches</span>
               </h1>
               <p
                 style={{
                   fontFamily: 'var(--font-sans)',
                   fontSize: '17px',
                   lineHeight: 1.7,
-                  color: 'rgba(255,255,255,0.5)',
+                  color: 'var(--color-muted)',
                   fontWeight: 300,
                   maxWidth: '620px',
                   marginBottom: '32px',
                 }}
               >
-                Un ecosistema pensado para empresas que necesitan control hoy y una base lista
-                para expandirse a nuevos canales, equipos y mercados.
+                MotorCloud conecta e-commerce, ERP, clientes, stock y datos en una base preparada
+                para crecer por capas sin volver a empezar cada vez que cambia la operacion.
               </p>
               <div
                 style={{
@@ -476,7 +487,7 @@ export default function Product() {
                 </a>
                 <Link
                   to="/contacto"
-                  className="btn-ghost-dark"
+                  className="btn-ghost"
                   data-track-event="cta_click"
                   data-track-label="Agendar diagnostico"
                   data-track-location="product_hero"
@@ -493,10 +504,10 @@ export default function Product() {
                       fontSize: '10px',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
-                      color: 'rgba(255,255,255,0.4)',
+                      color: 'var(--color-muted)',
                       padding: '7px 10px',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      background: 'rgba(255,255,255,0.04)',
+                      border: '1px solid var(--color-border)',
+                      background: 'var(--color-surface)',
                     }}
                   >
                     {signal}

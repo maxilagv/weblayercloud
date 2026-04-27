@@ -27,17 +27,25 @@ const injectStyles = (() => {
       }
 
       .hero-right-panel {
-        display: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        padding: 8px 0 0;
+        /* Fade-mask strip on mobile */
+        mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+        transform: scale(0.78);
+        transform-origin: center top;
       }
 
       @media (min-width: 920px) {
         .hero-right-panel {
-          display: flex;
-          align-items: center;
-          justify-content: center;
           padding: clamp(40px, 5vw, 80px);
-          position: relative;
-          overflow: hidden;
+          mask-image: none;
+          -webkit-mask-image: none;
+          transform: none;
         }
       }
 
@@ -215,7 +223,7 @@ const injectStyles = (() => {
 })();
 
 function renderHeadline(value: string) {
-  const highlighted = ['microservicios', 'escala', 'orquesta'];
+  const highlighted = ['organizada', 'automatizada', 'tuyo', 'crece', 'organizado', 'automatizado'];
   const lines = value.split('\n');
 
   return lines.map((line, lineIndex) => {
@@ -299,7 +307,7 @@ export default function Hero() {
           <div className="hero-orb" aria-hidden="true" />
 
           <div style={{ position: 'relative', zIndex: 1, maxWidth: '680px' }}>
-            <p className="hero-eyebrow">MotorCloud · SaaS Java · Arquitectura distribuida</p>
+            <p className="hero-eyebrow">LayerCloud · Software a Medida · Automatización Empresarial</p>
 
             <h1 ref={headlineRef} className="hero-headline">
               {renderHeadline(p.heroHeadline)}
@@ -372,9 +380,9 @@ export default function Hero() {
                   marginRight: '4px',
                 }}
               >
-                Foco:
+                Para:
               </span>
-              {['Distribución', 'Retail', 'Logística', 'B2B', 'Integraciones'].map((item) => (
+              {['Retail', 'Distribución', 'Alimentación', 'E-commerce', 'Logística'].map((item) => (
                 <span
                   key={item}
                   style={{

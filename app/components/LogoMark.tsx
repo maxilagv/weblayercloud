@@ -55,7 +55,7 @@ export default function LogoMark({
           userSelect: 'none',
         }}
       >
-        Motor<span style={{ fontStyle: 'italic' }}>Cloud</span>
+        Layer<span style={{ fontStyle: 'italic' }}>Cloud</span>
       </span>
     </div>
   );

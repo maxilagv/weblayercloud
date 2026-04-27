@@ -2,9 +2,13 @@ import { useEffect, useRef, type CSSProperties } from 'react';
 import { Link, type MetaFunction } from 'react-router';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, Boxes, Cable, Database, GitBranch, Layers3, LineChart, ShieldCheck } from 'lucide-react';
-import Hero from '../components/Hero';
-import PlatformArchitectureSection from '../components/home/PlatformArchitectureSection';
+import {
+  ArrowRight, Zap, Users, TrendingUp, BarChart3,
+  ShieldCheck, Cable, Database, Layers3, GitBranch, LineChart,
+  Cpu, Globe2, CheckCircle,
+} from 'lucide-react';
+import AnimatedShaderHero from '../components/ui/animated-shader-hero';
+import { Carousel, TestimonialCard } from '../components/ui/retro-testimonial';
 import PageTransition from '../components/PageTransition';
 import StructuredData from '../components/seo/StructuredData';
 import { useAdaptiveExperience } from '../hooks/useAdaptiveExperience';
@@ -20,119 +24,174 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const meta: MetaFunction = () =>
   buildMeta({
-    title: 'MotorCloud',
+    title: 'LayerCloud — Software a Medida para Empresas que Crecen',
     description:
-      'MotorCloud es un SaaS moderno en Java con más de 10 microservicios para ventas, catálogo, pagos, integraciones y operación B2B a escala.',
+      'Construimos software personalizado que automatiza procesos, organiza tu equipo y hace crecer tu negocio. Casos de éxito en retail, distribución, alimentación y e-commerce.',
     path: '/',
     keywords: [
-      'motorcloud',
-      'saas java',
-      'microservicios',
-      'arquitectura de software',
-      'erp moderno',
-      'integraciones empresariales',
-      'plataforma b2b',
+      'software a medida',
+      'desarrollo de software personalizado Argentina',
+      'automatización de procesos empresariales',
+      'sistemas de gestión para empresas',
+      'software para dueños de empresas',
+      'LayerCloud',
+      'ERP personalizado',
+      'automatización empresarial',
+      'software para pymes Argentina',
     ],
   });
 
+// ── DATA ─────────────────────────────────────────────────────────
+
 const impactStats = [
-  { num: '10+', lbl: 'microservicios coordinados' },
-  { num: '1', lbl: 'modelo operativo unificado' },
-  { num: '24/7', lbl: 'observabilidad y monitoreo' },
-  { num: 'B2B', lbl: 'foco en operaciones complejas' },
+  { num: '5+',   lbl: 'empresas activas' },
+  { num: '100%', lbl: 'software personalizado' },
+  { num: '3×',   lbl: 'crecimiento en ventas' },
+  { num: '24/7', lbl: 'soporte continuo' },
 ] as const;
 
-const platformLayers = [
+const painPoints = [
   {
-    Icon: Layers3,
-    title: 'Dominios claros',
-    desc: 'Catálogo, pricing, clientes, pedidos y permisos viven en límites de dominio definidos. Sin mezclar reglas comerciales con UI o integraciones.',
+    icon: '📊',
+    title: 'Planillas que no escalan',
+    desc: 'El Excel que funcionaba con 10 clientes explota con 100. Los datos no se sincronizan y el equipo trabaja siempre sobre información desactualizada.',
   },
   {
-    Icon: GitBranch,
-    title: 'Eventos y flujos',
-    desc: 'Cada cambio importante puede propagarse entre servicios con eventos, colas y automatizaciones que reducen acople y retrabajo.',
+    icon: '⏱',
+    title: 'Procesos manuales que frenan',
+    desc: 'Tareas repetitivas que consumen horas de tu equipo cada semana. Tiempo que podría ir al negocio, no a cargar datos en pantallas.',
   },
   {
-    Icon: Database,
-    title: 'Dato confiable',
-    desc: 'La plataforma prioriza trazabilidad, auditoría y sincronización controlada para que reporting y operación miren la misma verdad.',
+    icon: '🔌',
+    title: 'Sistemas que no se hablan',
+    desc: 'Tu stock en un sistema, tus ventas en otro, tu contabilidad en otro. Nada conectado y siempre hay que hacer todo dos veces.',
   },
   {
-    Icon: Cable,
-    title: 'Conectores reales',
-    desc: 'APIs, webhooks y adaptadores para pagos, marketplaces, ERPs y CRMs externos sin convertir cada integración en una excepción.',
+    icon: '👀',
+    title: 'Sin visibilidad real',
+    desc: 'Tomar decisiones sin datos en tiempo real es apostar. No sabés cuánto vendiste hoy, cuánto stock tenés ni qué cliente está en riesgo.',
+  },
+] as const;
+
+const automationBenefits = [
+  {
+    Icon: Zap,
+    title: 'Velocidad ×10',
+    desc: 'Las tareas que le tomaban horas a tu equipo, el sistema las hace en segundos. Facturas, reportes, notificaciones, actualizaciones de stock — todo automático.',
+    stat: '10×',
+    statLabel: 'más rápido',
   },
   {
     Icon: ShieldCheck,
-    title: 'Seguridad operativa',
-    desc: 'Roles, permisos, logs y aislamiento por entorno pensados para equipos comerciales, operativos y técnicos trabajando en paralelo.',
+    title: 'Cero errores humanos',
+    desc: 'Cuando el sistema hace el trabajo, los errores de tipeo, los olvidos y las inconsistencias desaparecen. El dato que entra es el dato que sale.',
+    stat: '99%',
+    statLabel: 'precisión',
+  },
+  {
+    Icon: TrendingUp,
+    title: 'Escala sin fricciones',
+    desc: 'Con 100 clientes o con 10.000, tu sistema trabaja igual. No necesitás contratar más administrativos para procesar más órdenes.',
+    stat: '∞',
+    statLabel: 'escalabilidad',
+  },
+  {
+    Icon: BarChart3,
+    title: 'Decisiones con datos',
+    desc: 'Dashboards en tiempo real, alertas automáticas, reportes cuando los necesitás. Sabés exactamente qué está pasando en tu negocio, siempre.',
+    stat: '24/7',
+    statLabel: 'visibilidad',
+  },
+] as const;
+
+const testimonials = [
+  {
+    name: 'EnSintonia',
+    designation: 'Entretenimiento & Media',
+    description:
+      'Automatizamos toda la gestión de agenda y reservas. Lo que antes nos tomaba horas de planillas, ahora el sistema lo hace solo. La experiencia de nuestros clientes cambió completamente.',
+    profileImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop',
+  },
+  {
+    name: 'Electrohogar',
+    designation: 'Retail de Electrodomésticos',
+    description:
+      'Unificamos ventas, inventario y facturación en un solo sistema. Pasamos de no saber el stock real a tener visibilidad completa en tiempo real. El equipo trabaja con datos, no con suposiciones.',
+    profileImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=300&auto=format&fit=crop',
+  },
+  {
+    name: 'AlimentosCanapa',
+    designation: 'Industria Alimentaria',
+    description:
+      'Conectamos producción, logística y distribución en tiempo real. La trazabilidad completa nos permitió reducir tiempos de entrega y responder a la demanda de manera proactiva.',
+    profileImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300&auto=format&fit=crop',
+  },
+  {
+    name: 'NexaStore',
+    designation: 'E-commerce & Retail Online',
+    description:
+      'Una tienda lista para escalar desde el día uno. Stock, pagos y fulfillment integrados sin necesidad de cambiar de plataforma cuando empezamos a crecer. Exactamente lo que necesitábamos.',
+    profileImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop',
+  },
+] as const;
+
+const teamDisciplines = [
+  {
+    Icon: Cpu,
+    title: 'Ingeniería de Software',
+    desc: 'Arquitectura limpia, código que escala y sistemas que duran. No parches, no deuda técnica acumulada.',
+    tag: 'Core',
+  },
+  {
+    Icon: Globe2,
+    title: 'Informática & Redes',
+    desc: 'Infraestructura segura, redes optimizadas y servidores que no se caen cuando más los necesitás.',
+    tag: 'Infraestructura',
+  },
+  {
+    Icon: Zap,
+    title: 'Robótica & Automatización',
+    desc: 'Automatizaciones avanzadas que van más allá del software: conectamos el mundo físico con el digital.',
+    tag: 'Innovación',
+  },
+  {
+    Icon: Users,
+    title: 'Ingeniería Social',
+    desc: 'Entendemos los procesos humanos antes de automatizarlos. Tecnología que la gente realmente usa y adopta.',
+    tag: 'Estrategia',
+  },
+] as const;
+
+const platformServices = [
+  {
+    Icon: Layers3,
+    title: 'Software a medida',
+    desc: 'Tu sistema, diseñado desde cero para tu negocio. No templates, no soluciones genéricas, no límites de terceros.',
+  },
+  {
+    Icon: GitBranch,
+    title: 'Automatizaciones',
+    desc: 'Procesos que corren solos: notificaciones, reportes, facturación, sincronización de datos entre sistemas.',
+  },
+  {
+    Icon: Database,
+    title: 'Gestión de datos',
+    desc: 'Base de datos unificada que conecta todos tus sistemas y te da visibilidad en tiempo real sobre tu operación.',
+  },
+  {
+    Icon: Cable,
+    title: 'Integraciones',
+    desc: 'Conectamos tu sistema con Mercado Libre, WhatsApp, AFIP, facturación electrónica, marketplaces y más.',
+  },
+  {
+    Icon: ShieldCheck,
+    title: 'Seguridad & Roles',
+    desc: 'Control total sobre quién ve qué. Permisos por área, logs de actividad y backup automático incluidos.',
   },
   {
     Icon: LineChart,
-    title: 'Escala medible',
-    desc: 'Métricas, alertas y observabilidad para saber qué está pasando en producción antes de que el problema llegue al usuario final.',
-  },
-] as const;
-
-const microserviceDomains = [
-  'Identity & Access',
-  'Catalog',
-  'Pricing',
-  'Orders',
-  'Payments',
-  'Inventory',
-  'Notifications',
-  'CRM',
-  'Analytics',
-  'Integrations',
-  'Audit',
-  'Workflow',
-] as const;
-
-const operatingScenarios = [
-  {
-    tag: 'Distribución B2B',
-    title: 'Catálogo, precios y órdenes sin hojas sueltas',
-    desc: 'Cuando el negocio vende por múltiples canales y necesita reglas distintas por cliente, una arquitectura bien separada deja de ser opcional.',
-  },
-  {
-    tag: 'Retail con operación',
-    title: 'Stock, pagos y ventas alineados en tiempo real',
-    desc: 'El problema no es solo vender más. Es vender sin romper inventario, finanzas o la experiencia del equipo que opera cada día.',
-  },
-  {
-    tag: 'Logística',
-    title: 'Rutas, estados y trazabilidad sobre eventos',
-    desc: 'La operación logística exige estados consistentes, integraciones y alertas. Eso encaja mejor con servicios especializados que con un monolito improvisado.',
-  },
-  {
-    tag: 'Migración legacy',
-    title: 'Pasar de planillas y parches a una plataforma viva',
-    desc: 'MotorCloud está pensado para convivir con datos históricos, integrarse por etapas y reducir riesgo durante el cambio.',
-  },
-] as const;
-
-const authorityLinks = [
-  {
-    href: '/saas-java',
-    label: 'SaaS en Java',
-    desc: 'Base técnica para productos con reglas complejas, equipos grandes e integraciones críticas.',
-  },
-  {
-    href: '/arquitectura-microservicios',
-    label: 'Arquitectura de microservicios',
-    desc: 'Separación de dominios, eventos, observabilidad y despliegues sin caos organizacional.',
-  },
-  {
-    href: '/integraciones-empresariales',
-    label: 'Integraciones empresariales',
-    desc: 'Pagos, marketplaces, webhooks y APIs conectados desde una capa estable.',
-  },
-  {
-    href: '/migracion-sistemas-legacy',
-    label: 'Migración de sistemas legacy',
-    desc: 'Cómo pasar de Excel y aplicaciones aisladas a una plataforma operativa sin cortar la operación.',
+    title: 'Analytics & Reportes',
+    desc: 'Dashboards en tiempo real con los indicadores clave para tu negocio. Todo en un lugar, siempre disponible.',
   },
 ] as const;
 
@@ -140,50 +199,80 @@ function openChatbot() {
   window.dispatchEvent(new CustomEvent('layercloud:open-chat'));
 }
 
+// ── COMPONENT ────────────────────────────────────────────────────
+
 export default function Home() {
-  const impactRef = useRef<HTMLDivElement>(null);
-  const layersRef = useRef<HTMLDivElement>(null);
-  const architectureRef = useRef<HTMLDivElement>(null);
-  const scenariosRef = useRef<HTMLDivElement>(null);
-  const authorityRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
+  const statsRef    = useRef<HTMLDivElement>(null);
+  const problemRef  = useRef<HTMLElement>(null);
+  const autoRef     = useRef<HTMLElement>(null);
+  const casesRef    = useRef<HTMLElement>(null);
+  const teamRef     = useRef<HTMLElement>(null);
+  const servicesRef = useRef<HTMLElement>(null);
+  const ctaRef      = useRef<HTMLDivElement>(null);
   const { prefersReducedMotion, isSmallViewport } = useAdaptiveExperience();
 
   useEffect(() => {
     if (prefersReducedMotion) return;
-
     const triggers: ScrollTrigger[] = [];
 
-    const stagger = (container: HTMLElement | null, selector: string, start = 'top 82%') => {
+    // Stagger cards up + scale
+    const stagger = (
+      container: HTMLElement | null,
+      selector: string,
+      from: gsap.TweenVars = { y: 36, opacity: 0, scale: 0.96 },
+      start = 'top 82%',
+    ) => {
       if (!container) return;
       const items = container.querySelectorAll(selector);
-      const tween = gsap.fromTo(
-        items,
-        { y: 28, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.78,
-          stagger: 0.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: container, start },
-        },
-      );
-
-      if (tween.scrollTrigger) {
-        triggers.push(tween.scrollTrigger);
-      }
+      if (!items.length) return;
+      const tween = gsap.fromTo(items, from, {
+        y: 0, opacity: 1, scale: 1,
+        duration: 0.72, stagger: 0.1,
+        ease: 'power3.out',
+        clearProps: 'scale,transform',
+        scrollTrigger: { trigger: container, start },
+      });
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
     };
 
-    stagger(impactRef.current, '.impact-card');
-    stagger(layersRef.current, '.layer-card');
-    stagger(architectureRef.current, '.architecture-card');
-    stagger(scenariosRef.current, '.scenario-card');
-    stagger(authorityRef.current, '.authority-card');
+    // Clip-path wipe reveal for section headings
+    const revealHeading = (container: HTMLElement | null) => {
+      if (!container) return;
+      const heading = container.querySelector<HTMLElement>('.section-reveal-heading');
+      if (!heading) return;
+      const tween = gsap.fromTo(
+        heading,
+        { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
+        {
+          clipPath: 'inset(0 0% 0 0)', opacity: 1,
+          duration: 1.1, ease: 'power4.out',
+          clearProps: 'clipPath,opacity',
+          scrollTrigger: { trigger: container, start: 'top 82%' },
+        },
+      );
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+    };
 
-    // Animated counters for impact stats
-    if (impactRef.current) {
-      const numEls = impactRef.current.querySelectorAll<HTMLElement>('.impact-num-animate');
+    // Eyebrow slide-in
+    const revealEyebrow = (container: HTMLElement | null) => {
+      if (!container) return;
+      const el = container.querySelector<HTMLElement>('.section-eyebrow-anim');
+      if (!el) return;
+      const tween = gsap.fromTo(
+        el,
+        { x: -20, opacity: 0 },
+        {
+          x: 0, opacity: 1,
+          duration: 0.6, ease: 'power3.out',
+          scrollTrigger: { trigger: container, start: 'top 85%' },
+        },
+      );
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+    };
+
+    // Animated counters in stats bar
+    if (statsRef.current) {
+      const numEls = statsRef.current.querySelectorAll<HTMLElement>('.stat-num-animate');
       numEls.forEach((el) => {
         const target = parseInt(el.getAttribute('data-target') || '0', 10);
         const suffix = el.getAttribute('data-suffix') || '';
@@ -194,30 +283,62 @@ export default function Home() {
           ease: 'power2.out',
           snap: { val: 1 },
           onUpdate: () => { el.textContent = `${Math.round(counter.val)}${suffix}`; },
-          scrollTrigger: { trigger: impactRef.current, start: 'top 85%', once: true },
+          scrollTrigger: { trigger: statsRef.current, start: 'top 85%', once: true },
         });
         if (t.scrollTrigger) triggers.push(t.scrollTrigger);
       });
+      stagger(statsRef.current, '.stat-card', { y: 24, opacity: 0 });
     }
+
+    stagger(problemRef.current, '.problem-card');
+    stagger(autoRef.current, '.auto-card', { y: 40, opacity: 0, scale: 0.94 });
+    // casesRef: carousel handles its own animations via motion/react
+    stagger(teamRef.current, '.team-card', { y: 32, opacity: 0 });
+    stagger(servicesRef.current, '.service-card');
+
+    revealHeading(problemRef.current);
+    revealHeading(autoRef.current);
+    revealHeading(casesRef.current);
+    revealHeading(teamRef.current);
+    revealHeading(servicesRef.current);
+
+    revealEyebrow(problemRef.current);
+    revealEyebrow(autoRef.current);
+    revealEyebrow(casesRef.current);
+    revealEyebrow(teamRef.current);
+    revealEyebrow(servicesRef.current);
+
+    // Sub-paragraphs in each section
+    [problemRef, autoRef, casesRef, teamRef, servicesRef].forEach((ref) => {
+      if (!ref.current) return;
+      const sub = ref.current.querySelector<HTMLElement>('.section-sub-anim');
+      if (!sub) return;
+      const tween = gsap.fromTo(
+        sub,
+        { y: 20, opacity: 0 },
+        {
+          y: 0, opacity: 1,
+          duration: 0.8, delay: 0.35, ease: 'power3.out',
+          scrollTrigger: { trigger: ref.current, start: 'top 82%' },
+        },
+      );
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
+    });
 
     if (ctaRef.current) {
       const tween = gsap.fromTo(
         ctaRef.current,
-        { y: 24, opacity: 0 },
+        { y: 28, opacity: 0 },
         {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: 'power3.out',
+          y: 0, opacity: 1,
+          duration: 0.85, ease: 'power3.out',
           scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' },
         },
       );
-      if (tween.scrollTrigger) {
-        triggers.push(tween.scrollTrigger);
-      }
+      if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
     }
 
-    return () => triggers.forEach((trigger) => trigger.kill());
+    return () => triggers.forEach((t) => t.kill());
   }, [prefersReducedMotion]);
 
   const wrap: CSSProperties = {
@@ -225,9 +346,8 @@ export default function Home() {
     marginInline: 'auto',
     paddingInline: 'clamp(20px, 6vw, 80px)',
   };
-
   const section: CSSProperties = {
-    paddingBlock: 'clamp(72px, 9vw, 120px)',
+    paddingBlock: 'clamp(80px, 10vw, 130px)',
     borderBottom: '1px solid var(--color-border)',
   };
 
@@ -235,9 +355,9 @@ export default function Home() {
     websiteJsonLd(),
     organizationJsonLd(),
     softwareApplicationJsonLd({
-      name: 'MotorCloud',
+      name: 'LayerCloud',
       description:
-        'SaaS moderno en Java con más de 10 microservicios para operaciones, integraciones y crecimiento B2B.',
+        'Software a medida que automatiza procesos, ordena la operación y hace crecer tu empresa. Casos de éxito en retail, distribución, alimentación y e-commerce.',
       path: '/',
     }),
     breadcrumbJsonLd([{ name: 'Inicio', path: '/' }]),
@@ -250,78 +370,80 @@ export default function Home() {
           <StructuredData key={index} data={entry} />
         ))}
 
-        <Hero />
-
-        <PlatformArchitectureSection
-          isSmallViewport={isSmallViewport}
-          sectionRef={architectureRef}
-          wrapStyle={wrap}
+        {/* ── HERO ── */}
+        <AnimatedShaderHero
+          trustBadge={{
+            text: "Software que hace crecer empresas reales en Argentina.",
+            icons: ["⚡"],
+          }}
+          headline={{
+            line1: "Tu empresa,",
+            line2: "automatizada.",
+          }}
+          subtitle="Construimos software que organiza tu operación, elimina el trabajo manual y te da visibilidad en tiempo real sobre tu negocio. Sin planillas, sin procesos lentos, sin límites."
+          buttons={{
+            primary: {
+              text: "Hablemos de tu proyecto",
+              onClick: openChatbot,
+            },
+            secondary: {
+              text: "Ver soluciones",
+              onClick: () => { window.location.href = '/servicios'; },
+            },
+          }}
         />
 
+        {/* ── STATS BAR ── */}
         <section
-          data-track-section="home_impact"
-          style={{ background: 'var(--color-dark)', borderBottom: '1px solid var(--color-dark-border)', position: 'relative', overflow: 'hidden' }}
+          data-track-section="home_stats"
+          style={{ background: 'var(--color-dark)', position: 'relative', overflow: 'hidden' }}
         >
-          {/* Noise texture overlay */}
           <div
             aria-hidden="true"
             style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.04\'/%3E%3C/svg%3E")',
-              backgroundSize: '180px',
-              pointerEvents: 'none',
-              opacity: 0.6,
-            }}
-          />
-          {/* Gradient sweep */}
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(90deg, rgba(255,59,0,0.04) 0%, transparent 50%, rgba(255,59,0,0.02) 100%)',
+              position: 'absolute', inset: 0,
+              background: 'linear-gradient(90deg, rgba(255,59,0,0.05) 0%, transparent 50%, rgba(255,59,0,0.03) 100%)',
               pointerEvents: 'none',
             }}
           />
           <div style={{ ...wrap, position: 'relative' }}>
             <div
-              ref={impactRef}
+              ref={statsRef}
               style={{
                 display: 'grid',
                 gridTemplateColumns: isSmallViewport ? '1fr 1fr' : 'repeat(4, 1fr)',
                 gap: '1px',
-                background: 'rgba(255,255,255,0.08)',
+                background: 'rgba(255,255,255,0.07)',
               }}
             >
               {impactStats.map((item) => {
                 const isNumeric = /^\d/.test(item.num);
                 const numericVal = parseInt(item.num.replace(/\D.*/, ''), 10);
                 const suffix = isNumeric ? item.num.replace(/^\d+/, '') : '';
-
                 return (
                   <div
                     key={item.lbl}
-                    className="impact-card"
+                    className="stat-card"
                     style={{
                       background: '#0A0A0A',
-                      padding: isSmallViewport ? '24px 18px' : '32px 24px',
+                      padding: isSmallViewport ? '28px 20px' : '40px 32px',
                       transition: 'background 0.25s',
                     }}
                     onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = '#111'; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = '#0A0A0A'; }}
                   >
                     <p
-                      className={isNumeric ? 'impact-num-animate' : undefined}
+                      className={isNumeric ? 'stat-num-animate' : undefined}
                       data-target={isNumeric ? numericVal : undefined}
                       data-suffix={isNumeric ? suffix : undefined}
                       style={{
                         fontFamily: 'var(--font-display)',
-                        fontSize: 'clamp(28px, 3.2vw, 46px)',
+                        fontSize: 'clamp(32px, 3.5vw, 54px)',
                         fontWeight: 900,
                         letterSpacing: '-0.04em',
-                        color: '#FAFAFA',
-                        marginBottom: '8px',
+                        color: '#FF3B00',
+                        marginBottom: '10px',
+                        lineHeight: 1,
                       }}
                     >
                       {item.num}
@@ -344,59 +466,576 @@ export default function Home() {
           </div>
         </section>
 
-        <section data-track-section="home_layers" style={{ ...section, position: 'relative', overflow: 'hidden' }}>
-          {/* Dot-grid background */}
+        {/* ── PROBLEM ── */}
+        <section
+          ref={problemRef}
+          data-track-section="home_problem"
+          style={{ ...section, position: 'relative', overflow: 'hidden' }}
+        >
           <div
             aria-hidden="true"
             style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.09) 1px, transparent 1px)',
-              backgroundSize: '26px 26px',
+              position: 'absolute', inset: 0,
+              backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px)',
+              backgroundSize: '28px 28px',
               pointerEvents: 'none',
               maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)',
             }}
           />
           <div style={{ ...wrap, position: 'relative' }}>
-            <div style={{ marginBottom: '38px', maxWidth: '760px' }}>
-              <p className="eyebrow" style={{ marginBottom: '12px' }}>
-                Plataforma en capas
+            <div style={{ marginBottom: '52px', maxWidth: '600px' }}>
+              <p className="eyebrow section-eyebrow-anim" style={{ marginBottom: '16px' }}>
+                El problema
               </p>
               <h2
+                className="section-reveal-heading"
                 style={{
                   fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(30px, 4vw, 54px)',
+                  fontSize: 'clamp(30px, 4.2vw, 58px)',
                   fontWeight: 800,
                   letterSpacing: '-0.04em',
                   lineHeight: 1.04,
                   color: 'var(--color-text)',
-                  marginBottom: '16px',
+                  marginBottom: '18px',
+                  willChange: 'clip-path, opacity',
                 }}
               >
-                Un SaaS moderno no se vende por screenshots.
-                <br />
-                <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'var(--color-muted)' }}>
-                  Se sostiene por diseño técnico.
+                ¿Tu negocio todavía corre<br />
+                <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'var(--color-accent)' }}>
+                  en planillas y procesos manuales?
                 </em>
               </h2>
               <p
+                className="section-sub-anim"
                 style={{
                   fontFamily: 'var(--font-sans)',
                   fontSize: '16px',
+                  lineHeight: 1.78,
+                  color: 'var(--color-muted)',
+                  fontWeight: 300,
+                }}
+              >
+                Cada hora que tu equipo pasa cargando datos es una hora que no está vendiendo,
+                atendiendo clientes ni haciendo crecer el negocio. Hay una mejor manera.
+              </p>
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: isSmallViewport ? '1fr' : 'repeat(2, 1fr)',
+                gap: '1px',
+                background: 'var(--color-border)',
+              }}
+            >
+              {painPoints.map((point) => (
+                <div
+                  key={point.title}
+                  className="problem-card"
+                  style={{
+                    background: 'var(--color-surface)',
+                    padding: isSmallViewport ? '26px 22px' : '34px 30px',
+                    transition: 'background 0.2s, box-shadow 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLDivElement;
+                    el.style.background = 'var(--color-bg)';
+                    el.style.boxShadow = 'inset 0 -3px 0 var(--color-accent)';
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLDivElement;
+                    el.style.background = 'var(--color-surface)';
+                    el.style.boxShadow = 'none';
+                  }}
+                >
+                  <div style={{ fontSize: '30px', marginBottom: '18px', lineHeight: 1 }}>
+                    {point.icon}
+                  </div>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '22px',
+                      fontWeight: 700,
+                      letterSpacing: '-0.03em',
+                      color: 'var(--color-text)',
+                      marginBottom: '12px',
+                    }}
+                  >
+                    {point.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '14px',
+                      lineHeight: 1.78,
+                      color: 'var(--color-muted)',
+                      fontWeight: 300,
+                    }}
+                  >
+                    {point.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── AUTOMATIONS ── */}
+        <section
+          ref={autoRef}
+          data-track-section="home_automations"
+          style={{
+            ...section,
+            background: 'var(--color-dark)',
+            borderBottom: '1px solid var(--color-dark-border)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Noise texture */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.04\'/%3E%3C/svg%3E")',
+              backgroundSize: '180px',
+              pointerEvents: 'none',
+              opacity: 0.5,
+            }}
+          />
+          {/* Glow orb */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              width: '700px', height: '700px',
+              background: 'radial-gradient(circle, rgba(255,59,0,0.08) 0%, transparent 65%)',
+              top: '-200px', right: '-150px',
+              pointerEvents: 'none',
+              animation: 'orb-drift 14s ease-in-out infinite',
+            }}
+          />
+          <div style={{ ...wrap, position: 'relative' }}>
+            <div style={{ marginBottom: '56px', maxWidth: '700px' }}>
+              <p className="eyebrow-accent section-eyebrow-anim" style={{ marginBottom: '16px' }}>
+                Automatizaciones
+              </p>
+              <h2
+                className="section-reveal-heading"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(30px, 4.2vw, 58px)',
+                  fontWeight: 800,
+                  letterSpacing: '-0.04em',
+                  lineHeight: 1.04,
+                  color: '#FAFAFA',
+                  marginBottom: '18px',
+                  willChange: 'clip-path, opacity',
+                }}
+              >
+                La automatización no es<br />
+                <em style={{ fontStyle: 'italic', fontWeight: 400, color: '#FF3B00' }}>
+                  el futuro. Es el presente.
+                </em>
+              </h2>
+              <p
+                className="section-sub-anim"
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '16px',
+                  lineHeight: 1.78,
+                  color: 'rgba(255,255,255,0.48)',
+                  fontWeight: 300,
+                }}
+              >
+                Tus competidores ya están automatizando. Cada proceso manual que todavía corrés a
+                mano es una ventaja que le estás regalando a quien sí lo automatizó.
+              </p>
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: isSmallViewport ? '1fr' : 'repeat(2, 1fr)',
+                gap: '1px',
+                background: 'rgba(255,255,255,0.07)',
+              }}
+            >
+              {automationBenefits.map(({ Icon, title, desc, stat, statLabel }) => (
+                <div
+                  key={title}
+                  className="auto-card"
+                  style={{
+                    background: '#0A0A0A',
+                    padding: isSmallViewport ? '28px 22px' : '38px 34px',
+                    transition: 'background 0.25s, box-shadow 0.25s',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0',
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLDivElement;
+                    el.style.background = '#0E0E0E';
+                    el.style.boxShadow = 'inset 0 0 0 1px rgba(255,59,0,0.2)';
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLDivElement;
+                    el.style.background = '#0A0A0A';
+                    el.style.boxShadow = 'none';
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: '22px',
+                    }}
+                  >
+                    <Icon size={20} color="#FF3B00" strokeWidth={2} />
+                    <div style={{ textAlign: 'right' }}>
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontSize: 'clamp(28px, 3vw, 46px)',
+                          fontWeight: 900,
+                          letterSpacing: '-0.04em',
+                          color: '#FF3B00',
+                          lineHeight: 1,
+                        }}
+                      >
+                        {stat}
+                      </p>
+                      <p
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '9px',
+                          letterSpacing: '0.15em',
+                          textTransform: 'uppercase',
+                          color: 'rgba(255,255,255,0.3)',
+                          marginTop: '4px',
+                        }}
+                      >
+                        {statLabel}
+                      </p>
+                    </div>
+                  </div>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '22px',
+                      fontWeight: 700,
+                      letterSpacing: '-0.03em',
+                      color: '#FAFAFA',
+                      marginBottom: '12px',
+                    }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '14px',
+                      lineHeight: 1.78,
+                      color: 'rgba(255,255,255,0.42)',
+                      fontWeight: 300,
+                    }}
+                  >
+                    {desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── SUCCESS CASES ── */}
+        <section
+          ref={casesRef}
+          data-track-section="home_cases"
+          style={{ ...section, position: 'relative', overflow: 'hidden' }}
+        >
+          <div style={{ ...wrap, position: 'relative' }}>
+            <div style={{ marginBottom: '56px', maxWidth: '680px' }}>
+              <p className="eyebrow section-eyebrow-anim" style={{ marginBottom: '16px' }}>
+                Casos de éxito
+              </p>
+              <h2
+                className="section-reveal-heading"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(30px, 4.2vw, 58px)',
+                  fontWeight: 800,
+                  letterSpacing: '-0.04em',
+                  lineHeight: 1.04,
+                  color: 'var(--color-text)',
+                  marginBottom: '18px',
+                  willChange: 'clip-path, opacity',
+                }}
+              >
+                Empresas reales.
+                <br />
+                <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'var(--color-muted)' }}>
+                  Resultados reales.
+                </em>
+              </h2>
+              <p
+                className="section-sub-anim"
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '16px',
+                  lineHeight: 1.78,
+                  color: 'var(--color-muted)',
+                  fontWeight: 300,
+                }}
+              >
+                Trabajamos con empresas de distintas industrias que tenían un problema en común:
+                sus sistemas no alcanzaban para lo que querían lograr.
+              </p>
+            </div>
+            <Carousel
+              items={testimonials.map((t, index) => (
+                <TestimonialCard
+                  key={t.name}
+                  testimonial={t}
+                  index={index}
+                  backgroundImage="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop"
+                />
+              ))}
+            />
+          </div>
+        </section>
+
+        {/* ── WHY US / TEAM ── */}
+        <section
+          ref={teamRef}
+          data-track-section="home_team"
+          style={{
+            ...section,
+            background: 'var(--color-dark)',
+            borderBottom: '1px solid var(--color-dark-border)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              width: '900px', height: '900px',
+              background: 'radial-gradient(circle, rgba(255,59,0,0.05) 0%, transparent 65%)',
+              bottom: '-350px', left: '-250px',
+              pointerEvents: 'none',
+              animation: 'orb-drift 18s ease-in-out infinite reverse',
+            }}
+          />
+          <div style={{ ...wrap, position: 'relative' }}>
+            <div style={{ marginBottom: '56px', maxWidth: '780px' }}>
+              <p className="eyebrow-accent section-eyebrow-anim" style={{ marginBottom: '16px' }}>
+                Por qué elegirnos
+              </p>
+              <h2
+                className="section-reveal-heading"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(30px, 4.2vw, 58px)',
+                  fontWeight: 800,
+                  letterSpacing: '-0.04em',
+                  lineHeight: 1.04,
+                  color: '#FAFAFA',
+                  marginBottom: '20px',
+                  willChange: 'clip-path, opacity',
+                }}
+              >
+                No somos una agencia.
+                <br />
+                <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'rgba(255,255,255,0.42)' }}>
+                  Somos ingenieros que entienden tu negocio.
+                </em>
+              </h2>
+              <p
+                className="section-sub-anim"
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '16px',
+                  lineHeight: 1.78,
+                  color: 'rgba(255,255,255,0.48)',
+                  fontWeight: 300,
+                  maxWidth: '640px',
+                }}
+              >
+                A diferencia de la mayoría, nuestro equipo combina ingeniería de software,
+                informática, robótica e ingeniería social. Eso nos permite ver el problema completo,
+                no solo la parte técnica.
+              </p>
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: isSmallViewport ? '1fr' : 'repeat(4, 1fr)',
+                gap: '1px',
+                background: 'rgba(255,255,255,0.07)',
+              }}
+            >
+              {teamDisciplines.map(({ Icon, title, desc, tag }) => (
+                <div
+                  key={title}
+                  className="team-card"
+                  style={{
+                    background: '#0A0A0A',
+                    padding: isSmallViewport ? '28px 22px' : '34px 28px',
+                    transition: 'background 0.25s, border-top-color 0.25s',
+                    borderTop: '2px solid transparent',
+                    cursor: 'default',
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget as HTMLDivElement;
+                    el.style.background = '#111';
+                    el.style.borderTopColor = '#FF3B00';
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget as HTMLDivElement;
+                    el.style.background = '#0A0A0A';
+                    el.style.borderTopColor = 'transparent';
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: '22px',
+                    }}
+                  >
+                    <Icon size={20} color="#FF3B00" strokeWidth={2} />
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '9px',
+                        letterSpacing: '0.15em',
+                        textTransform: 'uppercase',
+                        color: '#FF3B00',
+                        background: 'rgba(255,59,0,0.1)',
+                        border: '1px solid rgba(255,59,0,0.22)',
+                        padding: '4px 9px',
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  </div>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '19px',
+                      fontWeight: 700,
+                      letterSpacing: '-0.03em',
+                      color: '#FAFAFA',
+                      marginBottom: '12px',
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {title}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '13px',
+                      lineHeight: 1.78,
+                      color: 'rgba(255,255,255,0.4)',
+                      fontWeight: 300,
+                    }}
+                  >
+                    {desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+            {/* Differentiator callout */}
+            <div
+              style={{
+                marginTop: '2px',
+                padding: isSmallViewport ? '24px 22px' : '34px 38px',
+                background: 'rgba(255,59,0,0.06)',
+                border: '1px solid rgba(255,59,0,0.16)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '20px',
+                flexDirection: isSmallViewport ? 'column' : 'row',
+              }}
+            >
+              <CheckCircle size={22} color="#FF3B00" strokeWidth={2} style={{ flexShrink: 0 }} />
+              <p
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '15px',
+                  lineHeight: 1.68,
+                  color: 'rgba(255,255,255,0.68)',
+                  fontWeight: 300,
+                }}
+              >
+                <strong style={{ color: '#FAFAFA', fontWeight: 600 }}>Lo que nos distingue:</strong>{' '}
+                Mientras otros entregan el software y desaparecen, nosotros somos el equipo técnico
+                de tu empresa. Evolucionamos el sistema junto con tu negocio, sin costos ocultos ni
+                dependencias forzadas.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── PLATFORM SERVICES ── */}
+        <section
+          ref={servicesRef}
+          data-track-section="home_services"
+          style={{ ...section, background: 'var(--color-surface)', position: 'relative', overflow: 'hidden' }}
+        >
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px)',
+              backgroundSize: '28px 28px',
+              pointerEvents: 'none',
+              maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%)',
+            }}
+          />
+          <div style={{ ...wrap, position: 'relative' }}>
+            <div style={{ marginBottom: '52px', maxWidth: '680px' }}>
+              <p className="eyebrow section-eyebrow-anim" style={{ marginBottom: '16px' }}>
+                Qué construimos
+              </p>
+              <h2
+                className="section-reveal-heading"
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(28px, 3.8vw, 54px)',
+                  fontWeight: 800,
+                  letterSpacing: '-0.04em',
+                  lineHeight: 1.06,
+                  color: 'var(--color-text)',
+                  marginBottom: '16px',
+                  willChange: 'clip-path, opacity',
+                }}
+              >
+                Cada solución,
+                <br />
+                <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'var(--color-muted)' }}>
+                  diseñada para tu operación.
+                </em>
+              </h2>
+              <p
+                className="section-sub-anim"
+                style={{
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '15px',
                   lineHeight: 1.8,
                   color: 'var(--color-muted)',
                   fontWeight: 300,
-                  maxWidth: '680px',
+                  maxWidth: '560px',
                 }}
               >
-                Esta capa pública ahora explica qué hace fuerte a MotorCloud: dominios
-                estables, servicios especializados y un modelo de integración listo para operar
-                con terceros sin perder control.
+                No vendemos licencias ni templates. Construimos desde cero el sistema que tu
+                empresa necesita para operar, escalar y ganar en su mercado.
               </p>
             </div>
-
             <div
-              ref={layersRef}
               style={{
                 display: 'grid',
                 gridTemplateColumns: isSmallViewport ? '1fr' : 'repeat(3, 1fr)',
@@ -404,23 +1043,23 @@ export default function Home() {
                 background: 'var(--color-border)',
               }}
             >
-              {platformLayers.map(({ Icon, title, desc }) => (
+              {platformServices.map(({ Icon, title, desc }) => (
                 <div
                   key={title}
-                  className="layer-card"
+                  className="service-card"
                   style={{
-                    background: 'var(--color-surface)',
-                    padding: isSmallViewport ? '24px 20px' : '28px 24px',
-                    minHeight: '240px',
-                    transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                    background: 'var(--color-bg)',
+                    padding: isSmallViewport ? '26px 22px' : '32px 28px',
+                    minHeight: '200px',
+                    transition: 'transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s',
                     cursor: 'default',
                   }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLDivElement;
                     el.style.transform = 'translateY(-4px)';
-                    el.style.boxShadow = '0 16px 48px rgba(0,0,0,0.1)';
+                    el.style.boxShadow = '0 16px 48px rgba(0,0,0,0.09)';
                     const svg = el.querySelector('svg') as SVGElement | null;
-                    if (svg) svg.style.transform = 'scale(1.2)';
+                    if (svg) svg.style.transform = 'scale(1.15)';
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLDivElement;
@@ -430,11 +1069,16 @@ export default function Home() {
                     if (svg) svg.style.transform = 'scale(1)';
                   }}
                 >
-                  <Icon size={18} color="#FF3B00" strokeWidth={2.2} style={{ marginBottom: '18px', transition: 'transform 0.25s ease' }} />
+                  <Icon
+                    size={18}
+                    color="#FF3B00"
+                    strokeWidth={2.2}
+                    style={{ marginBottom: '18px', transition: 'transform 0.3s ease' }}
+                  />
                   <h3
                     style={{
                       fontFamily: 'var(--font-display)',
-                      fontSize: '24px',
+                      fontSize: '22px',
                       fontWeight: 700,
                       letterSpacing: '-0.03em',
                       color: 'var(--color-text)',
@@ -460,277 +1104,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section data-track-section="home_microservices" style={{ ...section, background: 'var(--color-surface)' }}>
-          <div style={wrap}>
-            <div style={{ marginBottom: '30px', maxWidth: '760px' }}>
-              <p className="eyebrow" style={{ marginBottom: '12px' }}>
-                Mapa operativo
-              </p>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(28px, 3.6vw, 48px)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.04em',
-                  lineHeight: 1.06,
-                  color: 'var(--color-text)',
-                  marginBottom: '14px',
-                }}
-              >
-                Más de 10 microservicios coordinados,
-                <br />
-                <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'var(--color-muted)' }}>
-                  una sola plataforma para operar.
-                </em>
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '15px',
-                  lineHeight: 1.75,
-                  color: 'var(--color-muted)',
-                  fontWeight: 300,
-                  maxWidth: '680px',
-                }}
-              >
-                No todos se muestran de cara al usuario final, pero todos cuentan para la
-                estabilidad del producto. El sitio ahora prioriza explicar esa base técnica.
-              </p>
-            </div>
-
-          </div>
-
-          {/* Marquee strip */}
-          <div
-            style={{
-              overflow: 'hidden',
-              borderTop: '1px solid var(--color-border)',
-              borderBottom: '1px solid var(--color-border)',
-              marginTop: 'clamp(32px, 5vw, 56px)',
-            }}
-          >
-            <div
-              className="marquee-track"
-              style={{ animationDuration: '28s' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.animationPlayState = 'paused'; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.animationPlayState = 'running'; }}
-            >
-              {[...microserviceDomains, ...microserviceDomains].map((service, i) => (
-                <span key={i} className="marquee-item">
-                  {service}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section data-track-section="home_scenarios" style={section}>
-          <div style={wrap}>
-            <div style={{ marginBottom: '34px', maxWidth: '760px' }}>
-              <p className="eyebrow" style={{ marginBottom: '12px' }}>
-                Donde encaja
-              </p>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(28px, 3.6vw, 48px)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.04em',
-                  lineHeight: 1.06,
-                  color: 'var(--color-text)',
-                }}
-              >
-                Operaciones donde un sistema genérico
-                <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'var(--color-muted)' }}>
-                  ya no alcanza.
-                </em>
-              </h2>
-            </div>
-
-            <div
-              ref={scenariosRef}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: isSmallViewport ? '1fr' : 'repeat(2, 1fr)',
-                gap: '1px',
-                background: 'var(--color-border)',
-              }}
-            >
-              {operatingScenarios.map((scenario) => (
-                <div
-                  key={scenario.title}
-                  className="scenario-card"
-                  style={{
-                    background: 'var(--color-bg)',
-                    padding: isSmallViewport ? '24px 20px' : '30px 26px',
-                    minHeight: '230px',
-                    transition: 'background 0.25s, box-shadow 0.25s',
-                    cursor: 'default',
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLDivElement;
-                    el.style.background = 'var(--color-surface)';
-                    el.style.boxShadow = 'inset 3px 0 0 var(--color-accent)';
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLDivElement;
-                    el.style.background = 'var(--color-bg)';
-                    el.style.boxShadow = 'none';
-                  }}
-                >
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '10px',
-                      letterSpacing: '0.16em',
-                      textTransform: 'uppercase',
-                      color: 'var(--color-accent)',
-                      marginBottom: '12px',
-                    }}
-                  >
-                    {scenario.tag}
-                  </p>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '26px',
-                      fontWeight: 700,
-                      letterSpacing: '-0.03em',
-                      color: 'var(--color-text)',
-                      lineHeight: 1.08,
-                      marginBottom: '12px',
-                    }}
-                  >
-                    {scenario.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-sans)',
-                      fontSize: '14px',
-                      lineHeight: 1.8,
-                      color: 'var(--color-muted)',
-                      fontWeight: 300,
-                    }}
-                  >
-                    {scenario.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section data-track-section="home_authority" style={{ ...section, background: 'var(--color-dark)', borderBottom: '1px solid var(--color-dark-border)' }}>
-          <div style={wrap}>
-            <div style={{ marginBottom: '34px', maxWidth: '720px' }}>
-              <p className="eyebrow-accent" style={{ marginBottom: '12px' }}>
-                Hub temático
-              </p>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(28px, 3.8vw, 52px)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.04em',
-                  lineHeight: 1.04,
-                  color: '#FAFAFA',
-                  marginBottom: '14px',
-                }}
-              >
-                Contenido pensado para atraer búsquedas
-                <br />
-                con intención técnica y comercial.
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '15px',
-                  lineHeight: 1.75,
-                  color: 'rgba(255,255,255,0.42)',
-                  fontWeight: 300,
-                }}
-              >
-                En lugar de empujar una demo, la web ahora empuja autoridad: arquitectura,
-                Java, integraciones y migración como temas centrales del posicionamiento.
-              </p>
-            </div>
-
-            <div
-              ref={authorityRef}
-              style={{
-                display: 'grid',
-                gridTemplateColumns: isSmallViewport ? '1fr' : 'repeat(4, 1fr)',
-                gap: '1px',
-                background: 'rgba(255,255,255,0.08)',
-              }}
-            >
-              {authorityLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className="authority-card"
-                  style={{
-                    background: '#0A0A0A',
-                    padding: isSmallViewport ? '24px 20px' : '26px 22px',
-                    textDecoration: 'none',
-                    minHeight: '220px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px',
-                    borderTop: '2px solid transparent',
-                    transition: 'background 0.25s, border-color 0.25s',
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLAnchorElement;
-                    el.style.background = '#111';
-                    el.style.borderTopColor = '#FF3B00';
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLAnchorElement;
-                    el.style.background = '#0A0A0A';
-                    el.style.borderTopColor = 'transparent';
-                  }}
-                >
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '24px',
-                      fontWeight: 700,
-                      letterSpacing: '-0.03em',
-                      color: '#FAFAFA',
-                    }}
-                  >
-                    {item.label}
-                  </p>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-sans)',
-                      fontSize: '14px',
-                      lineHeight: 1.8,
-                      color: 'rgba(255,255,255,0.42)',
-                      fontWeight: 300,
-                      flexGrow: 1,
-                    }}
-                  >
-                    {item.desc}
-                  </p>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '11px',
-                      letterSpacing: '0.14em',
-                      textTransform: 'uppercase',
-                      color: '#FF3B00',
-                    }}
-                  >
-                    Explorar <ArrowRight size={12} style={{ display: 'inline', verticalAlign: 'text-bottom' }} />
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
+        {/* ── CTA ── */}
         <section
           data-track-section="home_cta"
           style={{
@@ -746,16 +1120,26 @@ export default function Home() {
           <div
             aria-hidden="true"
             style={{
-              position: 'absolute',
-              inset: 0,
+              position: 'absolute', inset: 0,
               backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.07\'/%3E%3C/svg%3E")',
               backgroundSize: '200px',
               pointerEvents: 'none',
               mixBlendMode: 'overlay',
             }}
           />
-          <div ref={ctaRef} style={{ ...wrap, textAlign: 'center', maxWidth: '760px' }}>
-            <Boxes size={26} color="#FFFFFF" style={{ marginInline: 'auto', marginBottom: '18px' }} />
+          <div ref={ctaRef} style={{ ...wrap, textAlign: 'center', maxWidth: '780px' }}>
+            <p
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.6)',
+                marginBottom: '22px',
+              }}
+            >
+              ● Ingenieros disponibles ahora
+            </p>
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
@@ -764,36 +1148,47 @@ export default function Home() {
                 letterSpacing: '-0.05em',
                 lineHeight: 0.94,
                 color: '#FFFFFF',
-                marginBottom: '26px',
+                marginBottom: '28px',
               }}
             >
-              Si tu operación ya es compleja,
+              Tu negocio merece
               <br />
-              <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'rgba(255,255,255,0.58)' }}>
-                hablemos como producto, no como demo.
+              <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'rgba(255,255,255,0.55)' }}>
+                un sistema que trabaje por vos.
               </em>
             </h2>
             <p
               style={{
                 fontFamily: 'var(--font-sans)',
                 fontSize: '16px',
-                lineHeight: 1.7,
-                color: 'rgba(255,255,255,0.7)',
+                lineHeight: 1.72,
+                color: 'rgba(255,255,255,0.68)',
                 fontWeight: 300,
                 maxWidth: '520px',
                 marginInline: 'auto',
-                marginBottom: '36px',
+                marginBottom: '42px',
               }}
             >
-              Contanos el volumen, las integraciones y los cuellos de botella actuales. Te
-              devolvemos una conversación útil y una arquitectura posible.
+              Contanos tu desafío y en 48 horas te devolvemos una propuesta concreta, con
+              tecnología y costos claros. Sin compromiso.
             </p>
-            <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap', flexDirection: isSmallViewport ? 'column' : 'row', maxWidth: isSmallViewport ? '360px' : 'none', marginInline: 'auto' }}>
+            <div
+              style={{
+                display: 'flex',
+                gap: '14px',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                flexDirection: isSmallViewport ? 'column' : 'row',
+                maxWidth: isSmallViewport ? '360px' : 'none',
+                marginInline: 'auto',
+              }}
+            >
               <button
                 onClick={openChatbot}
                 data-track-event="cta_click"
-                data-track-label="Abrir diagnostico desde home"
+                data-track-label="Hablar con nosotros desde home"
                 data-track-location="home_cta"
+                className="cta-btn-main"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -806,17 +1201,28 @@ export default function Home() {
                   background: '#FFFFFF',
                   color: 'var(--color-accent)',
                   border: 'none',
-                  padding: '16px 32px',
+                  padding: '16px 36px',
                   cursor: 'pointer',
                   width: isSmallViewport ? '100%' : 'auto',
+                  transition: 'transform 0.22s cubic-bezier(0.22,1,0.36,1), box-shadow 0.22s',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLButtonElement;
+                  el.style.transform = 'translateY(-3px)';
+                  el.style.boxShadow = '0 16px 48px rgba(0,0,0,0.24)';
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLButtonElement;
+                  el.style.transform = 'translateY(0)';
+                  el.style.boxShadow = 'none';
                 }}
               >
-                Solicitar diagnóstico <ArrowRight size={16} strokeWidth={2.2} />
+                Hablar con nosotros <ArrowRight size={16} strokeWidth={2.2} />
               </button>
               <Link
-                to="/solucion"
+                to="/contacto"
                 data-track-event="cta_click"
-                data-track-label="Ir a plataforma desde home"
+                data-track-label="Ver contacto desde home"
                 data-track-location="home_cta"
                 style={{
                   display: 'inline-flex',
@@ -827,14 +1233,25 @@ export default function Home() {
                   fontSize: '15px',
                   fontWeight: 400,
                   background: 'transparent',
-                  color: 'rgba(255,255,255,0.82)',
-                  border: '1px solid rgba(255,255,255,0.32)',
-                  padding: '15px 32px',
+                  color: 'rgba(255,255,255,0.8)',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  padding: '15px 36px',
                   textDecoration: 'none',
                   width: isSmallViewport ? '100%' : 'auto',
+                  transition: 'border-color 0.2s, color 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.borderColor = 'rgba(255,255,255,0.72)';
+                  el.style.color = '#FFFFFF';
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLAnchorElement;
+                  el.style.borderColor = 'rgba(255,255,255,0.3)';
+                  el.style.color = 'rgba(255,255,255,0.8)';
                 }}
               >
-                Ver plataforma
+                Agendar una reunión
               </Link>
             </div>
           </div>

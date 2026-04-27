@@ -1,12 +1,12 @@
 import { useEffect, useRef, type CSSProperties } from 'react';
 import { type MetaFunction } from 'react-router';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, ShoppingBag, Building2, Zap, Users, BarChart3, Shield } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import StructuredData from '../components/seo/StructuredData';
+import GLSLHero from '../components/GLSLHero';
 import { useAdaptiveExperience } from '../hooks/useAdaptiveExperience';
 import { breadcrumbJsonLd, buildMeta, serviceJsonLd } from '../lib/seo';
 
@@ -46,7 +46,6 @@ export const meta: MetaFunction = () =>
   });
 
 export default function Servicios() {
-  const heroRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const { prefersReducedMotion, isSmallViewport } = useAdaptiveExperience();
 
@@ -86,98 +85,13 @@ export default function Servicios() {
       <div style={{ background: 'var(--color-bg)', minHeight: '100vh' }}>
 
         {/* ── HERO ── */}
-        <section
-          ref={heroRef}
-          style={{
-            background: 'var(--color-dark)',
-            paddingTop: 'clamp(120px, 14vw, 200px)',
-            paddingBottom: 'clamp(72px, 9vw, 120px)',
-            borderBottom: '1px solid var(--color-dark-border)',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Dot-grid */}
-          <div aria-hidden="true" style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px)',
-            backgroundSize: '26px 26px',
-            pointerEvents: 'none',
-            maskImage: 'radial-gradient(ellipse 80% 80% at 20% 50%, black 30%, transparent 100%)',
-          }} />
-          {/* Gradient accent */}
-          <div aria-hidden="true" style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: 'radial-gradient(ellipse 55% 60% at 5% 50%, rgba(255,59,0,0.1) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }} />
-          {/* Right fade */}
-          <div aria-hidden="true" style={{
-            position: 'absolute', top: 0, right: 0, bottom: 0, width: '40%',
-            background: 'linear-gradient(to left, rgba(10,10,10,0.95) 0%, transparent 100%)',
-            pointerEvents: 'none',
-          }} />
-
-          <div style={wrap}>
-            <motion.div
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-              style={{ position: 'relative', zIndex: 1 }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '32px' }}>
-                <div style={{ width: 5, height: 5, background: 'var(--color-accent)', borderRadius: '50%' }} />
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', margin: 0 }}>
-                  Lo que construimos
-                </p>
-              </div>
-
-              <h1 style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(40px, 6.5vw, 96px)',
-                fontWeight: 900,
-                letterSpacing: '-0.045em',
-                lineHeight: 0.92,
-                color: '#FAFAFA',
-                marginBottom: '32px',
-              }}>
-                Software que<br />
-                <em style={{ fontStyle: 'italic', fontWeight: 400, color: 'rgba(255,255,255,0.38)' }}>opera con vos.</em>
-              </h1>
-
-              <p style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: 'clamp(15px, 1.6vw, 18px)',
-                lineHeight: 1.72,
-                color: 'rgba(255,255,255,0.48)',
-                fontWeight: 300,
-                maxWidth: '520px',
-              }}>
-                No vendemos páginas web ni plantillas. Construimos sistemas que se integran
-                al corazón de tu operación y la hacen crecer sin agregar complejidad.
-              </p>
-
-              {/* Service pills */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '36px' }}>
-                {['E-commerce', 'ERP', 'Integraciones', 'SaaS Java'].map((tag) => (
-                  <span key={tag} style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '10px',
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: 'rgba(255,255,255,0.4)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    padding: '5px 12px',
-                    background: 'rgba(255,255,255,0.04)',
-                    animation: 'fade-up 600ms cubic-bezier(0.22, 1, 0.36, 1) both',
-                  }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        <GLSLHero
+          eyebrow="Servicios MotorCloud"
+          accent="Sistemas para vender mejor"
+          title="y operar sin friccion"
+          description="E-commerce conectado, ERP operativo e integraciones a medida para empresas que necesitan ordenar el negocio sin apagar el crecimiento."
+          trackSection="servicios_hero"
+        />
 
         {/* ── CARDS ── */}
         <section style={{ paddingBlock: 'clamp(72px, 9vw, 120px)', borderBottom: '1px solid var(--color-border)' }}>

@@ -1,5 +1,5 @@
-export const SITE_NAME = 'MotorCloud';
-export const SITE_URL = 'https://motor.cloud';
+export const SITE_NAME = 'LayerCloud';
+export const SITE_URL = 'https://layercloud.com.ar';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.svg`;
 
 export interface SeoMetaInput {
@@ -85,7 +85,7 @@ export function organizationJsonLd() {
       addressCountry: 'AR',
       addressLocality: 'Buenos Aires',
     },
-    sameAs: ['https://motor.cloud'],
+    sameAs: ['https://layercloud.com.ar'],
   };
 }
 
