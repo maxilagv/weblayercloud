@@ -1,0 +1,336 @@
+/* Hero moved to CampusHero.tsx + CampusHero.module.css (3D WebGL story hero). */
+
+/* =========================================================================
+   CAMPUS — Signature 3D depth design language
+   Self-contained (module-scoped) so it never bleeds into other service pages.
+   Core idea: every surface floats in layered depth, tilts toward the cursor,
+   and is tied together by the same brand-gradient "thread" motif as the hero.
+   ========================================================================= */
+
+/* ---------- Ambient depth per section ---------- */
+.atmos {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.5;
+  will-change: transform;
+}
+.orbA { width: 34vw; height: 34vw; left: -8%; top: -12%; background: radial-gradient(circle at 50% 50%, rgba(124, 92, 255, 0.5), transparent 66%); animation: orbDrift 24s ease-in-out infinite; }
+.orbB { width: 30vw; height: 30vw; right: -6%; top: 10%; background: radial-gradient(circle at 50% 50%, rgba(251, 122, 91, 0.42), transparent 66%); animation: orbDrift 30s ease-in-out infinite reverse; }
+.orbC { width: 26vw; height: 26vw; left: 40%; bottom: -14%; background: radial-gradient(circle at 50% 50%, rgba(244, 169, 59, 0.34), transparent 68%); animation: orbDrift 27s ease-in-out infinite; }
+@keyframes orbDrift { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(4%, -5%) scale(1.1); } }
+
+.dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(20, 19, 26, 0.06) 1px, transparent 1px);
+  background-size: 26px 26px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000, transparent 78%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000, transparent 78%);
+}
+
+.inner { position: relative; z-index: 1; }
+
+/* ---------- Connective "thread" (echoes the hero network) ---------- */
+.thread {
+  position: relative;
+  height: 1px;
+  margin: 0 auto;
+  width: min(680px, 80%);
+  background: linear-gradient(90deg, transparent, rgba(var(--page-accent-rgb), 0.5), transparent);
+}
+.thread::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: 0 0 12px 2px rgba(251, 122, 91, 0.7);
+  transform: translate(-50%, -50%);
+  animation: threadRun 5s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+}
+@keyframes threadRun { 0% { left: 4%; } 50% { left: 96%; } 100% { left: 4%; } }
+
+/* ---------- Section header (editorial signature) ---------- */
+.head { max-width: 60ch; margin-bottom: clamp(34px, 5vw, 58px); }
+.head.center { margin-inline: auto; text-align: center; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--coral);
+  margin-bottom: 16px;
+}
+.eyebrow::before { content: ""; width: 22px; height: 1px; background: linear-gradient(90deg, var(--indigo), var(--coral)); }
+.h2 {
+  font-size: clamp(2rem, 4.2vw, 3.3rem);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.05;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.h2 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; color: var(--coral); }
+.sub { margin-top: 1rem; color: var(--ink-2); font-size: 1.04rem; line-height: 1.6; max-width: 52ch; }
+.head.center .sub { margin-inline: auto; }
+
+/* ---------- Depth card (the unit of the whole page) ---------- */
+.depth {
+  position: relative;
+  border-radius: var(--r-lg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.74));
+  box-shadow: 0 1px 2px rgba(20, 19, 26, 0.05), 0 20px 44px -26px rgba(20, 19, 26, 0.4);
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateZ(0);
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s, opacity 0.6s ease;
+  will-change: transform;
+}
+/* gradient hairline border */
+.depth::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(140deg, rgba(124, 92, 255, 0.55), rgba(251, 122, 91, 0.45) 52%, rgba(244, 169, 59, 0.3));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+  transition: opacity 0.45s;
+  pointer-events: none;
+}
+/* cursor glare */
+.depth::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(140px 140px at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.55), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+.depth[data-tilt="on"] {
+  box-shadow: 0 2px 6px rgba(20, 19, 26, 0.06), 0 44px 80px -34px rgba(124, 92, 255, 0.5);
+}
+.depth[data-tilt="on"]::before { opacity: 1; }
+.depth[data-tilt="on"]::after { opacity: 1; }
+
+/* ---------- Gradient icon tile (replaces emojis) ---------- */
+.iconTile {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: var(--grad-soft);
+  box-shadow: 0 12px 24px -10px rgba(251, 122, 91, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateZ(34px);
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.iconTile svg { width: 23px; height: 23px; }
+
+/* ---------- Entrance reveal (opacity only — never fights the tilt) ----------
+   Opacity is armed by JS so content is never stuck hidden if JS/motion is off. */
+.reveal { will-change: opacity; }
+
+/* =========================================================================
+   STATS — floating 3D number cards
+   ========================================================================= */
+.statsScene { position: relative; padding: clamp(30px, 5vw, 64px) 0; overflow: hidden; }
+.statsGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.statCard { padding: clamp(20px, 2.4vw, 30px); }
+.statNum {
+  display: block;
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  background: var(--grad-firma);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transform: translateZ(30px);
+}
+.statLabel { margin-top: 9px; font-size: 0.9rem; color: var(--ink-2); max-width: 22ch; transform: translateZ(16px); }
+
+/* =========================================================================
+   ROLES — segmented 3D control + depth dashboards
+   ========================================================================= */
+.roleTabs {
+  display: inline-flex;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 0 0 1px var(--line), 0 10px 30px -18px rgba(20, 19, 26, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+}
+.roleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0.6em 1.05em;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s, background 0.3s, box-shadow 0.3s;
+}
+.roleBtn:hover { color: var(--ink); }
+.roleBtn.active { color: #fff; background: var(--paper-ink); box-shadow: var(--shadow-md); }
+.rbAv {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--coral);
+  background: rgba(251, 122, 91, 0.12);
+  transition: background 0.3s, color 0.3s;
+}
+.rbAv svg { width: 16px; height: 16px; }
+.roleBtn.active .rbAv { background: rgba(255, 255, 255, 0.16); color: #fff; }
+
+.rolePane { display: grid; margin-top: 28px; gap: 18px; perspective: 1200px; }
+.rolePane.roleAlumno { grid-template-columns: 1fr 0.8fr; }
+.rolePane.roleDocente { grid-template-columns: 1fr 1fr; }
+.rolePane.roleDirectivo { grid-template-columns: repeat(3, 1fr); }
+.rolePane.roleFamilia { grid-template-columns: 1fr 1fr; }
+
+.rcard { padding: 20px; }
+.rcard > * { transform: translateZ(20px); }
+.rcard h4 { font-size: 0.9rem; font-weight: 600; color: var(--ink-2); margin-bottom: 13px; }
+.rrow { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 0.86rem; }
+.rrow:last-child { border-bottom: 0; }
+.rrow .rv { font-family: var(--font-mono); font-weight: 600; font-size: 0.9rem; }
+.rrow .rdot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.rrow .rst { font-family: var(--font-mono); font-size: 0.68rem; padding: 2px 8px; border-radius: 100px; }
+.rbarRow { display: flex; align-items: center; gap: 9px; padding: 5px 0; }
+.rbarRow .rl { font-size: 0.82rem; font-weight: 500; width: 76px; flex: none; }
+.rbarRow .rbBg { flex: 1; height: 6px; border-radius: 100px; background: rgba(20, 19, 26, 0.09); overflow: hidden; }
+.rbarRow .rbFg { height: 100%; border-radius: 100px; background: var(--grad-soft); box-shadow: 0 0 10px -1px rgba(251, 122, 91, 0.6); }
+.rbarRow .rp { font-family: var(--font-mono); font-size: 0.68rem; color: var(--coral); font-weight: 600; flex: none; }
+
+/* =========================================================================
+   MODULES — 3D bento of depth cards
+   ========================================================================= */
+.modGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; perspective: 1400px; }
+.mcard { padding: 24px 20px 22px; display: flex; flex-direction: column; }
+.mcard > * { transform: translateZ(18px); }
+.mcard .iconTile { margin-bottom: 16px; }
+.mcardTtl { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 6px; }
+.mcardSub { font-size: 0.82rem; color: var(--ink-2); margin-bottom: 13px; line-height: 1.46; }
+.mcardFeats {
+  list-style: none;
+  padding: 0;
+  margin: auto 0 0;
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.mcardFeats li { display: flex; align-items: flex-start; gap: 7px; font-size: 0.77rem; color: var(--ink-3); line-height: 1.35; }
+.mcardFeats li::before { content: ""; flex: none; width: 6px; height: 6px; margin-top: 5px; border-radius: 50%; background: var(--grad-soft); }
+
+/* =========================================================================
+   FINALE — closing CTA with 3D grid floor + aurora + threads
+   ========================================================================= */
+.finale {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  padding: clamp(56px, 8vw, 116px) clamp(32px, 5vw, 80px);
+  background: var(--paper-ink);
+  color: var(--ink-on-dark);
+  isolation: isolate;
+}
+.finale .fAurora {
+  position: absolute;
+  inset: -30%;
+  z-index: -2;
+  filter: blur(54px);
+  opacity: 0.9;
+  background:
+    radial-gradient(40% 50% at 20% 30%, rgba(124, 92, 255, 0.85), transparent 60%),
+    radial-gradient(45% 55% at 80% 25%, rgba(251, 122, 91, 0.75), transparent 60%),
+    radial-gradient(50% 60% at 60% 85%, rgba(244, 169, 59, 0.6), transparent 62%),
+    radial-gradient(40% 50% at 30% 80%, rgba(61, 56, 224, 0.7), transparent 60%);
+  animation: finaleAurora 16s ease-in-out infinite alternate;
+}
+@keyframes finaleAurora {
+  0% { transform: translate3d(-3%, -2%, 0) scale(1.05) rotate(0deg); }
+  50% { transform: translate3d(4%, 3%, 0) scale(1.18) rotate(8deg); }
+  100% { transform: translate3d(-2%, 2%, 0) scale(1.08) rotate(-6deg); }
+}
+.finale .fGrid {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  z-index: -1;
+  width: 200%;
+  height: 80%;
+  transform: translateX(-50%) perspective(600px) rotateX(66deg);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+  background-size: 50px 50px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 8%, transparent 62%);
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 8%, transparent 62%);
+  animation: gridMove 4s linear infinite;
+}
+@keyframes gridMove { from { background-position: 0 0; } to { background-position: 0 50px; } }
+.fInner { position: relative; z-index: 1; max-width: 32ch; }
+.fInner h2 { font-size: clamp(2rem, 4.5vw, 3.6rem); font-weight: 600; letter-spacing: -0.025em; line-height: 1.03; color: #fff; }
+.fInner h2 em { font-family: var(--font-serif); font-style: italic; font-weight: 400; }
+.fInner p { color: rgba(255, 255, 255, 0.82); margin-top: 16px; font-size: 1.04rem; max-width: 48ch; }
+.fCta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+@media (max-width: 960px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .modGrid { grid-template-columns: repeat(2, 1fr); }
+  .rolePane.roleDirectivo { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 760px) {
+  .rolePane.roleAlumno, .rolePane.roleDocente, .rolePane.roleFamilia { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .statsGrid { grid-template-columns: 1fr 1fr; }
+  .modGrid { grid-template-columns: 1fr; }
+  .rolePane.roleDirectivo { grid-template-columns: 1fr; }
+  .h2 { font-size: 1.9rem; }
+}
+
+/* ---------- Reduced motion: calm, flat, fully legible ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .orb, .thread::after, .finale .fAurora, .finale .fGrid { animation: none; }
+  .depth { transform: none !important; }
+  .iconTile, .statNum, .statLabel, .rcard > *, .mcard > * { transform: none; }
+  .reveal { opacity: 1; }
+}

@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.*
+/pnpm-lock.yaml
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
@@ -12,6 +13,8 @@
 
 # testing
 /coverage
+/output
+/.playwright-cli
 
 # next.js
 /.next/
@@ -35,6 +38,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# local agent tooling
+/.claude
+/.codex
 
 # typescript
 *.tsbuildinfo
