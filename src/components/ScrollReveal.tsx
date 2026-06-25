@@ -2,22 +2,20 @@
 
 import React, { useEffect, useRef, useState, ReactNode } from "react";
 
-interface ScrollRevealProps {
+interface ScrollRevealProps extends React.HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   delay?: number;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
-export default function ScrollReveal({ children, delay = 0, className = "", style = {} }: ScrollRevealProps) {
+export default function ScrollReveal({ children, delay = 0, className = "", style = {}, ...props }: ScrollRevealProps) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
-      setIsVisible(true);
-      return;
+      const raf = window.requestAnimationFrame(() => setIsVisible(true));
+      return () => window.cancelAnimationFrame(raf);
     }
 
     // Add reveal-armed class to document if it doesn't have it
@@ -49,6 +47,7 @@ export default function ScrollReveal({ children, delay = 0, className = "", styl
       data-reveal=""
       className={`${className} ${isVisible ? "in" : ""}`}
       style={{ ...style, "--d": `${delay}ms` } as React.CSSProperties}
+      {...props}
     >
       {children}
     </div>
