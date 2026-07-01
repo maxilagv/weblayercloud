@@ -49,7 +49,7 @@ export default function ContactForm() {
   };
 
   const handleSubmit = () => {
-    let newErrors: Record<string, boolean> = {};
+    const newErrors: Record<string, boolean> = {};
     let valid = true;
 
     if (!name.trim()) { newErrors.name = true; valid = false; }

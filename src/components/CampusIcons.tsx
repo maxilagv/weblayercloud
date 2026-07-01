@@ -34,6 +34,12 @@ export type CampusIconKey =
   | "crm"
   | "ai"
   | "layers"
+  | "users"
+  | "sparkle"
+  | "code"
+  | "dashboard"
+  | "search"
+  | "growth"
   | "gauge"
   | "route"
   | "compass"
@@ -151,6 +157,51 @@ const paths: Record<CampusIconKey, React.ReactNode> = {
       <path d="M12 3l9 5-9 5-9-5 9-5z" />
       <path d="M3 12l9 5 9-5" />
       <path d="M3 16l9 5 9-5" />
+    </>
+  ),
+  users: (
+    <>
+      <circle cx="9" cy="8" r="3.2" />
+      <path d="M3.8 20c.4-3.3 2.5-5.2 5.2-5.2s4.8 1.9 5.2 5.2" />
+      <path d="M15.8 11.2a2.6 2.6 0 1 0 0-5.2" />
+      <path d="M16.6 15c2.1.4 3.5 2 3.8 4.6" />
+    </>
+  ),
+  sparkle: (
+    <>
+      <path d="M12 3l1.45 5.05L18.5 9.5l-5.05 1.45L12 16l-1.45-5.05L5.5 9.5l5.05-1.45L12 3z" />
+      <path d="M18.5 14.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" />
+      <path d="M5.5 15.5l.55 1.45 1.45.55-1.45.55-.55 1.45-.55-1.45-1.45-.55 1.45-.55z" />
+    </>
+  ),
+  code: (
+    <>
+      <path d="M8.5 8l-5 4 5 4" />
+      <path d="M15.5 8l5 4-5 4" />
+      <path d="M13.5 5.5l-3 13" />
+    </>
+  ),
+  dashboard: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2.4" />
+      <path d="M3 9h18" />
+      <path d="M8 13h4M8 16h7" />
+      <path d="M16.8 13.5h1.2M16.8 16.5h1.2" />
+    </>
+  ),
+  search: (
+    <>
+      <circle cx="10.5" cy="10.5" r="5.8" />
+      <path d="M15 15l5 5" />
+      <path d="M8.2 10.5h4.6M10.5 8.2v4.6" />
+    </>
+  ),
+  growth: (
+    <>
+      <path d="M4 19V5" />
+      <path d="M4 19h16" />
+      <path d="M7.5 15.5l3.5-3.8 3 2.4 5-6.4" />
+      <path d="M16.3 7.6H19v2.7" />
     </>
   ),
   gauge: (

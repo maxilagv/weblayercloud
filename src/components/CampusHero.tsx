@@ -2,16 +2,12 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 import { useLang } from "@/context/LangContext";
 import styles from "./CampusHero.module.css";
 
 // Types only — the actual runtime module is imported dynamically inside the
 // effect so the ~600kb WebGL bundle never touches SSR or the initial chunk.
 import type * as THREE_NS from "three";
-
-gsap.registerPlugin(ScrollTrigger);
 
 /**
  * CampusHero — a pure-code, scroll-driven 3D hero for the Virtual Campus page.
@@ -51,18 +47,18 @@ const smoothstep = (e0: number, e1: number, x: number) => {
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 export default function CampusHero() {
-  const { t, lang } = useLang();
+  const { t } = useLang();
 
   const outerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const hubRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Scroll progress (0..1) is written here by ScrollTrigger and read by the
-  // render loop — this decouples the rAF render cadence from scroll events.
+  // Reserved for the render loop. The hero stays ambient and never takes over
+  // page scroll.
   const progressRef = useRef(0);
 
-  const [act, setAct] = useState(0);
+  const act = 0;
   const [webglReady, setWebglReady] = useState(false);
 
   const HUB_KEYS = ["alumnos", "docentes", "familias", "directivos"] as const;
@@ -101,7 +97,6 @@ export default function CampusHero() {
 
     let renderer: THREE_NS.WebGLRenderer | null = null;
     let rafId = 0;
-    let st: ScrollTrigger | null = null;
     let disposed = false;
     let cleanupExtra: (() => void) | null = null;
 
@@ -330,22 +325,6 @@ export default function CampusHero() {
 
         setWebglReady(true);
 
-        // --- Scroll: pin + progress ----------------------------------------
-        st = ScrollTrigger.create({
-          trigger: outer,
-          start: "top top",
-          end: "bottom bottom",
-          pin: sticky,
-          pinSpacing: true,
-          scrub: 1,
-          anticipatePin: 1,
-          onUpdate: (self) => {
-            progressRef.current = self.progress;
-            const a = Math.min(Math.floor(self.progress * 4), 3);
-            setAct((prev) => (prev === a ? prev : a));
-          },
-        });
-
         // --- Render loop ----------------------------------------------------
         const start = performance.now();
         let smoothP = 0;
@@ -458,11 +437,9 @@ export default function CampusHero() {
     return () => {
       disposed = true;
       cancelAnimationFrame(rafId);
-      st?.kill();
       cleanupExtra?.();
       renderer?.dispose();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -1,10 +1,10 @@
 /* =========================================================================
-   CampusHero — scroll-driven 3D hero (warm/light, brand-gradient WebGL)
+   CampusHero - professional editorial hero with restrained motion
    ========================================================================= */
 
 .outer {
   position: relative;
-  height: 380vh; /* scroll runway for the pinned story */
+  height: 100svh;
   background:
     radial-gradient(120% 80% at 50% -10%, #F3EEE4 0%, var(--paper) 46%, var(--paper-3) 100%);
 }
@@ -28,7 +28,7 @@
   opacity: 0;
   transition: opacity 1.1s ease;
 }
-.outer.live .canvas { opacity: 1; }
+.outer.live .canvas { opacity: 0.42; }
 
 /* ---------- CSS aurora (base layer + reduced-motion fallback) ---------- */
 .aurora {
@@ -41,31 +41,31 @@
 .blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
+  filter: blur(78px);
   will-change: transform;
 }
 .b1 {
   width: 46vw; height: 46vw; left: 8%; top: 6%;
-  background: radial-gradient(circle at 40% 40%, rgba(124, 92, 255, 0.55), transparent 66%);
+  background: radial-gradient(circle at 40% 40%, rgba(124, 92, 255, 0.28), transparent 66%);
   animation: drift1 19s ease-in-out infinite;
 }
 .b2 {
   width: 42vw; height: 42vw; right: 6%; top: 2%;
-  background: radial-gradient(circle at 50% 50%, rgba(251, 122, 91, 0.5), transparent 66%);
+  background: radial-gradient(circle at 50% 50%, rgba(251, 122, 91, 0.26), transparent 66%);
   animation: drift2 23s ease-in-out infinite;
 }
 .b3 {
   width: 40vw; height: 40vw; right: 14%; bottom: -6%;
-  background: radial-gradient(circle at 50% 50%, rgba(244, 169, 59, 0.42), transparent 68%);
+  background: radial-gradient(circle at 50% 50%, rgba(244, 169, 59, 0.22), transparent 68%);
   animation: drift3 27s ease-in-out infinite;
 }
 .b4 {
   width: 38vw; height: 38vw; left: 10%; bottom: -10%;
-  background: radial-gradient(circle at 50% 50%, rgba(61, 56, 224, 0.4), transparent 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(61, 56, 224, 0.2), transparent 70%);
   animation: drift1 31s ease-in-out infinite reverse;
 }
 /* Once WebGL is live the aurora becomes a soft underglow, not the main act */
-.outer.live .aurora { opacity: 0.55; transition: opacity 1.1s ease; }
+.outer.live .aurora { opacity: 0.32; transition: opacity 1.1s ease; }
 
 @keyframes drift1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(4%, -5%) scale(1.08); } }
 @keyframes drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-5%, 4%) scale(1.1); } }
@@ -202,6 +202,7 @@
 
 /* ---------- Progress + scroll hint ---------- */
 .progress {
+  display: none;
   position: absolute;
   bottom: 26px;
   left: 50%;
@@ -227,6 +228,7 @@
   min-width: 8ch;
 }
 .scrollHint {
+  display: none;
   position: absolute;
   bottom: 32px;
   right: clamp(18px, 4vw, 48px);
@@ -241,7 +243,7 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 640px) {
-  .outer { height: 320vh; }
+  .outer { height: 100svh; }
   .title { font-size: 2.1rem; }
   .lead { font-size: 0.92rem; }
   .cta { flex-direction: column; align-items: center; }

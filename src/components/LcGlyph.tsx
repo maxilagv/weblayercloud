@@ -8,18 +8,23 @@ interface LcGlyphProps {
 
 export default function LcGlyph({ className = "lc-glyph", width = 30, height = 30 }: LcGlyphProps) {
   return (
-    <svg className={className} width={width} height={height} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg className={className} width={width} height={height} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <linearGradient id="lcg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#3D38E0" />
-          <stop offset=".4" stopColor="#7C5CFF" />
-          <stop offset=".75" stopColor="#FB7A5B" />
-          <stop offset="1" stopColor="#F4A93B" />
+        <linearGradient id="lcg" x1="8" y1="5" x2="32" y2="24" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#2F6BFF" />
+          <stop offset=".42" stopColor="#765CFF" />
+          <stop offset="1" stopColor="#FB7A5B" />
         </linearGradient>
+        <filter id="lcShadow" x="2" y="2" width="36" height="36" colorInterpolationFilters="sRGB">
+          <feDropShadow dx="0" dy="8" stdDeviation="5" floodColor="#7C5CFF" floodOpacity=".18" />
+        </filter>
       </defs>
-      <path d="M16 3L29 10L16 17L3 10L16 3Z" fill="url(#lcg)" />
-      <path d="M3 16L16 23L29 16" stroke="#15141A" strokeWidth="2" strokeLinejoin="round" opacity=".85" />
-      <path d="M3 22L16 29L29 22" stroke="#15141A" strokeWidth="2" strokeLinejoin="round" opacity=".4" />
+      <g filter="url(#lcShadow)">
+        <path d="M20 4.5L35 12.6L20 20.7L5 12.6L20 4.5Z" fill="url(#lcg)" />
+        <path d="M20 16.3L34 23.9L20 31.5L6 23.9L20 16.3Z" fill="#2B2932" />
+        <path d="M20 22.4L33.2 29.5L20 36.6L6.8 29.5L20 22.4Z" fill="#CFCBD5" />
+        <path d="M20 4.5L35 12.6L20 20.7L5 12.6L20 4.5Z" stroke="rgba(255,255,255,.55)" strokeWidth="1" strokeLinejoin="round" />
+      </g>
     </svg>
   );
 }

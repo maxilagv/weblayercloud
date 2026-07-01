@@ -15,15 +15,14 @@ const LangContext = createContext<LangContextProps | undefined>(undefined);
 
 export const LangProvider = ({ children }: { children: ReactNode }) => {
   const [lang, setLangState] = useState<Lang>("es");
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const storedLang = localStorage.getItem("lc_lang") as Lang;
     if (storedLang === "en" || storedLang === "es") {
-      setLangState(storedLang);
       document.documentElement.setAttribute("lang", storedLang);
       document.documentElement.setAttribute("data-lang", storedLang);
+      const id = window.setTimeout(() => setLangState(storedLang), 0);
+      return () => window.clearTimeout(id);
     } else {
       document.documentElement.setAttribute("lang", "es");
       document.documentElement.setAttribute("data-lang", "es");
@@ -38,7 +37,6 @@ export const LangProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const t = (es: string, en?: string) => {
-    if (!mounted) return es;
     return lang === "en" && en ? en : es;
   };
 

@@ -3,15 +3,15 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { useLang } from "@/context/LangContext";
-import Counter from "@/components/Counter";
 import ScrollReveal from "@/components/ScrollReveal";
 import HomeHero from "@/components/HomeHero";
 import TiltCard from "@/components/TiltCard";
 import CampusIcon, { type CampusIconKey } from "@/components/CampusIcons";
+import CampusPreviewSection from "@/components/home/CampusPreviewSection";
 import styles from "./page.module.css";
 
 export default function HomePageClient() {
-  const { t } = useLang();
+  const { lang, t } = useLang();
 
   // Staggered opacity reveal for depth cards (armed by JS; visible if JS/motion off).
   useEffect(() => {
@@ -46,6 +46,13 @@ export default function HomePageClient() {
     return () => io.disconnect();
   }, []);
 
+  const differenceStats: { icon: CampusIconKey; number: string; label: string }[] = [
+    { icon: "layers", number: "4", label: t("Capas de servicio", "Service layers") },
+    { icon: "users", number: "1", label: t("Fuente operativa única", "One operating source") },
+    { icon: "sparkle", number: "24/7", label: t("Automatización con IA", "AI automation") },
+    { icon: "code", number: "100%", label: t("Software a medida", "Custom software") },
+  ];
+
   const services: { icon: CampusIconKey; href: string; title: string; desc: string }[] = [
     {
       icon: "web",
@@ -54,7 +61,7 @@ export default function HomePageClient() {
       desc: t("Landings, sitios institucionales, e-commerce, embudos y medición de conversión.", "Landing pages, institutional sites, e-commerce, funnels and conversion measurement."),
     },
     {
-      icon: "crm",
+      icon: "dashboard",
       href: "/servicios/crm",
       title: "CRM / ERP",
       desc: t("Procesos comerciales, administrativos y operativos con roles, paneles y reportes.", "Commercial, administrative and operational processes with roles, panels and reports."),
@@ -73,23 +80,28 @@ export default function HomePageClient() {
     },
   ];
 
-  const steps: { n: string; title: string; desc: string }[] = [
+  const steps: { icon: CampusIconKey; n: string; title: string; desc: string; active?: boolean }[] = [
     {
+      icon: "search",
       n: "01",
       title: t("Descubrimiento", "Discovery"),
       desc: t("Mapeamos tus procesos, roles y datos reales antes de escribir una línea de código.", "We map your real processes, roles and data before writing a single line of code."),
     },
     {
+      icon: "layers",
       n: "02",
+      active: true,
       title: t("Arquitectura", "Architecture"),
       desc: t("Diseñamos flujos, permisos, estados y modelos que vuelven la idea una plataforma.", "We design flows, permissions, states and models that turn the idea into a platform."),
     },
     {
+      icon: "code",
       n: "03",
       title: t("Construcción", "Build"),
       desc: t("Construimos capa por capa, con interfaces claras y veloces para cada equipo.", "We build layer by layer, with clear, fast interfaces for every team."),
     },
     {
+      icon: "growth",
       n: "04",
       title: t("Escala", "Scale"),
       desc: t("Automatizamos con IA, medimos y dejamos trazabilidad para que el sistema crezca.", "We automate with AI, measure and leave traceability so the system keeps growing."),
@@ -128,31 +140,43 @@ export default function HomePageClient() {
         <div className={styles.atmos} aria-hidden="true">
           <span className={`${styles.orb} ${styles.orbA}`} />
           <span className={`${styles.orb} ${styles.orbB}`} />
+          <span className={`${styles.particle} ${styles.particleA}`} />
+          <span className={`${styles.particle} ${styles.particleB}`} />
+          <span className={`${styles.particle} ${styles.particleC}`} />
+          <svg className={styles.orbitLines} viewBox="0 0 1200 620" fill="none">
+            <path d="M122 390C300 155 708 102 1064 240" />
+            <path d="M142 168C342 304 744 386 1094 166" />
+          </svg>
         </div>
         <div className="wrap">
-          <ScrollReveal className={`${styles.head} ${styles.center} ${styles.inner}`}>
+          <ScrollReveal className={`${styles.head} ${styles.center} ${styles.inner} ${styles.premiumHead}`}>
             <span className={styles.eyebrow}>{t("La diferencia", "The difference")}</span>
-            <h2 className={styles.h2} dangerouslySetInnerHTML={{ __html: t("No entregamos páginas aisladas. Entregamos una <em>operación conectada.</em>", "We don't ship isolated pages. We ship a <em>connected operation.</em>") }} />
+            <h2 className={styles.h2}>
+              {lang === "es" ? (
+                <>
+                  No entregamos páginas aisladas. Entregamos una{" "}
+                  <span className={styles.scriptAccent}>operación conectada.</span>
+                </>
+              ) : (
+                <>
+                  We don&apos;t ship isolated pages. We ship a{" "}
+                  <span className={styles.scriptAccent}>connected operation.</span>
+                </>
+              )}
+            </h2>
             <p className={styles.sub}>{t("Cada capa captura datos, automatiza decisiones y le da a cada equipo una interfaz que puede usar todos los días.", "Each layer captures data, automates decisions and gives every team an interface they can use every day.")}</p>
           </ScrollReveal>
 
           <div className={`${styles.statsGrid} ${styles.inner}`}>
-            <TiltCard className={`${styles.statCard} ${styles.depth} ${styles.reveal}`} lift={10}>
-              <Counter count={4} className={styles.statNum} />
-              <div className={styles.statLabel}>{t("Capas de servicio", "Service layers")}</div>
-            </TiltCard>
-            <TiltCard className={`${styles.statCard} ${styles.depth} ${styles.reveal}`} lift={10}>
-              <Counter count={1} className={styles.statNum} />
-              <div className={styles.statLabel}>{t("Fuente operativa única", "One operating source")}</div>
-            </TiltCard>
-            <TiltCard className={`${styles.statCard} ${styles.depth} ${styles.reveal}`} lift={10}>
-              <span className={styles.statNum}>24/7</span>
-              <div className={styles.statLabel}>{t("Automatización con IA", "AI automation")}</div>
-            </TiltCard>
-            <TiltCard className={`${styles.statCard} ${styles.depth} ${styles.reveal}`} lift={10}>
-              <span className={styles.statNum}>100%</span>
-              <div className={styles.statLabel}>{t("Software a medida", "Custom software")}</div>
-            </TiltCard>
+            {differenceStats.map((item) => (
+              <TiltCard key={item.label} as="article" className={`${styles.statCard} ${styles.glassCard} ${styles.depth} ${styles.reveal}`} lift={10}>
+                <span className={styles.dotMatrix} aria-hidden="true" />
+                <span className={styles.iconTileSoft}><CampusIcon name={item.icon} /></span>
+                <span className={styles.statNum}>{item.number}</span>
+                <span className={styles.statLabel}>{item.label}</span>
+                <span className={styles.progressLine} aria-hidden="true" />
+              </TiltCard>
+            ))}
           </div>
         </div>
       </section>
@@ -160,21 +184,53 @@ export default function HomePageClient() {
       <div className={styles.thread} aria-hidden="true" />
 
       {/* SOLUCIONES */}
-      <section className="section" id="soluciones">
+      <section className={`${styles.solutionsScene} section`} id="soluciones">
         <div className={styles.atmos} aria-hidden="true">
           <span className={`${styles.orb} ${styles.orbC}`} />
           <div className={styles.dots} />
         </div>
         <div className="wrap">
-          <ScrollReveal className={`${styles.head} ${styles.inner}`}>
-            <span className={styles.eyebrow}>{t("Soluciones", "Solutions")}</span>
-            <h2 className={styles.h2} dangerouslySetInnerHTML={{ __html: t("Una sola arquitectura, <em>cuatro capas.</em>", "One architecture, <em>four layers.</em>") }} />
-            <p className={styles.sub}>{t("Construimos cada capa por separado o como un ecosistema completo, integrado de punta a punta.", "We build each layer on its own or as one end-to-end ecosystem.")}</p>
-          </ScrollReveal>
+          <div className={`${styles.solutionHeader} ${styles.inner}`}>
+            <ScrollReveal className={styles.head}>
+              <span className={styles.eyebrow}>{t("Soluciones", "Solutions")}</span>
+              <h2 className={styles.h2}>
+                {lang === "es" ? (
+                  <>
+                    Una sola arquitectura, <span className={styles.scriptAccent}>cuatro capas.</span>
+                  </>
+                ) : (
+                  <>
+                    One architecture, <span className={styles.scriptAccent}>four layers.</span>
+                  </>
+                )}
+              </h2>
+              <p className={styles.sub}>{t("Construimos cada capa por separado o como un ecosistema completo, integrado de punta a punta.", "We build each layer on its own or as one end-to-end ecosystem.")}</p>
+            </ScrollReveal>
+            <div className={styles.layerOrbit} aria-hidden="true">
+              <svg viewBox="0 0 260 220" fill="none">
+                <ellipse className={styles.orbitA} cx="130" cy="110" rx="104" ry="34" />
+                <ellipse className={styles.orbitB} cx="130" cy="110" rx="72" ry="100" transform="rotate(42 130 110)" />
+                <ellipse className={styles.orbitC} cx="130" cy="110" rx="78" ry="24" transform="rotate(-26 130 110)" />
+                <path d="M130 56l50 27-50 27-50-27 50-27z" fill="url(#orbTop)" />
+                <path d="M130 98l44 24-44 24-44-24 44-24z" fill="#2B2932" />
+                <path d="M130 128l38 21-38 21-38-21 38-21z" fill="#D7D2DD" />
+                <circle className={styles.orbitDotOne} cx="34" cy="111" r="5" />
+                <circle className={styles.orbitDotTwo} cx="215" cy="72" r="4" />
+                <circle className={styles.orbitDotThree} cx="180" cy="174" r="3.5" />
+                <defs>
+                  <linearGradient id="orbTop" x1="84" y1="56" x2="176" y2="110" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#2F6BFF" />
+                    <stop offset=".45" stopColor="#765CFF" />
+                    <stop offset="1" stopColor="#FB7A5B" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
 
           <div className={`${styles.serviceGrid} ${styles.inner}`}>
             {services.map((s, i) => (
-              <TiltCard key={s.title} as="div" className={`${styles.serviceCard} ${styles.depth} ${styles.reveal}`}>
+              <TiltCard key={s.title} as="article" className={`${styles.serviceCard} ${styles.glassCard} ${styles.depth} ${styles.reveal}`}>
                 <Link href={s.href} className={styles.serviceLink}>
                   <span className={styles.svcTop}>
                     <span className={styles.iconTile}><CampusIcon name={s.icon} /></span>
@@ -196,24 +252,50 @@ export default function HomePageClient() {
       <div className={styles.thread} aria-hidden="true" />
 
       {/* PROCESO */}
-      <section className="section">
+      <section className={`${styles.processScene} section`}>
+        <div className={styles.processRailTop} aria-hidden="true" />
         <div className="wrap">
-          <ScrollReveal className={`${styles.head} ${styles.center} ${styles.inner}`}>
+          <ScrollReveal className={`${styles.head} ${styles.center} ${styles.inner} ${styles.premiumHead}`}>
             <span className={styles.eyebrow}>{t("Proceso", "Process")}</span>
-            <h2 className={styles.h2} dangerouslySetInnerHTML={{ __html: t("De la idea al sistema, <em>capa por capa.</em>", "From idea to system, <em>layer by layer.</em>") }} />
+            <h2 className={styles.h2}>
+              {lang === "es" ? (
+                <>
+                  De la idea al sistema, <span className={styles.scriptAccent}>capa por capa.</span>
+                </>
+              ) : (
+                <>
+                  From idea to system, <span className={styles.scriptAccent}>layer by layer.</span>
+                </>
+              )}
+            </h2>
           </ScrollReveal>
 
           <div className={`${styles.procGrid} ${styles.inner}`}>
+            <span className={styles.processConnector} aria-hidden="true" />
             {steps.map((s) => (
-              <TiltCard key={s.n} className={`${styles.procStep} ${styles.depth} ${styles.reveal}`} lift={12}>
-                <span className={styles.procNum}>{s.n}</span>
+              <TiltCard key={s.n} as="article" className={`${styles.procStep} ${styles.glassCard} ${styles.depth} ${styles.reveal} ${s.active ? styles.procActive : ""}`} lift={12}>
+                <span className={styles.procNode} aria-hidden="true" />
+                <span className={styles.procTop}>
+                  <span className={styles.iconTileSoft}><CampusIcon name={s.icon} /></span>
+                  <span className={styles.procNum}>{s.n}</span>
+                </span>
                 <span className={styles.procTitle}>{s.title}</span>
                 <span className={styles.procDesc}>{s.desc}</span>
+                <span className={styles.procBars} aria-hidden="true">
+                  {[0, 1, 2, 3].map((bar) => (
+                    <i key={bar} className={bar + 1 === Number(s.n) ? styles.barOn : ""} />
+                  ))}
+                </span>
               </TiltCard>
             ))}
           </div>
         </div>
+        <div className={styles.processRailBottom} aria-hidden="true" />
       </section>
+
+      <div className={styles.thread} aria-hidden="true" />
+
+      <CampusPreviewSection />
 
       <div className={styles.thread} aria-hidden="true" />
 
@@ -255,24 +337,35 @@ export default function HomePageClient() {
       </section>
 
       {/* VALOR */}
-      <section className="section" style={{ background: "var(--paper-3)" }}>
+      <section className={styles.whyScene}>
         <div className={styles.atmos} aria-hidden="true">
           <span className={`${styles.orb} ${styles.orbA}`} />
+          <span className={`${styles.orb} ${styles.orbB}`} />
           <div className={styles.dots} />
         </div>
         <div className="wrap">
-          <ScrollReveal className={`${styles.head} ${styles.inner}`}>
+          <ScrollReveal className={`${styles.head} ${styles.whyHead} ${styles.inner}`}>
             <span className={styles.eyebrow}>{t("Por qué LayerCloud", "Why LayerCloud")}</span>
-            <h2 className={styles.h2} dangerouslySetInnerHTML={{ __html: t("No hacemos algo y <em>desaparecemos.</em>", "We don't build and <em>disappear.</em>") }} />
+            <h2 className={styles.whyTitle}>
+              {lang === "es" ? (
+                <>
+                  No hacemos algo y <span className={styles.scriptAccent}>desaparecemos.</span>
+                </>
+              ) : (
+                <>
+                  We don&apos;t build and <span className={styles.scriptAccent}>disappear.</span>
+                </>
+              )}
+            </h2>
             <p className={styles.sub}>{t("Buscamos la cima — y llevamos a cada cliente a la suya. Una vez que nos elegís, nos volvemos parte de tu trabajo.", "We aim for the top — and take every client to theirs. Once you choose us, we become part of your work.")}</p>
           </ScrollReveal>
 
-          <div className={`${styles.valueGrid} ${styles.inner}`}>
+          <div className={`${styles.valueGrid} ${styles.whyGrid} ${styles.inner}`}>
             {values.map((v) => (
-              <TiltCard key={v.title} className={`${styles.valueCard} ${styles.depth} ${styles.reveal}`}>
-                <span className={styles.iconTile}><CampusIcon name={v.icon} /></span>
-                <span className={styles.svcTitle}>{v.title}</span>
-                <span className={styles.svcDesc}>{v.desc}</span>
+              <TiltCard key={v.title} className={`${styles.valueCard} ${styles.whyCard} ${styles.glassCard} ${styles.depth} ${styles.reveal}`} lift={8}>
+                <span className={styles.iconTileSoft}><CampusIcon name={v.icon} /></span>
+                <span className={styles.whyCardTitle}>{v.title}</span>
+                <span className={styles.whyCardDesc}>{v.desc}</span>
               </TiltCard>
             ))}
           </div>

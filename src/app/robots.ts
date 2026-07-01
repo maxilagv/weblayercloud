@@ -1,12 +1,14 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from "next";
+import { absoluteUrl, site } from "@/lib/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/nosotros'],
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/api/", "/*?utm_*", "/*?fbclid=", "/*?gclid="],
     },
-    sitemap: 'https://weblayer.cloud/sitemap.xml',
+    sitemap: absoluteUrl("/sitemap.xml"),
+    host: site.url,
   };
 }

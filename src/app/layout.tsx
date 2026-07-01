@@ -9,6 +9,8 @@ import "@/styles/servicios.css";
 import { LangProvider } from "@/context/LangContext";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
+import { organizationJsonLd, site, websiteJsonLd } from "@/lib/seo";
 
 const hanken = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const instrument = Instrument_Serif({ weight: ["400"], style: ["normal", "italic"], subsets: ["latin"], variable: "--font-serif", display: "swap" });
@@ -19,24 +21,58 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "LayerCloud — Software a medida, construido capa por capa",
-  description: "Equipo de ingeniería de software a medida. Webs y ecosistemas de venta, CRM/ERP con IA, campus virtuales y automatizaciones inteligentes, diseñados desde cero.",
+  metadataBase: new URL(site.url),
+  applicationName: site.name,
+  generator: "Next.js",
+  referrer: "origin-when-cross-origin",
+  creator: site.name,
+  publisher: site.name,
+  category: "technology",
+  title: {
+    default: "LayerCloud - Software a medida",
+    template: "%s | LayerCloud",
+  },
+  description: site.description,
+  keywords: [
+    "software a medida",
+    "desarrollo de software",
+    "CRM a medida",
+    "ERP a medida",
+    "campus virtual",
+    "automatizacion con IA",
+    "desarrollo web",
+  ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
     type: "website",
-    siteName: "LayerCloud",
-    title: "LayerCloud — Software a medida, construido capa por capa",
-    description: "Equipo de ingeniería de software a medida. Webs y ecosistemas de venta, CRM/ERP con IA, campus virtuales y automatizaciones inteligentes — diseñados desde cero.",
-    images: [{ url: "https://weblayer.cloud/og-image.png", width: 1200, height: 630 }],
-    url: "https://weblayer.cloud/",
+    siteName: site.name,
+    locale: site.locale,
+    title: "LayerCloud - Software a medida",
+    description: site.description,
+    images: [{ url: site.ogImage, width: 1200, height: 630, alt: "LayerCloud" }],
+    url: "/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LayerCloud — Software a medida, construido capa por capa",
-    description: "Equipo de ingeniería de software a medida. Webs y ecosistemas de venta, CRM/ERP con IA, campus virtuales y automatizaciones inteligentes — diseñados desde cero.",
-    images: ["https://weblayer.cloud/og-image.png"],
+    title: "LayerCloud - Software a medida",
+    description: site.description,
+    images: [site.ogImage],
   },
   alternates: {
-    canonical: "https://weblayer.cloud/",
+    canonical: "/",
+  },
+  icons: {
+    icon: "/logo-layercloud.svg",
   },
 };
 
@@ -49,6 +85,7 @@ export default function RootLayout({
     <html lang="es" data-lang="es">
       <body className={`${hanken.variable} ${instrument.variable} ${jetbrains.variable} grain`}>
         <LangProvider>
+          <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
           <Navigation />
           {children}
           <Footer />

@@ -1,0 +1,21 @@
+<svg width="220" height="48" viewBox="0 0 220 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title">
+  <title id="title">LayerCloud</title>
+  <defs>
+    <linearGradient id="lc-logo-gradient" x1="9" y1="6" x2="36" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2F6BFF"/>
+      <stop offset=".42" stop-color="#765CFF"/>
+      <stop offset="1" stop-color="#FB7A5B"/>
+    </linearGradient>
+    <filter id="lc-logo-shadow" x="0" y="0" width="48" height="48" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#7C5CFF" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <g filter="url(#lc-logo-shadow)">
+    <path d="M24 5.4L42 15.1L24 24.8L6 15.1L24 5.4Z" fill="url(#lc-logo-gradient)"/>
+    <path d="M24 19.6L40.8 28.7L24 37.8L7.2 28.7L24 19.6Z" fill="#2B2932"/>
+    <path d="M24 26.9L39.8 35.4L24 43.9L8.2 35.4L24 26.9Z" fill="#CFCBD5"/>
+    <path d="M24 5.4L42 15.1L24 24.8L6 15.1L24 5.4Z" stroke="rgba(255,255,255,.58)" stroke-width="1.1" stroke-linejoin="round"/>
+  </g>
+  <text x="58" y="31" font-family="Hanken Grotesk, Arial, sans-serif" font-size="25" font-weight="760" letter-spacing="-.7" fill="#15141A">Layer</text>
+  <text x="124" y="31" font-family="Hanken Grotesk, Arial, sans-serif" font-size="25" font-weight="520" letter-spacing="-.7" fill="#8B8794">Cloud</text>
+</svg>
